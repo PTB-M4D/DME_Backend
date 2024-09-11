@@ -1,0 +1,11 @@
+package de.ptb.dsi.dme_backend.service;
+
+
+import de.ptb.dsi.dme_backend.model.ParticipantMeasuredValue;
+import de.ptb.dsi.dme_backend.model.ReferenceValue;
+
+import java.util.List;
+
+public interface ReferenceValueCalculationService {
+    ReferenceValue calculateReferenceValue(List<ParticipantMeasuredValue> participantMeasuredValueValue);
+}
