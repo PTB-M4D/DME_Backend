@@ -1,9 +1,5 @@
 # DME Comparison Application
 
-This is a Spring Boot application designed for comparing DCC and D-SI data models using various calculation and consistency check services. The application provides a set of services for calculating En values, performing consistency checks, and processing decisions based on the results.
-
-## Table of Contents
-
 - [Overview](#overview)
 - [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)
