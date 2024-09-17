@@ -76,21 +76,21 @@ To run the application inside a Docker container, follow these steps:
 1. **Build the Docker image:**
 
 ```bash
-docker build -t ....
+docker build -t dmebackend  
 ```
 
 2. **Run the Docker container:**
 
 ```bash
-docker run -p 8080:8080 .....
+docker run -p 8080:8080 dmebackend
+
 ```
 
-The application should now be accessible at `http://localhost:8080`.
+The application should now be accessible at `http://localhost:8080/api/dme-comparison`.
 
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 
 

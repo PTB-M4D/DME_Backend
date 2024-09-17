@@ -22,9 +22,10 @@ public class StandardBilateralEnValueCalculationService implements BilateralEnCa
 
                 double xi = participant1.getSiReal().getValue();
                 double xj = participant2.getSiReal().getValue();
-                double ui = participant1.getSiReal().getExpUnc().getUncertainty();
-                double uj = participant2.getSiReal().getExpUnc().getUncertainty();
-
+                double ui = participant1.getSiReal().getExpUnc();
+                double uj = participant2.getSiReal().getExpUnc();
+//                double ui = participant1.getSiReal().getExpUnc().getUncertainty();
+//                double uj = participant2.getSiReal().getExpUnc().getUncertainty();
                 double enValue = Math.abs(xi - xj) / Math.sqrt(ui * ui + uj * uj);
 
                 String key = participant1.getSiReal().getName() + " , " + participant2.getSiReal().getName();
