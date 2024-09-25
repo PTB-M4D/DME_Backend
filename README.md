@@ -53,7 +53,7 @@ git clone https://github.com/PTB-M4D/DME_Backend.git
   </proxies>
 </settings>
 ```
-3. **Build the project using Maven:**
+3. **Build the project local using Maven:**
 
 ```bash
 mvn clean install
@@ -67,26 +67,32 @@ mvn spring-boot:run
 
 ## Running the Application
 
-Once the application is running, you can access the API endpoints via `http://localhost:8080`.
+Once the application is running, you can access the API endpoints via `http://localhost:8080/api/dme-comparison/sayHello`.
 
 ## Docker Setup
 
 To run the application inside a Docker container, follow these steps:
 
 1. **Build the Docker image:**
-
 ```bash
-docker build -t dmebackend  
+
+docker build .
 ```
+ 
+```bash
+
+docker build -t dmebackend  
+
+```
+
 
 2. **Run the Docker container:**
 
-```bash
-docker run -p 8080:8080 dmebackend
-
+```bash  
+docker run -p 8000:8080 dmebackend
 ```
 
-The application should now be accessible at `http://localhost:8080/api/dme-comparison`.
+The application should now be accessible at `http://localhost:8000/api/dme-comparison`.
 
 
 ## License

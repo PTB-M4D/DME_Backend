@@ -18,7 +18,7 @@ public class DmeController {
    private final SiRealService siRealService;
 
     @RequestMapping(value = "/sayHello", method = RequestMethod.GET)
-    public String sayHelloWorld() {return "Hi";
+    public String sayHelloWorld() {return " Test Hi";
     }
     @RequestMapping(value = "/addSiReal", method = RequestMethod.POST)
     public ResponseEntity<SiReal> addSiReal(@RequestBody SiReal siReal)
