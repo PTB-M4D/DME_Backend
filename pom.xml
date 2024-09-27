@@ -50,8 +50,6 @@
             <artifactId>jetty-servlet</artifactId>
             <version>11.0.14</version>
         </dependency>
-
-
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -62,7 +60,58 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>de.ptb.common</groupId>-->
+<!--            <artifactId>dcc-service-api</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>de.ptb.common</groupId>-->
+<!--            <artifactId>service-commons</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                    <groupId>org.jboss.resteasy</groupId>-->
+<!--                    <artifactId>resteasy-core</artifactId>-->
+<!--                </exclusion>-->
+<!--                <exclusion>-->
+<!--                    <groupId>org.jboss.resteasy</groupId>-->
+<!--                    <artifactId>resteasy-multipart-provider</artifactId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
+<!--        </dependency>-->
+
     </dependencies>
+<!--    <repositories>-->
+<!--        <repository>-->
+<!--            <id>gitlab-maven</id>-->
+<!--            <url>https://itgit.bs.ptb.de/api/v4/groups/451/-/packages/maven</url>-->
+<!--        </repository>-->
+<!--    </repositories>-->
+<!--    <distributionManagement>-->
+<!--        <repository>-->
+<!--            <id>gitlab-maven</id>-->
+<!--            <url>https://itgit.bs.ptb.de/api/v4/projects/945/packages/maven</url>-->
+<!--        </repository>-->
+<!--        <snapshotRepository>-->
+<!--            <id>gitlab-maven</id>-->
+<!--            <url>https://itgit.bs.ptb.de/api/v4/projects/945/packages/maven</url>-->
+<!--        </snapshotRepository>-->
+<!--    </distributionManagement>-->
+
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>maven-central</id>
+            <url>https://itgit.bs.ptb.de/api/v4/projects/945/packages/maven</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
 
     <build>
         <finalName>dmebackend</finalName>
