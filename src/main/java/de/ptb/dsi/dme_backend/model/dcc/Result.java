@@ -1,0 +1,9 @@
+package de.ptb.dsi.dme_backend.model.dcc;
+
+import lombok.Data;
+
+@Data
+public class Result {
+    private ResultName name;
+    public ResultData data;
+}

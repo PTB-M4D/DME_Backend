@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dcc:digitalCalibrationCertificate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dcc="https://ptb.de/dcc" xmlns:si="https://ptb.de/si" xsi:schemaLocation="https://ptb.de/dcc https://ptb.de/dcc/v3.2.1/dcc.xsd" schemaVersion="3.2.1">
+    <dcc:administrativeData>
+        <dcc:dccSoftware>
+            <dcc:software>
+                <dcc:name>
+                    <dcc:content>Notepad++</dcc:content>
+                </dcc:name>
+                <dcc:release>v8.4.7</dcc:release>
+            </dcc:software>
+        </dcc:dccSoftware>
+        <dcc:coreData>
+            <dcc:countryCodeISO3166_1>TR</dcc:countryCodeISO3166_1>
+            <dcc:usedLangCodeISO639_1>en</dcc:usedLangCodeISO639_1>
+            <dcc:mandatoryLangCodeISO639_1>en</dcc:mandatoryLangCodeISO639_1>
+            <dcc:uniqueIdentifier>VCM-2024-P102</dcc:uniqueIdentifier>
+            <dcc:identifications>
+                <dcc:identification refType="basic_orderNo">
+                    <dcc:issuer>calibrationLaboratory</dcc:issuer>
+                    <dcc:value>1234567890</dcc:value>
+                    <dcc:name>
+                        <dcc:content lang="en">Order No.</dcc:content>
+                    </dcc:name>
+                </dcc:identification>
+            </dcc:identifications>
+            <dcc:beginPerformanceDate>2024-02-02</dcc:beginPerformanceDate>
+            <dcc:endPerformanceDate>2024-02-02</dcc:endPerformanceDate>
+            <dcc:performanceLocation>laboratory</dcc:performanceLocation>
+            <dcc:issueDate>2024-02-05</dcc:issueDate>
+        </dcc:coreData>
+        <dcc:items>
+            <dcc:item>
+                <dcc:name>
+                    <dcc:content lang="en">Virtual Mass</dcc:content>
+                </dcc:name>
+                <dcc:description>
+                    <dcc:name>
+                        <dcc:content lang="en">Virtual</dcc:content>
+                    </dcc:name>
+                    <dcc:content lang="en">This is a virtual mass for a virtual comparison.</dcc:content>
+                </dcc:description>
+                <dcc:manufacturer>
+                    <dcc:name>
+                        <dcc:content>virtualCompany</dcc:content>
+                    </dcc:name>
+                </dcc:manufacturer>
+                <dcc:identifications>
+                    <dcc:identification>
+                        <dcc:issuer>manufacturer</dcc:issuer>
+                        <dcc:value>1234567890</dcc:value>
+                        <dcc:name>
+                            <dcc:content lang="en">Serial No.</dcc:content>
+                        </dcc:name>
+                    </dcc:identification>
+                </dcc:identifications>
+                <dcc:itemQuantities>
+                    <dcc:itemQuantity refType="basic_nominalValue">
+                        <dcc:name>
+                            <dcc:content lang="en">Nominal mass</dcc:content>
+                        </dcc:name>
+                        <si:real>
+                            <si:value>1</si:value>
+                            <si:unit>\kilogram</si:unit>
+                        </si:real>
+                    </dcc:itemQuantity>
+                </dcc:itemQuantities>
+            </dcc:item>
+        </dcc:items>
+        <dcc:calibrationLaboratory>
+            <dcc:contact>
+                <dcc:name>
+                    <dcc:content>TÜBİTAK Ulusal Metroloji Enstitüsü (UME)</dcc:content>
+                </dcc:name>
+                <dcc:location>
+                    <dcc:city>Kocaeli</dcc:city>
+                    <dcc:countryCode>TR</dcc:countryCode>
+                    <dcc:postCode>41470</dcc:postCode>
+                    <dcc:state>Gebze</dcc:state>
+                    <dcc:street>Dr. Zeki Acar Cad.</dcc:street>
+                </dcc:location>
+            </dcc:contact>
+        </dcc:calibrationLaboratory>
+        <dcc:respPersons>
+            <dcc:respPerson>
+                <dcc:person>
+                    <dcc:name>
+                        <dcc:content>name lastName</dcc:content>
+                    </dcc:name>
+                </dcc:person>
+                <dcc:mainSigner>true</dcc:mainSigner>
+            </dcc:respPerson>
+        </dcc:respPersons>
+        <dcc:customer>
+            <dcc:name>
+                <dcc:content>Physikalisch-Technische Bundesanstalt (PTB)</dcc:content>
+            </dcc:name>
+            <dcc:location>
+                <dcc:city>Braunschweig</dcc:city>
+                <dcc:countryCode>DE</dcc:countryCode>
+                <dcc:postCode>38116</dcc:postCode>
+                <dcc:street>Bundesallee</dcc:street>
+                <dcc:streetNo>100</dcc:streetNo>
+            </dcc:location>
+        </dcc:customer>
+        <dcc:statements>
+            <dcc:statement></dcc:statement>
+            <dcc:statement></dcc:statement>
+            <dcc:statement></dcc:statement>
+            <dcc:statement>
+                <dcc:declaration>
+                    <dcc:content lang="en">This is a virtual input for a DCC-based comparison</dcc:content>
+                </dcc:declaration>
+            </dcc:statement>
+        </dcc:statements>
+    </dcc:administrativeData>
+    <dcc:measurementResults>
+        <dcc:measurementResult>
+            <dcc:name>
+                <dcc:content lang="en">Measurement results</dcc:content>
+            </dcc:name>
+            <dcc:usedMethods>
+                <dcc:usedMethod refType="basic_uncertainty">
+                    <dcc:name>
+                        <dcc:content lang="en">Measurement uncertainty</dcc:content>
+                    </dcc:name>
+                    <dcc:description>
+                        <dcc:content lang="en">The uncertainty stated is the expanded measurement uncertainty obtained by multiplying the standard measurement uncertainty be the coverage factor k = 2.
+                            It has been determine in accordance with  JCGM 100:2008. The value of the measureand then normally lies, with a probability of approximately 95  %, with th eatrributed coverage interval.</dcc:content>
+                    </dcc:description>
+                    <dcc:norm>JCGM 100:2008</dcc:norm>
+                </dcc:usedMethod>
+                <dcc:usedMethod>
+                    <dcc:name>
+                        <dcc:content lang="en">Procedure determination for virtual nominal mass value</dcc:content>
+                    </dcc:name>
+                    <dcc:description>
+                        <dcc:content lang="en">Randomised selection in given range by participant</dcc:content>
+                    </dcc:description>
+                </dcc:usedMethod>
+            </dcc:usedMethods>
+            <dcc:measuringEquipments>
+                <dcc:measuringEquipment>
+                    <dcc:name>
+                        <dcc:content lang="en">Virtual mass</dcc:content>
+                    </dcc:name>
+                </dcc:measuringEquipment>
+            </dcc:measuringEquipments>
+            <dcc:influenceConditions>
+                <dcc:influenceCondition refType="basic_temperature">
+                    <dcc:name>
+                        <dcc:content lang="en">temperature</dcc:content>
+                    </dcc:name>
+                    <dcc:data>
+                        <dcc:quantity refType="basic_min">
+                            <dcc:name>
+                                <dcc:content lang="en">temperature min</dcc:content>
+                            </dcc:name>
+                            <si:real>
+                                <si:value>293.05</si:value>
+                                <si:unit>\kelvin</si:unit>
+                                <si:expandedUnc>
+                                    <si:uncertainty>0.02</si:uncertainty>
+                                    <si:coverageFactor>2</si:coverageFactor>
+                                    <si:coverageProbability>0.95</si:coverageProbability>
+                                </si:expandedUnc>
+                            </si:real>
+                        </dcc:quantity>
+                        <dcc:quantity refType="basic_max">
+                            <dcc:name>
+                                <dcc:content lang="en">temperature max</dcc:content>
+                            </dcc:name>
+                            <si:real>
+                                <si:value>294.01</si:value>
+                                <si:unit>\kelvin</si:unit>
+                                <si:expandedUnc>
+                                    <si:uncertainty>0.02</si:uncertainty>
+                                    <si:coverageFactor>2</si:coverageFactor>
+                                    <si:coverageProbability>0.95</si:coverageProbability>
+                                </si:expandedUnc>
+                            </si:real>
+                        </dcc:quantity>
+                    </dcc:data>
+                </dcc:influenceCondition>
+            </dcc:influenceConditions>
+            <dcc:results>
+                <dcc:result refType="mass_mass">
+                    <dcc:name>
+                        <dcc:content lang="en">Virtual measurement result</dcc:content>
+                    </dcc:name>
+                    <dcc:data>
+                        <dcc:quantity refType="basic_nominalValue">
+                            <dcc:name>
+                                <dcc:content lang="en">nominal value</dcc:content>
+                            </dcc:name>
+                            <si:real>
+                                <si:value>1</si:value>
+                                <si:unit>\kilogram</si:unit>
+                            </si:real>
+                        </dcc:quantity>
+                        <dcc:quantity refType="basic_measuredValue">
+                            <dcc:name>
+                                <dcc:content lang="en">mass</dcc:content>
+                            </dcc:name>
+                            <si:real>
+                                <si:value>1.000000271</si:value>
+                                <si:unit>\kilogram</si:unit>
+                                <si:dateTime>2024-02-02T13:25:00</si:dateTime>
+                                <si:expandedUnc>
+                                    <si:uncertainty>0.000000100</si:uncertainty>
+                                    <si:coverageFactor>2</si:coverageFactor>
+                                    <si:coverageProbability>0.95</si:coverageProbability>
+                                </si:expandedUnc>
+                            </si:real>
+                        </dcc:quantity>
+                    </dcc:data>
+                </dcc:result>
+            </dcc:results>
+        </dcc:measurementResult>
+    </dcc:measurementResults>
+</dcc:digitalCalibrationCertificate>
