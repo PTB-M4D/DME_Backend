@@ -15,6 +15,7 @@ public class StandardBilateralEnValueCalculationService implements BilateralEnCa
         Map<String, Double> enValues = new HashMap<>();
 
 // Berechnung des bilateralen En-Wertes zwischen jedem Paar von Teilnehmern
+
         for (int i = 0; i < listParticipantMeasuredValue.size(); i++) {
             for (int j = i + 1; j < listParticipantMeasuredValue.size(); j++) {
                 ParticipantMeasuredValue participant1 = listParticipantMeasuredValue.get(i);
@@ -22,8 +23,8 @@ public class StandardBilateralEnValueCalculationService implements BilateralEnCa
 
                 double xi = participant1.getSiReal().getValue();
                 double xj = participant2.getSiReal().getValue();
-                double ui = participant1.getSiReal().getExpUnc();
-                double uj = participant2.getSiReal().getExpUnc();
+                double ui = participant1.getSiReal().getExpUnc().getUncertainty();
+                double uj = participant2.getSiReal().getExpUnc().getUncertainty();
 //                double ui = participant1.getSiReal().getExpUnc().getUncertainty();
 //                double uj = participant2.getSiReal().getExpUnc().getUncertainty();
                 double enValue = Math.abs(xi - xj) / Math.sqrt(ui * ui + uj * uj);

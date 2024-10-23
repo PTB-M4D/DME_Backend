@@ -2,15 +2,13 @@ package de.ptb.dsi.dme_backend.model;
 
 import lombok.Data;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Data
 public class ComparisonDataModel {
-   private List<ParticipantMeasuredValue> participantMeasuredValueList;//contributorList
-   private List<ParticipantMeasuredValue> outliers;
+   private HashMap<String, Contribution> contributions;//contributorList
+   private HashMap<String,EntityUnderComparison> entities;//key entityId
    private List<AnalysisOutput> analysisOutputData;
-//   private ReferenceValue referenceValue;
-//   private List<EquivalenceValues> equivalenceValueList;
-//   List of iteration en
-
+   //   private List<ParticipantMeasuredValue> outliers;
 }

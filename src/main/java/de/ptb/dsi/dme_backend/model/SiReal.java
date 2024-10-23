@@ -11,11 +11,8 @@ public class SiReal {
     Double value;
     String unit;
     String dateTime;
-    Double expUnc;
-//    SiExpandedUnc expUnc;
+    SiExpandedUnc expUnc;
+    //Double expUnc;
 
-    public SiReal(){
-        instanceCounter++;
-        id=instanceCounter;
-    }
+
 }

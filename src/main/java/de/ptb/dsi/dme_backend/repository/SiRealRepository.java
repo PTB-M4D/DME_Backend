@@ -2,6 +2,7 @@ package de.ptb.dsi.dme_backend.repository;
 
 
 import de.ptb.dsi.dme_backend.model.SiReal;
+import de.ptb.dsi.dme_backend.model.dcc.DigitalCalibrationCertificate;
 import lombok.Data;
 import org.springframework.stereotype.Repository;
 
@@ -13,10 +14,13 @@ import java.util.List;
 public class SiRealRepository {
     private final List<SiReal>siRealList = new ArrayList<>();
 
+    DigitalCalibrationCertificate dcc =new DigitalCalibrationCertificate();
     public List<SiReal> getSiRealList() {
         return siRealList;
     }
-
+    public DigitalCalibrationCertificate getDcc(){
+        return dcc;
+    }
     public SiReal findById(int id){
         for(SiReal siReal: siRealList){
             if(siReal.getId() == id){
