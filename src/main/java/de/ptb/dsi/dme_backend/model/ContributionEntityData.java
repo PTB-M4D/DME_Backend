@@ -1,7 +1,9 @@
 package de.ptb.dsi.dme_backend.model;
 
-import java.util.HashMap;
+import lombok.Data;
 
+import java.util.HashMap;
+@Data
 public class ContributionEntityData {
     HashMap<String, SiReal> contributionData;// key contributionId
 }

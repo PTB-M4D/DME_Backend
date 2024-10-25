@@ -9,7 +9,7 @@ import java.util.List;
 
 
 @Service
-public class WeightedMeanCalculationService implements ReferenceValueCalculationService{
+public class WeightedMeanCalculationService implements IReferenceValueCalculationService {
 
     @Override
     public ReferenceValue calculateReferenceValue(List<ParticipantMeasuredValue> participantMeasuredValueValue) {

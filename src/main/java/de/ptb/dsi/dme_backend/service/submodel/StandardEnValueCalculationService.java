@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Service
-public class StandardEnValueCalculationService implements EnValueCalculationService{
+public class StandardEnValueCalculationService implements IEnValueCalculationService {
 
     @Override
     public HashMap<String, EnValue> calculateEnValue(HashMap<String, SiReal> contributionMeasuredValues, ReferenceValue referenceValue, List<String> outlierContributions) {

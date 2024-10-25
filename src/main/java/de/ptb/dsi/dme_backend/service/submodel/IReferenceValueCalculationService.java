@@ -6,6 +6,6 @@ import de.ptb.dsi.dme_backend.model.ReferenceValue;
 
 import java.util.List;
 
-public interface ReferenceValueCalculationService {
+public interface IReferenceValueCalculationService {
     ReferenceValue calculateReferenceValue(List<ParticipantMeasuredValue> participantMeasuredValueValue);
 }
