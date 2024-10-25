@@ -1,4 +1,4 @@
-package de.ptb.dsi.dme_backend.service;
+package de.ptb.dsi.dme_backend.service.submodel;
 
 
 import de.ptb.dsi.dme_backend.model.SiReal;
