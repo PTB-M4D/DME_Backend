@@ -14,5 +14,6 @@ public class WeightedMeanCalculationService implements ReferenceValueCalculation
     @Override
     public ReferenceValue calculateReferenceValue(List<ParticipantMeasuredValue> participantMeasuredValueValue) {
         return null;
+        //Comment
     }
 }
