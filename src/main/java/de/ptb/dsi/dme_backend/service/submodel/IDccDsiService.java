@@ -1,5 +1,5 @@
 package de.ptb.dsi.dme_backend.service.submodel;
 
-public interface DccDsiService {
+public interface IDccDsiService {
 void marshallDccXml();
 }

@@ -1,7 +1,9 @@
 package de.ptb.dsi.dme_backend.model;
 
-import java.util.List;
+import lombok.Data;
 
+import java.util.List;
+@Data
 public class DataIdentifier {
     String id;
     List<String> refIds;

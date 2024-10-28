@@ -1,6 +1,7 @@
 package de.ptb.dsi.dme_backend.model;
 
 import lombok.Data;
+import lombok.Getter;
 
 import java.util.HashMap;
 import java.util.List;

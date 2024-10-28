@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class EnCriterionConsistencyCheckService implements ConsistencyCheckService{
+public class EnCriterionConsistencyCheckService implements IConsistencyCheckService {
 
     @Override
     public List<ConsistencyCheckResult> inconsistentParticipantList() {

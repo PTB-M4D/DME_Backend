@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 
 @Service
-public class StandardBilateralEnValueCalculationService implements BilateralEnCalculationService{
+public class StandardBilateralEnValueCalculationService implements IBilateralEnCalculationService {
     @Override
     public HashMap<String, HashMap<String, BilateralEnValue>> calculateBilateralEnValues(HashMap<String, SiReal> contributionMeasuredValues) {
         return null;
