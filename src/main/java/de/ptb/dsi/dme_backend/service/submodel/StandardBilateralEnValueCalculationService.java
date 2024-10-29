@@ -16,6 +16,12 @@ public class StandardBilateralEnValueCalculationService implements IBilateralEnC
 
     public HashMap<String, HashMap<String, BilateralEnValue>> calculateBilateralEnValues(HashMap<String, SiReal> contributionMeasuredValues,
                                                                                          HashMap<String, Contribution> contributions) {
+
+        //Check whether both arrays have an equal amount of entries
+        if(contributionMeasuredValues.size() != contributions.size()){
+            throw new IllegalArgumentException("Encountered a different number of contributionMeasuredValues and contributions.");
+        }
+
         // Keys for contributions und contributionMeasuredValues should be identical
         ArrayList<String> keyList = new ArrayList<>(contributions.keySet());
 

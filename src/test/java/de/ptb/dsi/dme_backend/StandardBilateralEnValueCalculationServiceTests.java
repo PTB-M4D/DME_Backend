@@ -7,10 +7,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 public class StandardBilateralEnValueCalculationServiceTests {
-
 
 
     @Test
@@ -67,4 +67,30 @@ public class StandardBilateralEnValueCalculationServiceTests {
         // asserts
         assertEquals(result, expectedResult);
     }
+
+    @Test
+    public void testExceptionSizesOfValuesAndContributions(){
+
+        //Example Values
+        HashMap<String, SiReal> contributionMeasuredValues = new HashMap<>();
+        contributionMeasuredValues.put("0", new SiReal(1.0, new SiExpandedUnc(0.4, 1)));
+        contributionMeasuredValues.put("1", new SiReal(1.5, new SiExpandedUnc(0.3, 1)));
+
+        HashMap<String, Contribution> contributions = new HashMap<>();
+        contributions.put("0", new Contribution("123"));
+
+
+        //Call Function
+        StandardBilateralEnValueCalculationService StandardBilateralEnValueCalculationService = new StandardBilateralEnValueCalculationService();
+//        HashMap<String, HashMap<String, BilateralEnValue>> result =
+//                ;
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> StandardBilateralEnValueCalculationService
+                        .calculateBilateralEnValues(contributionMeasuredValues, contributions));
+
+        assertEquals("Encountered a different number of contributionMeasuredValues and contributions.",
+                exception.getMessage());
+    }
+
 }
