@@ -8,4 +8,9 @@ public class SiExpandedUnc {
     int coverageFactor;
     Double coverageProbability;
     String distribution;
+
+    public SiExpandedUnc(Double uncertainty, int coverageFactor){
+        this.uncertainty = uncertainty;
+        this.coverageFactor = coverageFactor;
+    }
 }

@@ -2,42 +2,52 @@ package de.ptb.dsi.dme_backend.service.submodel;
 
 
 import de.ptb.dsi.dme_backend.model.BilateralEnValue;
+import de.ptb.dsi.dme_backend.model.Contribution;
+import de.ptb.dsi.dme_backend.model.EnValue;
 import de.ptb.dsi.dme_backend.model.SiReal;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 @Service
 public class StandardBilateralEnValueCalculationService implements IBilateralEnCalculationService {
-    @Override
-    public HashMap<String, HashMap<String, BilateralEnValue>> calculateBilateralEnValues(HashMap<String, SiReal> contributionMeasuredValues) {
-        return null;
-    }
 
-//    @Override
-//    public Map<String, Double> calculateBilateralEnValues(List<ParticipantMeasuredValue> listParticipantMeasuredValue) {
-//        Map<String, Double> enValues = new HashMap<>();
-//
-//// Berechnung des bilateralen En-Wertes zwischen jedem Paar von Teilnehmern
-//
-//        for (int i = 0; i < listParticipantMeasuredValue.size(); i++) {
-//            for (int j = i + 1; j < listParticipantMeasuredValue.size(); j++) {
-//                ParticipantMeasuredValue participant1 = listParticipantMeasuredValue.get(i);
-//                ParticipantMeasuredValue participant2 = listParticipantMeasuredValue.get(j);
-//
-//                double xi = participant1.getSiReal().getValue();
-//                double xj = participant2.getSiReal().getValue();
-//                double ui = participant1.getSiReal().getExpUnc().getUncertainty();
-//                double uj = participant2.getSiReal().getExpUnc().getUncertainty();
-////                double ui = participant1.getSiReal().getExpUnc().getUncertainty();
-////                double uj = participant2.getSiReal().getExpUnc().getUncertainty();
-//                double enValue = Math.abs(xi - xj) / Math.sqrt(ui * ui + uj * uj);
-//
-//                String key = participant1.getSiReal().getName() + " , " + participant2.getSiReal().getName();
-//                enValues.put(key, enValue);
-//
-//            }
-//        }
-//        return enValues;
-  //  }
+
+    public HashMap<String, HashMap<String, BilateralEnValue>> calculateBilateralEnValues(HashMap<String, SiReal> contributionMeasuredValues,
+                                                                                         HashMap<String, Contribution> contributions) {
+        // Keys for contributions und contributionMeasuredValues should be identical
+        ArrayList<String> keyList = new ArrayList<>(contributions.keySet());
+
+        HashMap<String, HashMap<String, BilateralEnValue>> bilateralEnValueMatrix = new HashMap<>();
+        for (int i = 0; i < keyList.size(); i++) {
+            HashMap<String, BilateralEnValue> bilateralEnValues = new HashMap<>();
+            for (int j = 0 ; j < keyList.size(); j++) {
+                //Expanded uncertainty (95 %) are needed for bilateral En values
+                double xi = contributionMeasuredValues.get(keyList.get(i)).getValue();
+                double xj = contributionMeasuredValues.get(keyList.get(j)).getValue();
+                double ui = contributionMeasuredValues.get(keyList.get(i)).getExpUnc().getUncertainty();
+                double uj = contributionMeasuredValues.get(keyList.get(j)).getExpUnc().getUncertainty();
+
+                double enValueDouble = Math.abs(xi - xj) / Math.sqrt(ui * ui + uj * uj);
+
+                // format Data into SiReal -> EnValue -> BilateralEnValue -> HashMap<String, BilateralEnValue>
+                SiReal enValueSiReal = new SiReal(enValueDouble);
+                EnValue enValue = new EnValue(enValueSiReal, "bilateral EnValue");
+                BilateralEnValue bilateralEnValue = new BilateralEnValue(
+                        "bilateral En value calculation",
+                        enValue,
+                        "bilateral En Value",
+                        contributions.get(keyList.get(i)).getContributionId(),
+                        contributions.get(keyList.get(j)).getContributionId());
+
+                // add to inner Hashmap
+                String key = Integer.toString(j);
+                bilateralEnValues.put(key, bilateralEnValue);
+            }
+            // add to outer Hashmap
+            bilateralEnValueMatrix.put(Integer.toString(i), bilateralEnValues);
+        }
+        return bilateralEnValueMatrix;
+    }
 }
