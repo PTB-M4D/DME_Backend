@@ -4,6 +4,10 @@ import lombok.Data;
 
 @Data
 public class ParticipantMeasuredValue {
-    //    ID
     private SiReal siReal;
+
+    public ParticipantMeasuredValue(){}
+    public ParticipantMeasuredValue(SiReal siReal){
+        this.siReal = siReal;
+    }
 }
