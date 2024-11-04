@@ -1,8 +1,10 @@
 package de.ptb.dsi.dme_backend.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class SiExpandedUnc {
     Double uncertainty;
     int coverageFactor;

@@ -21,6 +21,10 @@ public class StandardBilateralEnValueCalculationService implements IBilateralEnC
         if(contributionMeasuredValues.size() != contributions.size()){
             throw new IllegalArgumentException("Encountered a different number of contributionMeasuredValues and contributions.");
         }
+        //Check if required fields are empty
+        checkForNullInContributionMeasuredValues(contributionMeasuredValues);
+        checkForNullInContributions(contributions);
+        checkForNullInSiExpUnc(contributionMeasuredValues);
 
         // Keys for contributions und contributionMeasuredValues should be identical
         ArrayList<String> keyList = new ArrayList<>(contributions.keySet());
@@ -56,4 +60,30 @@ public class StandardBilateralEnValueCalculationService implements IBilateralEnC
         }
         return bilateralEnValueMatrix;
     }
+
+    public void checkForNullInContributionMeasuredValues(HashMap<String, SiReal> contributionMeasuredValues){
+        for (SiReal siReal : contributionMeasuredValues.values()) {
+            if(siReal.getValue() == null){
+                throw new NullPointerException("Value in SiReal cannot be null.");
+            }
+        }
+    }
+    public void checkForNullInSiExpUnc(HashMap<String, SiReal> contributionMeasuredValues){
+        for (SiReal siReal : contributionMeasuredValues.values()) {
+            if(siReal.getExpUnc().getUncertainty() == null){
+                throw new NullPointerException("Uncertainty in ExpUnc cannot be null.");
+            }
+        }
+    }
+
+
+    public void checkForNullInContributions(HashMap<String, Contribution> contributions){
+        for (Contribution contribution : contributions.values()) {
+            if(contribution.getContributionId() == null){
+                throw new NullPointerException("ContributionId in contribution cannot be null.");
+            }
+        }
+    }
+
+
 }
