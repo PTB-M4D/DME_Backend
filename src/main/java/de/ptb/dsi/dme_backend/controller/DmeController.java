@@ -3,7 +3,7 @@ package de.ptb.dsi.dme_backend.controller;
 import de.ptb.dsi.dme_backend.model.SiReal;
 
 import de.ptb.dsi.dme_backend.repository.SiRealRepository;
-import de.ptb.dsi.dme_backend.service.InputReaderService;
+import de.ptb.dsi.dme_backend.service.input.InputReaderService;
 import de.ptb.dsi.dme_backend.service.submodel.SiRealService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,11 +13,8 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
 import java.io.IOException;
 import java.util.List;
-
-import static org.springframework.http.MediaType.APPLICATION_XML_VALUE;
 
 @RestController
 @RequestMapping(path = "/api/dme-comparison")
