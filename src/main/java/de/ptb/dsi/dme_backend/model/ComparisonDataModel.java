@@ -10,6 +10,5 @@ import java.util.List;
 public class ComparisonDataModel {
    private HashMap<String, Contribution> contributions;//contributorList
    private HashMap<String,EntityUnderComparison> entities;//key entityId
-   private List<AnalysisOutput> analysisOutputData;
    //   private List<ParticipantMeasuredValue> outliers;
 }
