@@ -1,4 +1,4 @@
-package de.ptb.dsi.dme_backend.service;
+package de.ptb.dsi.dme_backend.service.input;
 
 import de.ptb.dsi.dme_backend.model.ComparisonDataModel;
 
