@@ -2,7 +2,9 @@ package de.ptb.dsi.dme_backend.service;
 
 import de.ptb.dsi.dme_backend.model.ParticipantMeasuredValue;
 import de.ptb.dsi.dme_backend.model.ReferenceValue;
+import de.ptb.dsi.dme_backend.model.SiExpandedUnc;
 import de.ptb.dsi.dme_backend.model.SiReal;
+import de.ptb.dsi.dme_backend.service.submodel.WeightedMeanCalculationService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -15,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class WeightedMeanCalculationServiceTest {
 
     //Create participantMeasuredValueList from array lists
-    private static List<ParticipantMeasuredValue> getParticipantMeasuredValues(ArrayList<Double> values, ArrayList<Double> uncertainties) {
+    private static List<ParticipantMeasuredValue> getParticipantMeasuredValues(ArrayList<Double> values, ArrayList<SiExpandedUnc> uncertainties) {
         List<ParticipantMeasuredValue> participantMeasuredValueList = new ArrayList<ParticipantMeasuredValue>();
 
         for(int i = 0; i < values.size(); i++){
@@ -29,21 +31,24 @@ public class WeightedMeanCalculationServiceTest {
     @Test
     public void testWeightedMeanCalculation(){
         //Create example data
-        ArrayList<Double> values = new ArrayList<>(), uncertainties = new ArrayList<>();
+        ArrayList<Double> values = new ArrayList<>();
+        ArrayList<SiExpandedUnc>uncertainties = new ArrayList<>();
+
+        int coverageFactor = 2;
 
         values.add(5.0);
         values.add(20.0);
         values.add(15.0);
 
-        uncertainties.add(30.0);
-        uncertainties.add(60.0);
-        uncertainties.add(10.0);
+        uncertainties.add(new SiExpandedUnc(30.0, coverageFactor));
+        uncertainties.add(new SiExpandedUnc(60.0, coverageFactor));
+        uncertainties.add(new SiExpandedUnc(10.0, coverageFactor));
 
         List<ParticipantMeasuredValue> participantMeasuredValueList = getParticipantMeasuredValues(values, uncertainties);
 
         //Create expected result
         //TODO: Use real test data
-        ReferenceValue expectedResult = new ReferenceValue(new SiReal(0.0, 0.0 *2));
+        ReferenceValue expectedResult = new ReferenceValue(new SiReal(0.0, new SiExpandedUnc(0.0, 2)));
 
         //Create instance and run function
         WeightedMeanCalculationService serviceToTest = new WeightedMeanCalculationService();
