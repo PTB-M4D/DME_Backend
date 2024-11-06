@@ -6,4 +6,10 @@ import lombok.Data;
 public class EnValue {
     private SiReal enValueRaw;
     private SiReal enValueRounded;
+    private String method;
+
+    public EnValue(SiReal enValueRaw, String method) {
+        this.enValueRaw = enValueRaw;
+        this.method = method;
+    }
 }

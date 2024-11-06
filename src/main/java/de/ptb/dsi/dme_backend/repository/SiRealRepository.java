@@ -33,7 +33,7 @@ public class SiRealRepository {
         si.setValue(siReal.getValue());
         si.setUnit(siReal.getUnit());
         si.setDateTime(siReal.getDateTime());
-        si.setExpandedUncertainty(siReal.getExpandedUncertainty());
+        si.setExpUnc(siReal.getExpUnc());
         siRealList.add(si);
         return si;
     }

@@ -1,4 +1,4 @@
-package de.ptb.dsi.dme_backend.service;
+package de.ptb.dsi.dme_backend.service.submodel;
 
 
 import de.ptb.dsi.dme_backend.model.ParticipantMeasuredValue;
@@ -10,7 +10,7 @@ import java.util.List;
 
 
 @Service
-public class WeightedMeanCalculationService implements ReferenceValueCalculationService{
+public class WeightedMeanCalculationService implements IReferenceValueCalculationService {
 
     @Override
     public ReferenceValue calculateReferenceValue(List<ParticipantMeasuredValue> participantMeasuredValueValue) {

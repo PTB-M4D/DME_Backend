@@ -1,4 +1,4 @@
-package de.ptb.dsi.dme_backend.service;
+package de.ptb.dsi.dme_backend.service.submodel;
 
 import de.ptb.dsi.dme_backend.model.ConsistencyCheckResult;
 import org.springframework.stereotype.Service;
@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class EnCriterionConsistencyCheckService implements ConsistencyCheckService{
+public class EnCriterionConsistencyCheckService implements IConsistencyCheckService {
 
     @Override
     public List<ConsistencyCheckResult> inconsistentParticipantList() {

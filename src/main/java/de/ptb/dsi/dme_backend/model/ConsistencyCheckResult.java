@@ -6,5 +6,5 @@ import lombok.Data;
 public class ConsistencyCheckResult {
     private String methodType;
     private boolean isConsistent;
-//    ID of non-consistent participant
+    private String nonConsistentContribution;//    ID of non-consistent contribution
 }
