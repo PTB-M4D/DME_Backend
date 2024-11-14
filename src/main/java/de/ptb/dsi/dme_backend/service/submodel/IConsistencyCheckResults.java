@@ -1,7 +1,7 @@
 package de.ptb.dsi.dme_backend.service.submodel;
 
 import java.util.List;
-
+// kann weg
 public interface IConsistencyCheckResults {
     //    –	When the data is inconsistent, it provides data indicating that it is inconsistent and showing, potential participants that may be marked as outliers
     List<String> inconsistentParticipantList();
