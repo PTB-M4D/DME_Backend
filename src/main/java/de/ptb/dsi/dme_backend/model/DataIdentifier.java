@@ -2,6 +2,7 @@ package de.ptb.dsi.dme_backend.model;
 
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 @Data
 public class DataIdentifier {
@@ -9,4 +10,9 @@ public class DataIdentifier {
     List<String> refIds;
     List<String> refTypes;
     String siLabel;
+
+    public DataIdentifier(){
+        this.refIds = new ArrayList<>();
+        this.refTypes = new ArrayList<>();
+    }
 }

@@ -6,4 +6,8 @@ import java.util.HashMap;
 @Data
 public class ContributionEntityData {
     HashMap<String, SiReal> contributionData;// key contributionId
+
+    public ContributionEntityData(){
+        this.contributionData = new HashMap<>();
+    }
 }

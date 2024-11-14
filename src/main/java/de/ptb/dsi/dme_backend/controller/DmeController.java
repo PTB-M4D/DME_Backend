@@ -1,6 +1,7 @@
 package de.ptb.dsi.dme_backend.controller;
 
 import de.ptb.dsi.dme_backend.model.SiReal;
+import de.ptb.dsi.dme_backend.service.domain.VirtualMassComparisonService;
 import de.ptb.dsi.dme_backend.service.input.InputReaderService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,8 +25,14 @@ public class DmeController {
         return new ResponseEntity<>(inputReaderService.readDocument(pid), HttpStatus.OK);
     }
 
-//    @RequestMapping(value = "/sayHello", method = RequestMethod.GET)
-//    public String sayHelloWorld() {return " Test Hi";
-//    }
+    @RequestMapping(value = "/testMass", method = RequestMethod.GET)
+    public String compareMass()  {
+        VirtualMassComparisonService virtualMassComparisonService = new VirtualMassComparisonService();
+        virtualMassComparisonService.evaluateComparison("");
+        return "evaluation complete";
+    }
+
+    @RequestMapping(value = "/sayHello", method = RequestMethod.GET)
+    public String sayHelloWorld() {return " Test Hi";}
 }
 
