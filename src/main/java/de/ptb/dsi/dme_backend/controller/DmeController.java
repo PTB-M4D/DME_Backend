@@ -1,6 +1,7 @@
 package de.ptb.dsi.dme_backend.controller;
 
-
+import de.ptb.dsi.dme_backend.model.SiReal;
+import de.ptb.dsi.dme_backend.service.domain.VirtualMassComparisonService;
 import de.ptb.dsi.dme_backend.service.input.InputReaderService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ import java.io.IOException;
 public class DmeController {
 
     private final InputReaderService inputReaderService;
+    private final VirtualMassComparisonService virtualMassComparisonService;
 
     @RequestMapping(value = "/dcc/{pid}", method = RequestMethod.GET )
     public ResponseEntity<Document> readDocument(@PathVariable String pid) throws ParserConfigurationException, IOException, SAXException {
@@ -30,8 +32,13 @@ public class DmeController {
         return new ResponseEntity<>(inputReaderService.readData(), HttpStatus.OK);
     }
 
-//    @RequestMapping(value = "/sayHello", method = RequestMethod.GET)
-//    public String sayHelloWorld() {return " Test Hi";
-//    }
+    @RequestMapping(value = "/testMass", method = RequestMethod.GET)
+    public String compareMass()  {
+        virtualMassComparisonService.evaluateComparison("");
+        return "evaluation complete";
+    }
+
+    @RequestMapping(value = "/sayHello", method = RequestMethod.GET)
+    public String sayHelloWorld() {return " Test Hi";}
 }
 
