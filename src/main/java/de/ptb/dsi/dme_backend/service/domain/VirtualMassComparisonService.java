@@ -16,39 +16,44 @@ public class VirtualMassComparisonService implements IComparisonEvaluationServic
     @Override
     public String evaluateComparison(String inputJson) {
 
-        // 1) Dataidentifier festlegen (später über UI) -> Werte im DCC finden, refType basic measured value (später über UI)
-        DataIdentifier dataIdentifier = new DataIdentifier();
-        dataIdentifier.getRefTypes().add("basic_measuredValue");
-
-        // 2) Input Reader starten mit dataIdentifier
-        // mit dataIdentifier die entsprechenden Werte aus dem DCC einlesen und in ComparisonDataModel schreiben
-
-        // Hard coded Erzeugung des ComparisonDataModels -> später durch InputReader
+        // 1) Contribution Inhalte kommen aus UI
         Contribution contribution1 = new Contribution("1", "UME","Mass_Comparison_UME");
-        ContributionEntityData contributionEntityData1 = new ContributionEntityData();
-        contributionEntityData1.getContributionData().put(contribution1.getContributionId(), new SiReal(1.000000271, new SiExpandedUnc(1.0E-7, 2)));
-
         Contribution contribution2 = new Contribution("2", "NRC","Mass_Comparison_NRC");
-        ContributionEntityData contributionEntityData2 = new ContributionEntityData();
-        contributionEntityData2.getContributionData().put(contribution2.getContributionId(), new SiReal(1.000000249, new SiExpandedUnc(5.7E-8, 2)));
-
         Contribution contribution3 = new Contribution("3", "PTB","Mass_Comparison_PTB_outlier");
-        ContributionEntityData contributionEntityData3 = new ContributionEntityData();
-        contributionEntityData3.getContributionData().put(contribution3.getContributionId(), new SiReal(1.000000424, new SiExpandedUnc(4.6E-8, 2)));
 
-        // EntityUnderComparison -> ContributionEntityData -> Hashmap<SiReal> {"1": SiReal, "2": SiReal, "3": SiReal}
-        EntityUnderComparison entityUnderComparison = new EntityUnderComparison();
-        entityUnderComparison.setEntityId("mass");
-        entityUnderComparison.getDataIdentifiers().put("1", dataIdentifier);
-        entityUnderComparison.getEntityData().put(contribution1.getContributionId(), contributionEntityData1);
-        entityUnderComparison.getEntityData().put(contribution2.getContributionId(), contributionEntityData2);
-        entityUnderComparison.getEntityData().put(contribution3.getContributionId(), contributionEntityData3);
+        // 2) Dataidentifier festlegen (später über UI) -> Werte im DCC finden, refType basic measured value (später über UI)
+        DataIdentifier dataIdentifier = new DataIdentifier();
+        dataIdentifier.getRefTypes().add("basic_measuredValue"); //für Temperature würde noch refId dazukommen
 
+        // 3) ComparisonDataModel erzeugen und auffüllen
+        // Hard coded Erzeugung des ComparisonDataModels -> später durch InputReader
         ComparisonDataModel comparisonDataModel = new ComparisonDataModel();
         comparisonDataModel.getContributions().put(contribution1.getContributionId(), contribution1);
         comparisonDataModel.getContributions().put(contribution2.getContributionId(), contribution2);
         comparisonDataModel.getContributions().put(contribution3.getContributionId(), contribution3);
-        comparisonDataModel.getEntities().put("mass", entityUnderComparison);
+
+        // 4) EntityUnderComparison erzeugen z.B. "mass" oder "temp_setpoint1"
+        EntityUnderComparison entityUnderComparison = new EntityUnderComparison();
+        entityUnderComparison.setEntityId("mass"); // kommt aus UI? automatisch generiert?
+        entityUnderComparison.getDataIdentifiers().put("1", dataIdentifier); // sollte ggf nur einen dataIdentifier pro EntityUnderComparison?
+        comparisonDataModel.getEntities().put("mass", entityUnderComparison); // EntityUnderComparison ins comparsionDatamodel einfügen
+
+        // 5) Input Reader starten
+        // mit dataIdentifier aus den EntityUnderComparison imComparisonDataModel, die entsprechenden Werte aus dem DCC einlesen
+        // EntityUnderComparison -> ContributionEntityData -> Hashmap<SiReal> {"1": SiReal, "2": SiReal, "3": SiReal}
+        ContributionEntityData contributionEntityData1 = new ContributionEntityData();
+        contributionEntityData1.getContributionData().put(contribution1.getContributionId(), new SiReal(1.000000271, new SiExpandedUnc(1.0E-7, 2)));
+
+        ContributionEntityData contributionEntityData2 = new ContributionEntityData();
+        contributionEntityData2.getContributionData().put(contribution2.getContributionId(), new SiReal(1.000000249, new SiExpandedUnc(5.7E-8, 2)));
+
+        ContributionEntityData contributionEntityData3 = new ContributionEntityData();
+        contributionEntityData3.getContributionData().put(contribution3.getContributionId(), new SiReal(1.000000424, new SiExpandedUnc(4.6E-8, 2)));
+
+        comparisonDataModel.getEntities().get("mass").getEntityData().put(contribution1.getContributionId(), contributionEntityData1);
+        comparisonDataModel.getEntities().get("mass").getEntityData().put(contribution2.getContributionId(), contributionEntityData2);
+        comparisonDataModel.getEntities().get("mass").getEntityData().put(contribution3.getContributionId(), contributionEntityData3);
+
 
         // Schleife über alle EntityUnderComparison
         // Auswertung hier nur für EntityUnderComparison mit id = "mass"
@@ -105,7 +110,6 @@ public class VirtualMassComparisonService implements IComparisonEvaluationServic
                 // hat sich Anzahl der Outlier geändert? Kriterium für nächsten Durchlauf
                 currentOutlierLength = entity.getAnalysisOutputs().getLast().getOutliers().size();
             }
-
         }
 
         // Output report erzeugen
