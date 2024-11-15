@@ -2,17 +2,13 @@ package de.ptb.dsi.dme_backend.model;
 
 import lombok.Data;
 
-import java.util.ArrayList;
 import java.util.List;
 @Data
 public class DataIdentifier {
     String id; // key for inputReader dataIdentifierId
-    List<String> refIds;
-    List<String> refTypes;
+    String refId;
+    String refType;
     String siLabel;
 
-    public DataIdentifier(){
-        this.refIds = new ArrayList<>();
-        this.refTypes = new ArrayList<>();
-    }
+
 }
