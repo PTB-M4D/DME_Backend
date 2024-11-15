@@ -5,14 +5,19 @@ import de.ptb.dsi.dme_backend.service.submodel.DecisionProcessingService;
 import de.ptb.dsi.dme_backend.service.submodel.EnCriterionConsistencyCheckService;
 import de.ptb.dsi.dme_backend.service.submodel.StandardEnValueCalculationService;
 import de.ptb.dsi.dme_backend.service.submodel.WeightedMeanCalculationService;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+@Service
+@AllArgsConstructor
 public class VirtualMassComparisonService implements IComparisonEvaluationService {
-    private ComparisonDataModel comparisonDataModel;
+//    private ComparisonDataModel comparisonDataModel;
+
     @Override
     public String evaluateComparison(String inputJson) {
 
@@ -23,7 +28,7 @@ public class VirtualMassComparisonService implements IComparisonEvaluationServic
 
         // 2) Dataidentifier festlegen (später über UI) -> Werte im DCC finden, refType basic measured value (später über UI)
         DataIdentifier dataIdentifier = new DataIdentifier();
-        dataIdentifier.getRefTypes().add("basic_measuredValue"); //für Temperature würde noch refId dazukommen
+        dataIdentifier.setRefType("basic_measuredValue"); //für Temperature würde noch refId dazukommen
 
         // 3) ComparisonDataModel erzeugen und auffüllen
         // Hard coded Erzeugung des ComparisonDataModels -> später durch InputReader
