@@ -16,12 +16,15 @@ public class DecisionProcessingService {
 //        -	If a participant is defined as outlier, a new AnalysisOutput is added to ComparisonDataModel and the outlier is removed from the list ParticipantMeasuredValuesContributing and put to list ParticipantMeasuredValuesOutliers
 
         if (automatic){
-            String method = analysisOutput.getCheckResult().getMethodType();
 
-            //Automatische En Wert Entscheidung: id auf Outlier Liste im AnalysisOutput setzen
-            if (method.equals("En Value Criterion")) {
-                String id = analysisOutput.getCheckResult().getNonConsistentContribution();
-                analysisOutput.getOutliers().add(id);
+            if (!analysisOutput.getCheckResult().isConsistent()) {
+                String method = analysisOutput.getCheckResult().getMethodType();
+
+                //Automatische En Wert Entscheidung: id auf Outlier Liste im AnalysisOutput setzen
+                if (method.equals("En Value Criterion")) {
+                    String id = analysisOutput.getCheckResult().getNonConsistentContribution();
+                    analysisOutput.getOutliers().add(id);
+                }
             }
         }
     }
