@@ -17,7 +17,7 @@ public class AnalysisOutput {
 
     public AnalysisOutput(){
         this.enValues = new HashMap<>();
-        this. bilateralEnValues = new HashMap<String,HashMap<String,BilateralEnValue>>();
+        this.bilateralEnValues = new HashMap<String,HashMap<String,BilateralEnValue>>();
         this.outliers = new ArrayList<>();
     }
 }
