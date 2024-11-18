@@ -19,14 +19,17 @@ public class EnCriterionConsistencyCheckService implements IConsistencyCheckServ
         String idOfNonConsistentContribution = null;
 
         HashMap<String, EnValue> enValues = analysisOutput.getEnValues();
-        HashMap<String, HashMap<String,BilateralEnValue>> bilateralEnValues = analysisOutput.getBilateralEnValues();
+
+//        HashMap<String, HashMap<String,BilateralEnValue>> bilateralEnValues = analysisOutput.getBilateralEnValues();
 
         //Standard En-Values
         for(String key : enValues.keySet()){
-            Double currentValue = enValues.get(key).getEnValueRaw().getValue();
-            if(currentValue > highestInconsistentValue){
-                highestInconsistentValue = currentValue;
-                idOfNonConsistentContribution = key;
+            if (!analysisOutput.getOutliers().contains(key)) {
+                Double currentValue = enValues.get(key).getEnValueRaw().getValue();
+                if (currentValue > highestInconsistentValue) {
+                    highestInconsistentValue = currentValue;
+                    idOfNonConsistentContribution = key;
+                }
             }
         }
 
@@ -41,7 +44,7 @@ public class EnCriterionConsistencyCheckService implements IConsistencyCheckServ
             }
         }*/
 
-        analysisOutput.setCheckResult(new ConsistencyCheckResult(methodType, highestInconsistentValue > 1.0, idOfNonConsistentContribution));
+        analysisOutput.setCheckResult(new ConsistencyCheckResult(methodType, highestInconsistentValue <= 1.0, idOfNonConsistentContribution));
     }
 
 }

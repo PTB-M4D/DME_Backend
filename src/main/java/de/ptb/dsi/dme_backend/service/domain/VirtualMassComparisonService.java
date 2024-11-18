@@ -103,11 +103,11 @@ public class VirtualMassComparisonService implements IComparisonEvaluationServic
 
                 // ConsistencyCheck
                 EnCriterionConsistencyCheckService consistencyCheckService = new EnCriterionConsistencyCheckService();
-//                consistencyCheckService.evaluateConsistency(analysisOutput);
+                consistencyCheckService.evaluateConsistency(analysisOutput);
 
                 // Entscheidung, ob geflaggte Contributions als Outlier aufgenommen werden sollen
                 DecisionProcessingService decisionProcessingService = new DecisionProcessingService();
-//                decisionProcessingService.processDecision(analysisOutput, true);
+                decisionProcessingService.processDecision(analysisOutput, true);
 
                 // AnalysisOutput in EntityUnderComparison hinzufügen
                 entity.getAnalysisOutputs().add(analysisOutput);
