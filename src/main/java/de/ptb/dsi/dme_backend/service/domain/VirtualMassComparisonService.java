@@ -82,35 +82,35 @@ public class VirtualMassComparisonService implements IComparisonEvaluationServic
                 }
                 // Outlier aus Contribution aussortieren -> neue Liste ohne Outlier
                 List<String> outliers = analysisOutput.getOutliers();
-                HashMap<String, SiReal> contributionData = entity.getEntityData().get("mass-measure").getContributionData();
-                List<SiReal> contributingData = new ArrayList<>();
+                HashMap<String, SiReal> contributionData = entity.getEntityData().get("measuredValue").getContributionData();
+                HashMap<String ,SiReal> contributingData = new HashMap<>();
                 for (String id : contributionData.keySet()) {
                     if (!outliers.contains(id)) {
-                        contributingData.add(contributionData.get(id));
+                        contributingData.put(id, contributionData.get(id));
                     }
                 }
 
-//                // weigehted mean berechnen
-//                WeightedMeanCalculationService weightedMeanCalculationService = new WeightedMeanCalculationService();
-//                ReferenceValue referenceValue = weightedMeanCalculationService.calculateReferenceValue(contributingData);
-//                analysisOutput.setRefValue(referenceValue);
-//
-//                // En werte berechnen
-////                HashMap<String, SiReal> contributionMeasuredValues = new HashMap<>();
-////                for (String contributionId : comparisonDataModel.getContributions().keySet()){
-////                    contributionMeasuredValues.put(contributionId, entity.getEntityData().get(contributionId).getContributionData().get(contributionId));
-////                }
-//                StandardEnValueCalculationService enValueCalculationService = new StandardEnValueCalculationService();
-//                HashMap<String, EnValue> enValues = enValueCalculationService.calculateEnValue(contributionData, referenceValue, analysisOutput.getOutliers());
-//                analysisOutput.setEnValues(enValues);
-//
-//                // ConsistencyCheck
-//                EnCriterionConsistencyCheckService consistencyCheckService = new EnCriterionConsistencyCheckService();
-//                consistencyCheckService.evaluateConsistency(analysisOutput);
-//
-//                // Entscheidung, ob geflaggte Contributions als Outlier aufgenommen werden sollen
-//                DecisionProcessingService decisionProcessingService = new DecisionProcessingService();
-//                decisionProcessingService.processDecision(analysisOutput, true);
+                // weigehted mean berechnen
+                WeightedMeanCalculationService weightedMeanCalculationService = new WeightedMeanCalculationService();
+                ReferenceValue referenceValue = weightedMeanCalculationService.calculateReferenceValue(contributingData);
+                analysisOutput.setRefValue(referenceValue);
+
+                // En werte berechnen
+//                HashMap<String, SiReal> contributionMeasuredValues = new HashMap<>();
+//                for (String contributionId : comparisonDataModel.getContributions().keySet()){
+//                    contributionMeasuredValues.put(contributionId, entity.getEntityData().get(contributionId).getContributionData().get(contributionId));
+//                }
+                StandardEnValueCalculationService enValueCalculationService = new StandardEnValueCalculationService();
+                HashMap<String, EnValue> enValues = enValueCalculationService.calculateEnValue(contributionData, referenceValue, analysisOutput.getOutliers());
+                analysisOutput.setEnValues(enValues);
+
+                // ConsistencyCheck
+                EnCriterionConsistencyCheckService consistencyCheckService = new EnCriterionConsistencyCheckService();
+                consistencyCheckService.evaluateConsistency(analysisOutput);
+
+                // Entscheidung, ob geflaggte Contributions als Outlier aufgenommen werden sollen
+                DecisionProcessingService decisionProcessingService = new DecisionProcessingService();
+                decisionProcessingService.processDecision(analysisOutput, true);
 
                 // AnalysisOutput in EntityUnderComparison hinzufügen
                 entity.getAnalysisOutputs().add(analysisOutput);
