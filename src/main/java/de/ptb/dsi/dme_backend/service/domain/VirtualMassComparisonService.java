@@ -22,14 +22,14 @@ public class VirtualMassComparisonService implements IComparisonEvaluationServic
     public String evaluateComparison(String inputJson) {
 
         // 1) Contribution Inhalte kommen aus UI
-        Contribution contribution1 = new Contribution("1", "UME","Mass_Comparison_UME");
-        Contribution contribution2 = new Contribution("2", "NRC","Mass_Comparison_NRC");
-        Contribution contribution3 = new Contribution("3", "PTB","Mass_Comparison_PTB_outlier");
+        Contribution contribution1 = new Contribution("UME", "UME","Mass_Comparison_UME");
+        Contribution contribution2 = new Contribution("NRC", "NRC","Mass_Comparison_NRC");
+        Contribution contribution3 = new Contribution("PTB", "PTB","Mass_Comparison_PTB_outlier");
 
         // 2) Dataidentifier festlegen (später über UI) -> Werte im DCC finden, refType basic measured value (später über UI)
         DataIdentifier dataIdentifier = new DataIdentifier();
         dataIdentifier.setRefType("basic_measuredValue");
-        dataIdentifier.setId("1"); //für Temperature würde noch refId dazukommen
+        dataIdentifier.setId("measuredValue"); //für Temperature würde noch refId dazukommen
 
         // 3) ComparisonDataModel erzeugen und auffüllen
         // Hard coded Erzeugung des ComparisonDataModels -> später durch InputReader
@@ -40,25 +40,27 @@ public class VirtualMassComparisonService implements IComparisonEvaluationServic
 
         // 4) EntityUnderComparison erzeugen z.B. "mass" oder "temp_setpoint1"
         EntityUnderComparison entityUnderComparison = new EntityUnderComparison();
-        entityUnderComparison.setEntityId("mass"); // kommt aus UI? automatisch generiert?
+        entityUnderComparison.setEntityId("mass-measure"); // kommt aus UI? automatisch generiert?
         entityUnderComparison.getDataIdentifiers().put(dataIdentifier.getId(), dataIdentifier); // sollte ggf nur einen dataIdentifier pro EntityUnderComparison?
-        comparisonDataModel.getEntities().put("mass", entityUnderComparison); // EntityUnderComparison ins comparsionDatamodel einfügen
+
+        comparisonDataModel.getEntities().put(entityUnderComparison.getEntityId(), entityUnderComparison); // EntityUnderComparison ins comparsionDatamodel einfügen
 
         // 5) Input Reader starten
         // mit dataIdentifier aus den EntityUnderComparison imComparisonDataModel, die entsprechenden Werte aus dem DCC einlesen
         // EntityUnderComparison -> ContributionEntityData -> Hashmap<SiReal> {"1": SiReal, "2": SiReal, "3": SiReal}
-        ContributionEntityData contributionEntityData1 = new ContributionEntityData();
-        contributionEntityData1.getContributionData().put(contribution1.getContributionId(), new SiReal(1.000000271, new SiExpandedUnc(1.0E-7, 2)));
+        ContributionEntityData contributionEntityData = new ContributionEntityData();
+        contributionEntityData.getContributionData().put(contribution1.getContributionId(), new SiReal(1.000000271, new SiExpandedUnc(1.0E-7, 2)));
 
-        ContributionEntityData contributionEntityData2 = new ContributionEntityData();
-        contributionEntityData2.getContributionData().put(contribution2.getContributionId(), new SiReal(1.000000249, new SiExpandedUnc(5.7E-8, 2)));
+//        ContributionEntityData contributionEntityData2 = new ContributionEntityData();
+        contributionEntityData.getContributionData().put(contribution2.getContributionId(), new SiReal(1.000000249, new SiExpandedUnc(5.7E-8, 2)));
 
-        ContributionEntityData contributionEntityData3 = new ContributionEntityData();
-        contributionEntityData3.getContributionData().put(contribution3.getContributionId(), new SiReal(1.000000424, new SiExpandedUnc(4.6E-8, 2)));
+//        ContributionEntityData contributionEntityData3 = new ContributionEntityData();
+        contributionEntityData.getContributionData().put(contribution3.getContributionId(), new SiReal(1.000000424, new SiExpandedUnc(4.6E-8, 2)));
 
-        comparisonDataModel.getEntities().get("mass").getEntityData().put(contribution1.getContributionId(), contributionEntityData1);
-        comparisonDataModel.getEntities().get("mass").getEntityData().put(contribution2.getContributionId(), contributionEntityData2);
-        comparisonDataModel.getEntities().get("mass").getEntityData().put(contribution3.getContributionId(), contributionEntityData3);
+        comparisonDataModel.getEntities().get("mass-measure").getEntityData().put(dataIdentifier.getId(),contributionEntityData);
+//        comparisonDataModel.getEntities().get(dataIdentifier.getId()).getEntityData().put(dataIdentifier.getId(), contributionEntityData);
+//        comparisonDataModel.getEntities().get("mass").getEntityData().put(contribution2.getContributionId(), contributionEntityData2);
+//        comparisonDataModel.getEntities().get("mass").getEntityData().put(contribution3.getContributionId(), contributionEntityData3);
 
 
         // Schleife über alle EntityUnderComparison
@@ -80,35 +82,35 @@ public class VirtualMassComparisonService implements IComparisonEvaluationServic
                 }
                 // Outlier aus Contribution aussortieren -> neue Liste ohne Outlier
                 List<String> outliers = analysisOutput.getOutliers();
-                HashMap<String, ContributionEntityData> contributionEntityData = entity.getEntityData();
-                List<ParticipantMeasuredValue> contributingData = new ArrayList<>();
-                for (String id : contributionEntityData.keySet()) {
+                HashMap<String, SiReal> contributionData = entity.getEntityData().get("mass-measure").getContributionData();
+                List<SiReal> contributingData = new ArrayList<>();
+                for (String id : contributionData.keySet()) {
                     if (!outliers.contains(id)) {
-                        contributingData.add(new ParticipantMeasuredValue(contributionEntityData.get(id).getContributionData().get(id)));
+                        contributingData.add(contributionData.get(id));
                     }
                 }
 
-                // weigehted mean berechnen
-                WeightedMeanCalculationService weightedMeanCalculationService = new WeightedMeanCalculationService();
-                ReferenceValue referenceValue = weightedMeanCalculationService.calculateReferenceValue(contributingData);
-                analysisOutput.setRefValue(referenceValue);
-
-                // En werte berechnen
-                HashMap<String, SiReal> contributionMeasuredValues = new HashMap<>();
-                for (String contributionId : comparisonDataModel.getContributions().keySet()){
-                    contributionMeasuredValues.put(contributionId, entity.getEntityData().get(contributionId).getContributionData().get(contributionId));
-                }
-                StandardEnValueCalculationService enValueCalculationService = new StandardEnValueCalculationService();
-                HashMap<String, EnValue> enValues = enValueCalculationService.calculateEnValue(contributionMeasuredValues, referenceValue, analysisOutput.getOutliers());
-                analysisOutput.setEnValues(enValues);
-
-                // ConsistencyCheck
-                EnCriterionConsistencyCheckService consistencyCheckService = new EnCriterionConsistencyCheckService();
-                consistencyCheckService.evaluateConsistency(analysisOutput);
-
-                // Entscheidung, ob geflaggte Contributions als Outlier aufgenommen werden sollen
-                DecisionProcessingService decisionProcessingService = new DecisionProcessingService();
-                decisionProcessingService.processDecision(analysisOutput, true);
+//                // weigehted mean berechnen
+//                WeightedMeanCalculationService weightedMeanCalculationService = new WeightedMeanCalculationService();
+//                ReferenceValue referenceValue = weightedMeanCalculationService.calculateReferenceValue(contributingData);
+//                analysisOutput.setRefValue(referenceValue);
+//
+//                // En werte berechnen
+////                HashMap<String, SiReal> contributionMeasuredValues = new HashMap<>();
+////                for (String contributionId : comparisonDataModel.getContributions().keySet()){
+////                    contributionMeasuredValues.put(contributionId, entity.getEntityData().get(contributionId).getContributionData().get(contributionId));
+////                }
+//                StandardEnValueCalculationService enValueCalculationService = new StandardEnValueCalculationService();
+//                HashMap<String, EnValue> enValues = enValueCalculationService.calculateEnValue(contributionData, referenceValue, analysisOutput.getOutliers());
+//                analysisOutput.setEnValues(enValues);
+//
+//                // ConsistencyCheck
+//                EnCriterionConsistencyCheckService consistencyCheckService = new EnCriterionConsistencyCheckService();
+//                consistencyCheckService.evaluateConsistency(analysisOutput);
+//
+//                // Entscheidung, ob geflaggte Contributions als Outlier aufgenommen werden sollen
+//                DecisionProcessingService decisionProcessingService = new DecisionProcessingService();
+//                decisionProcessingService.processDecision(analysisOutput, true);
 
                 // AnalysisOutput in EntityUnderComparison hinzufügen
                 entity.getAnalysisOutputs().add(analysisOutput);
