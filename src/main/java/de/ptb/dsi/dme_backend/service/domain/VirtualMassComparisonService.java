@@ -28,7 +28,8 @@ public class VirtualMassComparisonService implements IComparisonEvaluationServic
 
         // 2) Dataidentifier festlegen (später über UI) -> Werte im DCC finden, refType basic measured value (später über UI)
         DataIdentifier dataIdentifier = new DataIdentifier();
-        dataIdentifier.setRefType("basic_measuredValue"); //für Temperature würde noch refId dazukommen
+        dataIdentifier.setRefType("basic_measuredValue");
+        dataIdentifier.setId("1"); //für Temperature würde noch refId dazukommen
 
         // 3) ComparisonDataModel erzeugen und auffüllen
         // Hard coded Erzeugung des ComparisonDataModels -> später durch InputReader
@@ -40,7 +41,7 @@ public class VirtualMassComparisonService implements IComparisonEvaluationServic
         // 4) EntityUnderComparison erzeugen z.B. "mass" oder "temp_setpoint1"
         EntityUnderComparison entityUnderComparison = new EntityUnderComparison();
         entityUnderComparison.setEntityId("mass"); // kommt aus UI? automatisch generiert?
-        entityUnderComparison.getDataIdentifiers().put("1", dataIdentifier); // sollte ggf nur einen dataIdentifier pro EntityUnderComparison?
+        entityUnderComparison.getDataIdentifiers().put(dataIdentifier.getId(), dataIdentifier); // sollte ggf nur einen dataIdentifier pro EntityUnderComparison?
         comparisonDataModel.getEntities().put("mass", entityUnderComparison); // EntityUnderComparison ins comparsionDatamodel einfügen
 
         // 5) Input Reader starten

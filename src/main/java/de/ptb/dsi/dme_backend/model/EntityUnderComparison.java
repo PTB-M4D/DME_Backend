@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 @Data
 public class EntityUnderComparison {
-    String entityId; // z.B. "mass"
-    HashMap<String,DataIdentifier> dataIdentifiers; // sollte nur 1 dataIdentifier sein?
+    String entityId; // z.B. "mass" z.B temperatur
+    HashMap<String,DataIdentifier> dataIdentifiers ; // sollte nur 1 dataIdentifier sein?
     HashMap<String, ContributionEntityData> entityData;// key dataIdentifierId -> evtl unnötig? key=contributionid?
     List<AnalysisOutput> analysisOutputs;
 
