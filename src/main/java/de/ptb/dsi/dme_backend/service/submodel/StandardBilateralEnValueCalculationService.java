@@ -36,8 +36,8 @@ public class StandardBilateralEnValueCalculationService implements IBilateralEnC
                 //Expanded uncertainty (95 %) are needed for bilateral En values
                 double xi = contributionMeasuredValues.get(keyList.get(i)).getValue();
                 double xj = contributionMeasuredValues.get(keyList.get(j)).getValue();
-                double ui = contributionMeasuredValues.get(keyList.get(i)).getExpUnc().getUncertainty();
-                double uj = contributionMeasuredValues.get(keyList.get(j)).getExpUnc().getUncertainty();
+                double ui = contributionMeasuredValues.get(keyList.get(i)).getExpandedMU().getValueExpandedMU();
+                double uj = contributionMeasuredValues.get(keyList.get(j)).getExpandedMU().getValueExpandedMU();
 
                 double enValueDouble = Math.abs(xi - xj) / Math.sqrt(ui * ui + uj * uj);
 
@@ -69,7 +69,7 @@ public class StandardBilateralEnValueCalculationService implements IBilateralEnC
     }
     public void checkForNullInSiExpUnc(HashMap<String, SiReal> contributionMeasuredValues){
         for (SiReal siReal : contributionMeasuredValues.values()) {
-            if(siReal.getExpUnc().getUncertainty() == null){
+            if(siReal.getExpandedMU().getValueExpandedMU() == null){
                 throw new NullPointerException("Uncertainty in ExpUnc cannot be null.");
             }
         }

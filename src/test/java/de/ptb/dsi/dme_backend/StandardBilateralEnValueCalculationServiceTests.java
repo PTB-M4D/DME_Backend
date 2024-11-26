@@ -23,8 +23,8 @@ public class StandardBilateralEnValueCalculationServiceTests {
 
         //Example Values
         contributionMeasuredValues = new HashMap<>();
-        contributionMeasuredValues.put("0", new SiReal(1.0, new SiExpandedUnc(0.4, 2)));
-        contributionMeasuredValues.put("1", new SiReal(1.5, new SiExpandedUnc(0.3, 2)));
+        contributionMeasuredValues.put("0", new SiReal(1.0, new SiExpandedMU(0.4, 2)));
+        contributionMeasuredValues.put("1", new SiReal(1.5, new SiExpandedMU(0.3, 2)));
 
         contributions = new HashMap<>();
         contributions.put("0", new Contribution("123"));
@@ -107,7 +107,7 @@ public class StandardBilateralEnValueCalculationServiceTests {
 
     @Test
     public void testExceptionNullValuesInContributionMeasuredValues(){
-        contributionMeasuredValues.put("0", new SiReal(null, new SiExpandedUnc(0.4, 2)));
+        contributionMeasuredValues.put("0", new SiReal(null, new SiExpandedMU(0.4, 2)));
 
         NullPointerException exception = assertThrows(NullPointerException.class,
                 () -> StandardBilateralEnValueCalculationService
@@ -119,7 +119,7 @@ public class StandardBilateralEnValueCalculationServiceTests {
 
     @Test
     public void testExceptionNullValuesInExpUnc(){
-        contributionMeasuredValues.put("0", new SiReal(1.0, new SiExpandedUnc()));
+        contributionMeasuredValues.put("0", new SiReal(1.0, new SiExpandedMU()));
 
         NullPointerException exception = assertThrows(NullPointerException.class,
                 () -> StandardBilateralEnValueCalculationService
