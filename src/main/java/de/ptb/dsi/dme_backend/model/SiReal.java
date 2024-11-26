@@ -2,14 +2,12 @@ package de.ptb.dsi.dme_backend.model;
 
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Data
 @NoArgsConstructor
-
+@Builder
+@AllArgsConstructor
 public class SiReal {
     Long id;
     String label;

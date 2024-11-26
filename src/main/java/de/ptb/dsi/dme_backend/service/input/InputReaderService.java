@@ -138,14 +138,14 @@ public class InputReaderService implements IInputReaderService {
                         .item(0).getTextContent());
                 String siRealDistributionXMLList = evaluateXPath(xpath, siRealRefTypeListNode, "//*[@refType='" + refType + "']/realListXMLList/expandedUncXMLList/distributionXMLList")
                         .item(0).getTextContent();
-                SiExpandedUnc siExpandedUnc = SiExpandedUnc.builder()
-                        .uncertainty(expandedUncXMLList.get(0))//index
+                SiExpandedMU siExpandedUnc = SiExpandedMU.builder()
+                        .valueExpandedMU(expandedUncXMLList.get(0))//index
                         .coverageFactor(coverageFactorXMLList)
                         .coverageProbability(siRealCoverageProbabilityXMLList)
                         .distribution(siRealDistributionXMLList).build();
                 siReal = SiReal.builder().value(siValuesXMLList.get(0))// index
                         .unit(siRealListUnitXMLList)
-                        .expUnc(siExpandedUnc).build();
+                        .expandedMU(siExpandedUnc).build();
                 System.out.println("siReal: "+siReal);
             } else if(siRealNodeExist && refTypeNode.getLength() != 0 && nodeQuantityExist &&  siRealNodeExist) {
 
@@ -155,8 +155,8 @@ public class InputReaderService implements IInputReaderService {
                     Double siReaLUncertainty = Double.valueOf(evaluateXPath(xpath, siRealRefTypeListNode, "//*[@refType='" + refType + "']/real/expandedUnc/uncertainty").item(0).getTextContent());
                     int siReaLCoverageFactor = Integer.parseInt(evaluateXPath(xpath, siRealRefTypeListNode, "//*[@refType='" + refType + "']/real/expandedUnc/coverageFactor").item(0).getTextContent());
                     Double siRealCoverageProbability = Double.valueOf(evaluateXPath(xpath, siRealRefTypeListNode, "//*[@refType='" + refType + "']/real/expandedUnc/coverageProbability").item(0).getTextContent());
-                    SiExpandedUnc siExpandedUnc = SiExpandedUnc.builder()
-                            .uncertainty(siReaLUncertainty)
+                SiExpandedMU siExpandedUnc = SiExpandedMU.builder()
+                            .valueExpandedMU(siReaLUncertainty)
                             .coverageFactor(siReaLCoverageFactor)
                             .coverageProbability(siRealCoverageProbability)
                             .build();
@@ -164,7 +164,7 @@ public class InputReaderService implements IInputReaderService {
                             .value(siReaLValue)
                             .unit(siReaLUnit)
                             .dateTime(siReaLDateTime)
-                            .expUnc(siExpandedUnc).build();
+                            .expandedMU(siExpandedUnc).build();
                     System.out.println("siReaL: " + siReal);
                 }
             else {return null;}
