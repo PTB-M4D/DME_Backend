@@ -65,7 +65,7 @@ public class InputReaderService implements IInputReaderService {
     public SiReal readData() throws ParserConfigurationException, IOException, SAXException, XPathExpressionException {
 //    public SiReal readData(@Nonnull DataIdentifier dataIdentifier, @Nonnull Document document) throws  XPathExpressionException {
         Document document;
-        SiReal siReal = new SiReal();
+        SiReal siReal ;
 //        document = readDocument("Temp_Comparison_PTB_1");
         document = readDocument("Mass_Comparison_PTB");
         document.getDocumentElement().normalize();
@@ -76,26 +76,33 @@ public class InputReaderService implements IInputReaderService {
         }
 //        String refId = dataIdentifier.getRefId();
 //        int index= dataIdentifier.getIndex();
+        //        String refType = "basic_measuredValue";
         String refId = "blackbody01";
+        String refType = "basic_measuredValue";
+//        String  refType = "basic_measuredValue basic_arithmenticMean temperature_ITS-90";
+        NodeList filteredNodes = null;
+        String dccExpression = "//*[name()='dcc:digitalCalibrationCertificate']";
+        NodeList dccNode= (NodeList)  xpath.evaluate(dccExpression, document, XPathConstants.NODESET);
+        String refIdExpressionBoolean = "boolean(//*[@refId='" + refId + "'])";
+        Boolean refIdExist = (Boolean) xpath.evaluate(refIdExpressionBoolean  , document, XPathConstants.BOOLEAN);
         // Prüfen, ob refId definiert ist und nach Elementen mit dem angegebenen refId suchen
-        XPathExpression exprRefId = xpath.compile("//*[@refId='" + refId + "']");
-        NodeList refIdNodes = (NodeList) exprRefId.evaluate(document, XPathConstants.NODESET);
-        log.info(refIdNodes != null && refIdNodes.getLength() > 0 ? "Found nodes for refId: {}" : "No nodes found for refId: {}", refId);
-        if (refIdNodes.getLength() != 0 && refIdNodes != null) {
-            String refType = "basic_measuredValue basic_arithmenticMean temperature_ITS-90";
-            siReal = searchRefTypeInNode(refType, refIdNodes);
-        } else {
+        if(refIdExist) {
+            XPathExpression exprRefId = xpath.compile("//*[@refId='" + refId + "']");
+            NodeList refIdNodes = (NodeList) exprRefId.evaluate( document, XPathConstants.NODESET);
+            log.info(refIdNodes != null && refIdNodes.getLength() > 0 ? "Found nodes for refId: {}" : "No nodes found for refId: {}", refId);
+            if (refIdNodes.getLength() != 0 && refIdNodes != null) {
+                filteredNodes=refIdNodes;
+            }
+        }else {
 //             Suche nach dcc-Elementen mit dem angegebenen refType
-//            String refType = dataIdentifier.getRefType();
-            String refType = "basic_measuredValue";
             XPathExpression exprRefTye = xpath.compile("//*[@refType='" + refType + "']");
-            NodeList siRealNodeXMLList = (NodeList) exprRefTye.evaluate(document, XPathConstants.NODESET);
-            siReal = searchRefTypeInNode(refType, siRealNodeXMLList);
+            filteredNodes = (NodeList) exprRefTye.evaluate(document, XPathConstants.NODESET);
         }
+        siReal=searchRefTypeInNode(refType ,filteredNodes);
         return siReal;
     }
 
-    private SiReal searchRefTypeInNode(String refType, NodeList nodes) throws XPathExpressionException {
+    private SiReal searchRefTypeInNode( String refType, NodeList nodes) throws XPathExpressionException {
         XPath xpath = XPathFactory.newInstance().newXPath();
         SiReal siReal = null;
         //        int index= dataIdentifier.getIndex();
@@ -132,11 +139,11 @@ public class InputReaderService implements IInputReaderService {
                 String siRealDistributionXMLList = evaluateXPath(xpath, siRealRefTypeListNode, "//*[@refType='" + refType + "']/realListXMLList/expandedUncXMLList/distributionXMLList")
                         .item(0).getTextContent();
                 SiExpandedUnc siExpandedUnc = SiExpandedUnc.builder()
-                        .uncertainty(expandedUncXMLList.get(0))
+                        .uncertainty(expandedUncXMLList.get(0))//index
                         .coverageFactor(coverageFactorXMLList)
                         .coverageProbability(siRealCoverageProbabilityXMLList)
                         .distribution(siRealDistributionXMLList).build();
-                siReal = SiReal.builder().value(siValuesXMLList.get(0))
+                siReal = SiReal.builder().value(siValuesXMLList.get(0))// index
                         .unit(siRealListUnitXMLList)
                         .expUnc(siExpandedUnc).build();
                 System.out.println("siReal: "+siReal);
