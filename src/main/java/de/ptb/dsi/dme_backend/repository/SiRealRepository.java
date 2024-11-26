@@ -29,11 +29,11 @@ public class SiRealRepository {
     public SiReal save(SiReal siReal){
         SiReal si= new SiReal();
         si.setId(siReal.getId());
-        si.setName(siReal.getName());
+        si.setLabel(siReal.getLabel());
         si.setValue(siReal.getValue());
         si.setUnit(siReal.getUnit());
         si.setDateTime(siReal.getDateTime());
-        si.setExpUnc(siReal.getExpUnc());
+        si.setExpandedMU(siReal.getExpandedMU());
         siRealList.add(si);
         return si;
     }

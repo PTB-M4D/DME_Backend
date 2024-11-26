@@ -49,13 +49,13 @@ public class VirtualMassComparisonService implements IComparisonEvaluationServic
         // mit dataIdentifier aus den EntityUnderComparison imComparisonDataModel, die entsprechenden Werte aus dem DCC einlesen
         // EntityUnderComparison -> ContributionEntityData -> Hashmap<SiReal> {"1": SiReal, "2": SiReal, "3": SiReal}
         ContributionEntityData contributionEntityData = new ContributionEntityData();
-        contributionEntityData.getContributionData().put(contribution1.getContributionId(), new SiReal(1.000000271, new SiExpandedUnc(1.0E-7, 2)));
+        contributionEntityData.getContributionData().put(contribution1.getContributionId(), new SiReal(1.000000271, new SiExpandedMU(1.0E-7, 2)));
 
 //        ContributionEntityData contributionEntityData2 = new ContributionEntityData();
-        contributionEntityData.getContributionData().put(contribution2.getContributionId(), new SiReal(1.000000249, new SiExpandedUnc(5.7E-8, 2)));
+        contributionEntityData.getContributionData().put(contribution2.getContributionId(), new SiReal(1.000000249, new SiExpandedMU(5.7E-8, 2)));
 
 //        ContributionEntityData contributionEntityData3 = new ContributionEntityData();
-        contributionEntityData.getContributionData().put(contribution3.getContributionId(), new SiReal(1.000000424, new SiExpandedUnc(4.6E-8, 2)));
+        contributionEntityData.getContributionData().put(contribution3.getContributionId(), new SiReal(1.000000424, new SiExpandedMU(4.6E-8, 2)));
 
         comparisonDataModel.getEntities().get("mass-measure").getEntityData().put(dataIdentifier.getId(),contributionEntityData);
 //        comparisonDataModel.getEntities().get(dataIdentifier.getId()).getEntityData().put(dataIdentifier.getId(), contributionEntityData);
