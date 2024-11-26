@@ -7,9 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 @Data
 public class EntityUnderComparison {
-    String entityId; // z.B. "mass"
-    HashMap<String,DataIdentifier> dataIdentifiers; // sollte nur 1 dataIdentifier sein?
-    HashMap<String, ContributionEntityData> entityData;// key dataIdentifierId -> evtl unnötig? key=contributionid?
+    String entityId; // z.B temperatur
+    HashMap<String,DataIdentifier> dataIdentifiers ; // key dataIdentifierId | z.B. "1" -> "basic_measuredValue", "2" -> "basic_measuredValueSensor1"
+    HashMap<String, ContributionEntityData> entityData;// key dataIdentifierId | "1" -> basic_measuredvalue von allen Contributions
     List<AnalysisOutput> analysisOutputs;
 
     public EntityUnderComparison() {

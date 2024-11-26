@@ -63,7 +63,6 @@ public class StandardEnValueCalculationServiceTests {
 
         double epsilon = 0.00001;
         assertEquals(expectedResult.getEnValueRaw().getValue(), result.getEnValueRaw().getValue(), epsilon);
-
     }
 
     @Test

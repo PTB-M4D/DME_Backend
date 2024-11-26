@@ -6,7 +6,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class BilateralEnValue {
-    private String methodType;
     private EnValue enValue;
     private String method;
     private String contributionA; //contributionId

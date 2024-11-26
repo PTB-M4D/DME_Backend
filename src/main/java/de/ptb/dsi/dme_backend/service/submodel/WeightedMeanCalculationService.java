@@ -7,24 +7,25 @@ import de.ptb.dsi.dme_backend.model.SiExpandedUnc;
 import de.ptb.dsi.dme_backend.model.SiReal;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 
 
 @Service
 public class WeightedMeanCalculationService implements IReferenceValueCalculationService {
 
-    //TODO: Coverage factor?
+    //TODO: liste zu hashmap
     @Override
-    public ReferenceValue calculateReferenceValue(List<ParticipantMeasuredValue> participantMeasuredValueValue) {
+    public ReferenceValue calculateReferenceValue(HashMap<String, SiReal> contributionData) {
         //Calculate reference value and uncertainty
         double referenceUncertainty = 0, referenceValue = 0, sumWeightedValues = 0, sumWeights = 0;
 
-        for (ParticipantMeasuredValue measurement : participantMeasuredValueValue) {
+        for (SiReal measurement : contributionData.values()) {
             //Potentiate standard uncertainty for further use
-            Double currentPotentiatedStandardUncertainty = Math.pow(measurement.getSiReal().getExpUnc().getUncertainty(), 2);
+            Double currentPotentiatedStandardUncertainty = Math.pow(measurement.getExpUnc().getUncertainty(), 2);
 
             //Calculate weighted values and weights
-            sumWeightedValues += measurement.getSiReal().getValue() / currentPotentiatedStandardUncertainty;
+            sumWeightedValues += measurement.getValue() / currentPotentiatedStandardUncertainty;
             sumWeights += 1 / currentPotentiatedStandardUncertainty;
         }
 

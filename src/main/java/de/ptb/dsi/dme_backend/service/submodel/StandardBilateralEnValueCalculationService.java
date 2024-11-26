@@ -45,7 +45,6 @@ public class StandardBilateralEnValueCalculationService implements IBilateralEnC
                 SiReal enValueSiReal = new SiReal(enValueDouble);
                 EnValue enValue = new EnValue(enValueSiReal, "bilateral EnValue");
                 BilateralEnValue bilateralEnValue = new BilateralEnValue(
-                        "bilateral En value calculation",
                         enValue,
                         "bilateral En Value",
                         contributions.get(keyList.get(i)).getContributionId(),

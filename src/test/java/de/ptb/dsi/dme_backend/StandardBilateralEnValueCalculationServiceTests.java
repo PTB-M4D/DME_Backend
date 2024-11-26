@@ -39,13 +39,11 @@ public class StandardBilateralEnValueCalculationServiceTests {
         // Formatting the result
         HashMap<String, BilateralEnValue> bilateralEnValues0 = new HashMap<>();
         bilateralEnValues0.put("0", new BilateralEnValue(
-                "bilateral En value calculation",
                 new EnValue(new SiReal(0.0), "bilateral EnValue"),
                 "bilateral En Value",
                 "123",
                 "123"));
         bilateralEnValues0.put("1", new BilateralEnValue(
-                "bilateral En value calculation",
                 new EnValue(new SiReal(1.0), "bilateral EnValue"),
                 "bilateral En Value",
                 "123",
@@ -53,13 +51,11 @@ public class StandardBilateralEnValueCalculationServiceTests {
 
         HashMap<String, BilateralEnValue> bilateralEnValues1 = new HashMap<>();
         bilateralEnValues1.put("0", new BilateralEnValue(
-                "bilateral En value calculation",
                 new EnValue(new SiReal(1.0), "bilateral EnValue"),
                 "bilateral En Value",
                 "456",
                 "123"));
         bilateralEnValues1.put("1", new BilateralEnValue(
-                "bilateral En value calculation",
                 new EnValue(new SiReal(0.0), "bilateral EnValue"),
                 "bilateral En Value",
                 "456",

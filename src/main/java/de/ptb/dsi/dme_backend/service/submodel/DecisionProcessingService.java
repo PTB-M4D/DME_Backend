@@ -21,12 +21,11 @@ public class DecisionProcessingService {
                 String method = analysisOutput.getCheckResult().getMethodType();
 
                 //Automatische En Wert Entscheidung: id auf Outlier Liste im AnalysisOutput setzen
-                if (method.equals("En Value Criterion")) {
+                if (method.equals("EnCriterion")) {
                     String id = analysisOutput.getCheckResult().getNonConsistentContribution();
                     analysisOutput.getOutliers().add(id);
                 }
             }
         }
     }
-
 }
