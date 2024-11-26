@@ -26,9 +26,9 @@ public class StandardEnValueCalculationServiceTests {
 
         //Example Values
         contributionMeasuredValues = new HashMap<>();
-        contributionMeasuredValues.put("1", new SiReal(22.11, new SiExpandedUnc(1.0, 2)));
-        contributionMeasuredValues.put("2", new SiReal(22.22, new SiExpandedUnc(1.0, 2)));
-        contributionMeasuredValues.put("3", new SiReal(23.40, new SiExpandedUnc(0.5, 2)));
+        contributionMeasuredValues.put("1", new SiReal(22.11, new SiExpandedMU(1.0, 2)));
+        contributionMeasuredValues.put("2", new SiReal(22.22, new SiExpandedMU(1.0, 2)));
+        contributionMeasuredValues.put("3", new SiReal(23.40, new SiExpandedMU(0.5, 2)));
 
         outlierContributions = Arrays.asList("1", "3");
     }
@@ -37,7 +37,7 @@ public class StandardEnValueCalculationServiceTests {
     public void testOutlierCalculation(){
 
         ReferenceValue referenceValue = new ReferenceValue(new SiReal(22.9883333,
-                new SiExpandedUnc(0.40824829, 2)));
+                new SiExpandedMU(0.40824829, 2)));
         HashMap<String, EnValue> enValues = standardEnValueCalculationService.calculateEnValue(
                 contributionMeasuredValues, referenceValue, outlierContributions);
 
@@ -52,7 +52,7 @@ public class StandardEnValueCalculationServiceTests {
         //creating Inputs
 
         ReferenceValue referenceValue = new ReferenceValue(new SiReal(22.9883333,
-                new SiExpandedUnc(0.40824829, 2)));
+                new SiExpandedMU(0.40824829, 2)));
 
         // Formatting the result
         EnValue expectedResult = new EnValue(new SiReal(0.962165959), "correlated EnValue");
@@ -71,7 +71,7 @@ public class StandardEnValueCalculationServiceTests {
         //creating Inputs
 
         ReferenceValue referenceValue = new ReferenceValue(new SiReal(22.1650000,
-                new SiExpandedUnc(0.707106781, 2)));
+                new SiExpandedMU(0.707106781, 2)));
 
         // Formatting the result
         EnValue expectedResult = new EnValue(new SiReal(1.4260552), "uncorrelated EnValue");

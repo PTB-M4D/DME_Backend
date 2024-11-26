@@ -1,7 +1,6 @@
 package de.ptb.dsi.dme_backend.service.submodel;
 
 
-import de.ptb.dsi.dme_backend.model.BilateralEnValue;
 import de.ptb.dsi.dme_backend.model.EnValue;
 import de.ptb.dsi.dme_backend.model.ReferenceValue;
 import de.ptb.dsi.dme_backend.model.SiReal;
@@ -36,9 +35,9 @@ public class StandardEnValueCalculationService implements IEnValueCalculationSer
 
     public EnValue calculateCorrelatedEnValue(SiReal value, ReferenceValue refValue) {
         double x = value.getValue();
-        double u_x = value.getExpUnc().getUncertainty();
+        double u_x = value.getExpandedMU().getValueExpandedMU();
         double xRef = refValue.getSiReal().getValue();
-        double u_xRef = refValue.getSiReal().getExpUnc().getUncertainty();
+        double u_xRef = refValue.getSiReal().getExpandedMU().getValueExpandedMU();
         //TODO check if converage is 95 %
 
         double En = Math.abs((x - xRef) / Math.sqrt(u_x*u_x - u_xRef*u_xRef));
@@ -48,9 +47,9 @@ public class StandardEnValueCalculationService implements IEnValueCalculationSer
 
     public EnValue calculateUncorrelatedEnValue(SiReal value, ReferenceValue refValue) {
         double x = value.getValue();
-        double u_x = value.getExpUnc().getUncertainty();
+        double u_x = value.getExpandedMU().getValueExpandedMU();
         double xRef = refValue.getSiReal().getValue();
-        double u_xRef = refValue.getSiReal().getExpUnc().getUncertainty();
+        double u_xRef = refValue.getSiReal().getExpandedMU().getValueExpandedMU();
         //TODO check if converage is 95 %
 
         double En = Math.abs((x - xRef) / Math.sqrt(u_x*u_x + u_xRef*u_xRef));
@@ -64,7 +63,7 @@ public class StandardEnValueCalculationService implements IEnValueCalculationSer
         }
     }
     public void checkForNullInSiExpUnc(SiReal siReal){
-        if(siReal.getExpUnc().getUncertainty() == null){
+        if(siReal.getExpandedMU().getValueExpandedMU() == null){
             throw new NullPointerException("Uncertainty in ExpUnc cannot be null.");
         }
     }
