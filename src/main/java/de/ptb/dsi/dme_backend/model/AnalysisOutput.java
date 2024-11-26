@@ -1,8 +1,6 @@
 package de.ptb.dsi.dme_backend.model;
 
 import lombok.Data;
-import org.eclipse.jetty.util.component.HaltLifeCycleListener;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

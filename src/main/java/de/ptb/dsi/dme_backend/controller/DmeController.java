@@ -1,5 +1,6 @@
 package de.ptb.dsi.dme_backend.controller;
 
+import de.ptb.dsi.dme_backend.model.DataIdentifier;
 import de.ptb.dsi.dme_backend.model.SiReal;
 import de.ptb.dsi.dme_backend.service.domain.VirtualMassComparisonService;
 import de.ptb.dsi.dme_backend.service.input.InputReaderService;
@@ -27,11 +28,14 @@ public class DmeController {
     public ResponseEntity<Document> readDocument(@PathVariable String pid) throws ParserConfigurationException, IOException, SAXException {
         return new ResponseEntity<>(inputReaderService.readDocument(pid), HttpStatus.OK);
     }
+//    @RequestMapping(value = "/sireal", method = RequestMethod.GET)
+//    public ResponseEntity<SiReal> readData(@PathVariable DataIdentifier dataIdentifier, @PathVariable Document document) throws ParserConfigurationException, IOException, SAXException, TransformerException, XPathExpressionException {
+//        return new ResponseEntity<>(inputReaderService.readData(dataIdentifier,document), HttpStatus.OK);
+//    }
     @RequestMapping(value = "/sireal", method = RequestMethod.GET)
-    public ResponseEntity<Document> readData() throws ParserConfigurationException, IOException, SAXException, TransformerException, XPathExpressionException {
+    public ResponseEntity<SiReal> readData() throws ParserConfigurationException, IOException, SAXException, TransformerException, XPathExpressionException {
         return new ResponseEntity<>(inputReaderService.readData(), HttpStatus.OK);
     }
-
     @RequestMapping(value = "/testMass", method = RequestMethod.GET)
     public String compareMass()  {
         virtualMassComparisonService.evaluateComparison("");

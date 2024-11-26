@@ -9,6 +9,7 @@ public class DataIdentifier {
     String refId;
     String refType;
     String siLabel;
+    Integer index;
 
 
 }

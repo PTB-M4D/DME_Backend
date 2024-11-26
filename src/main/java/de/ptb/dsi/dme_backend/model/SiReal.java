@@ -2,14 +2,12 @@ package de.ptb.dsi.dme_backend.model;
 
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Data
 @NoArgsConstructor
-
+@AllArgsConstructor
+@Builder
 public class SiReal {
     Long id;
     String name;
@@ -27,3 +25,24 @@ public class SiReal {
         this.expUnc = expUnc;
     }
 }
+// 1. Basic measured quantity
+//         (o) - element label             (string)
+//         (o) - element quantityTypeQUDT  (qudt:quantitykind Type)
+//         (m) - element value             (decimal value type)
+//         (m) - element unit              (string - SI format)
+//         (o) - element significantDigit  (integer)
+//         (o) - element dateTime          (xs:dateTime)
+//
+//         2. Measured quantity with univariate measurement uncertainty
+//         (o) - element label             (string)
+//         (o) - element quantityTypeQUDT  (qudt:quantitykind Type)
+//         (m) - element value             (decimal value type)
+//         (m) - element unit              (string - SI format)
+//         (o) - element significantDigit  (integer)
+//         (o) - element dateTime          (xs:dateTime)
+//         (m) - element measurementUncertaintyUnivariate (si:measurementUncertaintyUnivaraiteType)
+//         # with choice   si:standardMU
+//         or si:expandedMU
+//         or si:coverageIntervalMU
+//         # or [deprecated] si:expandedUnc
+//         # or [deprecated] si:coverageInterval

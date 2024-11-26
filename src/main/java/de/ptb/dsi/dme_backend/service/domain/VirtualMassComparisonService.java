@@ -7,7 +7,6 @@ import de.ptb.dsi.dme_backend.service.submodel.StandardEnValueCalculationService
 import de.ptb.dsi.dme_backend.service.submodel.WeightedMeanCalculationService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -75,7 +74,7 @@ public class VirtualMassComparisonService implements IComparisonEvaluationServic
                 // AnalysisOutput in EntityUnderComparison erzeugen
                 AnalysisOutput analysisOutput = new AnalysisOutput();
                 if (currentOutlierLength > 0) {
-                    analysisOutput.setOutliers(entity.getAnalysisOutputs().getLast().getOutliers());
+                    analysisOutput.setOutliers(entity.getAnalysisOutputs().get((entity.getAnalysisOutputs().size())-1).getOutliers());
                 }
                 // Outlier aus Contribution aussortieren -> neue Liste ohne Outlier
                 List<String> outliers = analysisOutput.getOutliers();
@@ -113,7 +112,7 @@ public class VirtualMassComparisonService implements IComparisonEvaluationServic
                 entity.getAnalysisOutputs().add(analysisOutput);
 
                 // hat sich Anzahl der Outlier geändert? Kriterium für nächsten Durchlauf
-                currentOutlierLength = entity.getAnalysisOutputs().getLast().getOutliers().size();
+                currentOutlierLength = entity.getAnalysisOutputs().get(entity.getAnalysisOutputs().size()-1).getOutliers().size();
             }
         }
 
