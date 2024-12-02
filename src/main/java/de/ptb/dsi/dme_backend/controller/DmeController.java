@@ -32,12 +32,12 @@ public class DmeController {
 //    public ResponseEntity<SiReal> readData(@PathVariable DataIdentifier dataIdentifier, @PathVariable Document document) throws ParserConfigurationException, IOException, SAXException, TransformerException, XPathExpressionException {
 //        return new ResponseEntity<>(inputReaderService.readData(dataIdentifier,document), HttpStatus.OK);
 //    }
-    @RequestMapping(value = "/sireal", method = RequestMethod.GET)
-    public ResponseEntity<SiReal> readData() throws ParserConfigurationException, IOException, SAXException, TransformerException, XPathExpressionException {
-        return new ResponseEntity<>(inputReaderService.readData(), HttpStatus.OK);
-    }
+//    @RequestMapping(value = "/sireal", method = RequestMethod.GET)
+//    public ResponseEntity<SiReal> readData() throws ParserConfigurationException, IOException, SAXException, TransformerException, XPathExpressionException {
+//        return new ResponseEntity<>(inputReaderService.readData(), HttpStatus.OK);
+//    }
     @RequestMapping(value = "/testMass", method = RequestMethod.GET)
-    public String compareMass()  {
+    public String compareMass() throws XPathExpressionException, ParserConfigurationException, IOException, TransformerException, SAXException {
         virtualMassComparisonService.evaluateComparison("");
         return "evaluation complete";
     }
