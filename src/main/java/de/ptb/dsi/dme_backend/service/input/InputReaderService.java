@@ -124,21 +124,21 @@ public class InputReaderService implements IInputReaderService {
             if (refTypeNode.getLength() != 0 && nodeQuantityExist && siRealXmlListNodeExist) {
 
                 List<Double> siValuesXMLList = Arrays.stream(evaluateXPath(xpath, siRealRefTypeListNode, "//*[@refType='" + refType + "']/realListXMLList/valueXMLList")
-                                .item(index).getTextContent()
+                                .item(0).getTextContent()
                                 .split("\\s+"))
                         .map(Double::parseDouble).collect(Collectors.toList());
                 String siRealListUnitXMLList = evaluateXPath(xpath, siRealRefTypeListNode, "//*[@refType='" + refType + "']/realListXMLList/unitXMLList")
-                        .item(index).getTextContent();
+                        .item(0).getTextContent();
                 List<Double> expandedUncXMLList = Arrays.stream(evaluateXPath(xpath, siRealRefTypeListNode, "//*[@refType='" + refType + "']/realListXMLList/expandedUncXMLList/uncertaintyXMLList")
-                                .item(index).getTextContent()
+                                .item(0).getTextContent()
                                 .split("\\s+"))
                         .map(Double::parseDouble).collect(Collectors.toList());
                 System.out.println(" siRealXMLList"+ siValuesXMLList);
                 int coverageFactorXMLList = Integer.parseInt(evaluateXPath(xpath, siRealRefTypeListNode, "//*[@refType='" + refType + "']/realListXMLList/expandedUncXMLList/coverageFactorXMLList").item(0).getTextContent());
                 Double siRealCoverageProbabilityXMLList = Double.valueOf(evaluateXPath(xpath, siRealRefTypeListNode, "//*[@refType='" + refType + "']/realListXMLList/expandedUncXMLList/coverageProbabilityXMLList")
-                        .item(index).getTextContent());
+                        .item(0).getTextContent());
                 String siRealDistributionXMLList = evaluateXPath(xpath, siRealRefTypeListNode, "//*[@refType='" + refType + "']/realListXMLList/expandedUncXMLList/distributionXMLList")
-                        .item(index).getTextContent();
+                        .item(0).getTextContent();
                 SiExpandedMU siExpandedUnc = SiExpandedMU.builder()
                         .valueExpandedMU(expandedUncXMLList.get(index))//index
                         .coverageFactor(coverageFactorXMLList)

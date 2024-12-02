@@ -40,11 +40,12 @@ public class VirtualMassComparisonService implements IComparisonEvaluationServic
         Contribution contribution9 = new Contribution("PTB1", "PTB","Mass_Comparison_PTB");
         Contribution contribution10 = new Contribution("PTB2", "PTB","Mass_Comparison_PTB_Ausreisser");
         Contribution contribution11 = new Contribution("UME", "UME","Mass_Comparison_UME");
+
         // 2) Dataidentifier festlegen (später über UI) -> Werte im DCC finden, refType basic measured value (später über UI)
-        DataIdentifier dataIdentifier = new DataIdentifier();
-        dataIdentifier.setRefType("basic_measuredValue");
-        dataIdentifier.setId("measuredValue"); //für Temperature würde noch refId dazukommen
-        dataIdentifier.setIndex(0);
+        DataIdentifier dataIdentifier = DataIdentifier.builder()
+            .refType("basic_measuredValue")
+            .id("measuredValue") //für Temperature würde noch refId dazukommen
+            .index(0).build();
 
         // 3) ComparisonDataModel erzeugen und auffüllen
         // Hard coded Erzeugung des ComparisonDataModels -> später durch InputReader
@@ -74,12 +75,7 @@ public class VirtualMassComparisonService implements IComparisonEvaluationServic
         // mit dataIdentifier aus den EntityUnderComparison imComparisonDataModel, die entsprechenden Werte aus dem DCC einlesen
         // EntityUnderComparison -> ContributionEntityData -> Hashmap<SiReal> {"1": SiReal, "2": SiReal, "3": SiReal}
         inputReaderService.loadData(comparisonDataModel);
-//        ContributionEntityData contributionEntityData = new ContributionEntityData();
-//        contributionEntityData.getContributionData().put(contribution1.getContributionId(), new SiReal(1.000000271, new SiExpandedMU(1.0E-7, 2)));
-//        contributionEntityData.getContributionData().put(contribution2.getContributionId(), new SiReal(1.000000249, new SiExpandedMU(5.7E-8, 2)));
-//        contributionEntityData.getContributionData().put(contribution3.getContributionId(), new SiReal(1.000000424, new SiExpandedMU(4.6E-8, 2)));
-//
-//        comparisonDataModel.getEntities().get("measuredValue").getEntityData().put(dataIdentifier.getId(),contributionEntityData);
+
 
         // Schleife über alle EntityUnderComparison
         // Auswertung hier nur für EntityUnderComparison mit id = "mass"

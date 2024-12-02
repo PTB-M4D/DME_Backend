@@ -3,6 +3,7 @@ package de.ptb.dsi.dme_backend.controller;
 import de.ptb.dsi.dme_backend.model.DataIdentifier;
 import de.ptb.dsi.dme_backend.model.SiReal;
 import de.ptb.dsi.dme_backend.service.domain.VirtualMassComparisonService;
+import de.ptb.dsi.dme_backend.service.domain.VirtualRadTemperatureComparisonService;
 import de.ptb.dsi.dme_backend.service.input.InputReaderService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ public class DmeController {
 
     private final InputReaderService inputReaderService;
     private final VirtualMassComparisonService virtualMassComparisonService;
+    private final VirtualRadTemperatureComparisonService virtualRadTemperatureComparisonService;
 
     @RequestMapping(value = "/dcc/{pid}", method = RequestMethod.GET )
     public ResponseEntity<Document> readDocument(@PathVariable String pid) throws ParserConfigurationException, IOException, SAXException {
@@ -39,6 +41,12 @@ public class DmeController {
     @RequestMapping(value = "/testMass", method = RequestMethod.GET)
     public String compareMass() throws XPathExpressionException, ParserConfigurationException, IOException, TransformerException, SAXException {
         virtualMassComparisonService.evaluateComparison("");
+        return "evaluation complete";
+    }
+
+    @RequestMapping(value = "/testTemp", method = RequestMethod.GET)
+    public String compareTemp() throws XPathExpressionException, ParserConfigurationException, IOException, TransformerException, SAXException {
+        virtualRadTemperatureComparisonService.evaluateComparison("");
         return "evaluation complete";
     }
 
