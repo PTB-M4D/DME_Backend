@@ -89,14 +89,20 @@ public class VirtualMassComparisonService implements IComparisonEvaluationServic
             while (lastOutlierLength != currentOutlierLength) {
                 lastOutlierLength = currentOutlierLength;
 
+
                 // AnalysisOutput in EntityUnderComparison erzeugen
-                AnalysisOutput analysisOutput = new AnalysisOutput();
+                String investigatedDataIdentifierId = "measuredValue"; // Data under investigation
+                AnalysisOutput analysisOutput = new AnalysisOutput(investigatedDataIdentifierId);
+
+                // Wenn schon vorheriger Analysisoutput vorhanden -> Outlier liste holen
+                analysisOutput.setOutliers(new ArrayList<>());
                 if (currentOutlierLength > 0) {
                     analysisOutput.setOutliers(entity.getAnalysisOutputs().get((entity.getAnalysisOutputs().size())-1).getOutliers());
                 }
+
                 // Outlier aus Contribution aussortieren -> neue Liste ohne Outlier
                 List<String> outliers = analysisOutput.getOutliers();
-                HashMap<String, SiReal> contributionData = entity.getEntityData().get("measuredValue").getContributionData();
+                HashMap<String, SiReal> contributionData = entity.getEntityData().get(investigatedDataIdentifierId).getContributionData();
                 HashMap<String ,SiReal> contributingData = new HashMap<>();
                 for (String id : contributionData.keySet()) {
                     if (!outliers.contains(id)) {

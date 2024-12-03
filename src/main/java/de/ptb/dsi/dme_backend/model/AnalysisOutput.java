@@ -7,6 +7,7 @@ import java.util.List;
 
 @Data
 public class AnalysisOutput {
+    private String dataIdentifierId; //links to investigated dataIdentifierId
     private ReferenceValue refValue;
     private HashMap<String,EnValue> enValues;//key ContributionId
     private HashMap<String,HashMap<String,BilateralEnValue>> bilateralEnValues;//keys ContributionIds
@@ -17,5 +18,9 @@ public class AnalysisOutput {
         this.enValues = new HashMap<>();
         this.bilateralEnValues = new HashMap<String,HashMap<String,BilateralEnValue>>();
         this.outliers = new ArrayList<>();
+    }
+
+    public AnalysisOutput(String dataIdentifierId){
+        this.dataIdentifierId = dataIdentifierId;
     }
 }

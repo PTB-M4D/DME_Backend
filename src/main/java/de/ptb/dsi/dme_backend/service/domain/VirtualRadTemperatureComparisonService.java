@@ -11,6 +11,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -22,7 +23,7 @@ public class VirtualRadTemperatureComparisonService implements IComparisonEvalua
     private final InputReaderService inputReaderService;
     private final Pt100TemperatureFromResistanceCalculatorService pt100TemperatureFromResistanceCalculatorService;
     private final StandardDifferenceCalculatorService differenceCalculatorService;
-
+    private final StandardBilateralEnValueCalculationService bilateralEnValueCalculationService;
     @Override
     public String evaluateComparison(String inputJson) throws XPathExpressionException, ParserConfigurationException, IOException, TransformerException, SAXException {
 
@@ -166,17 +167,20 @@ public class VirtualRadTemperatureComparisonService implements IComparisonEvalua
                 lastOutlierLength = currentOutlierLength;
 
                 // AnalysisOutput in EntityUnderComparison erzeugen
-                AnalysisOutput analysisOutput = new AnalysisOutput();
+                String investigatedDataIdentifierId = "tempDiff"; // Data under investigation
+                AnalysisOutput analysisOutput = new AnalysisOutput(investigatedDataIdentifierId);
+
+                // Wenn schon vorheriger Analysisoutput vorhanden -> Outlier liste holen
+                analysisOutput.setOutliers(new ArrayList<>());
                 if (currentOutlierLength > 0) {
                     analysisOutput.setOutliers(entity.getAnalysisOutputs().get((entity.getAnalysisOutputs().size())-1).getOutliers());
                 }
 
                 // Outlier aus Contribution aussortieren -> neue Liste ohne Outlier
-                List<String> outliers = analysisOutput.getOutliers();
-                HashMap<String, SiReal> allContributionData = entity.getEntityData().get("tempDiff").getContributionData();
+                HashMap<String, SiReal> allContributionData = entity.getEntityData().get(investigatedDataIdentifierId).getContributionData();
                 HashMap<String ,SiReal> contributingData = new HashMap<>();
                 for (String id : allContributionData.keySet()) {
-                    if (!outliers.contains(id)) {
+                    if (!analysisOutput.getOutliers().contains(id)) {
                         contributingData.put(id, allContributionData.get(id));
                     }
                 }
@@ -190,6 +194,12 @@ public class VirtualRadTemperatureComparisonService implements IComparisonEvalua
                 StandardEnValueCalculationService enValueCalculationService = new StandardEnValueCalculationService();
                 HashMap<String, EnValue> enValues = enValueCalculationService.calculateEnValue(allContributionData, referenceValue, analysisOutput.getOutliers());
                 analysisOutput.setEnValues(enValues);
+
+                // Berecnung der Bilateralen En Werte
+                HashMap<String, Contribution> contributions = comparisonDataModel.getContributions();
+                HashMap<String, HashMap<String, BilateralEnValue>> bilateralEnValues =
+                        bilateralEnValueCalculationService.calculateBilateralEnValues(entity.getEntityData().get(investigatedDataIdentifierId).getContributionData(), contributions);
+                analysisOutput.setBilateralEnValues(bilateralEnValues);
 
                 // ConsistencyCheck
                 EnCriterionConsistencyCheckService consistencyCheckService = new EnCriterionConsistencyCheckService();
