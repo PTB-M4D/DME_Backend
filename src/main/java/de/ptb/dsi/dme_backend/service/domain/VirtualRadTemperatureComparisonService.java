@@ -116,7 +116,16 @@ public class VirtualRadTemperatureComparisonService implements IComparisonEvalua
             EntityUnderComparison entity = comparisonDataModel.getEntities().get(entityUnderComparisonId);
 
             // Badtemperatur aus Widerstandswert Sensor 1 berechnen
-            // neuen Dataidentifier anlegen
+            // pt100 temperatur berechnen und zur EntityUnderComparison hinzufügen
+            ContributionEntityData sensor1Data = entity.getEntityData().get("sensor1");
+            ContributionEntityData bathTempData = new ContributionEntityData();
+            for (String key : sensor1Data.getContributionData().keySet()){
+                SiReal resistance = sensor1Data.getContributionData().get(key);
+                SiReal bathTemp = pt100TemperatureFromResistanceCalculatorService.calculateTemperature(resistance);
+                bathTempData.getContributionData().put(key, bathTemp);
+            }
+
+            // neuen Dataidentifier anlegen und zur EntityUnderComparison hinzufügen
             DataIdentifier dataIdentifierBathTemp = DataIdentifier.builder()
                     .id("pt100Temp")
                     .refType("temperature_referenceValue")
@@ -124,74 +133,78 @@ public class VirtualRadTemperatureComparisonService implements IComparisonEvalua
                     .siLabel("Temperature reference calculated from pt-100 resistance")
                     .index(entity.getDataIdentifiers().get("sensor1").getIndex()).build();
             entity.getDataIdentifiers().put(dataIdentifierBathTemp.getId(), dataIdentifierBathTemp);
-
-            // pt100 temperatur berechnen und zur EntityUnderComparison hinzufügen
-            ContributionEntityData contributionData = entity.getEntityData().get("sensor1");
-            ContributionEntityData bathTempData = new ContributionEntityData();
-            for (String key : contributionData.getContributionData().keySet()){
-                SiReal resistance = contributionData.getContributionData().get(key);
-                SiReal bathTemp = pt100TemperatureFromResistanceCalculatorService.calculateTemperature(resistance);
-                bathTempData.getContributionData().put(key, bathTemp);
-            }
             entity.getEntityData().put(dataIdentifierBathTemp.getId(), bathTempData);
-            System.out.println("fertig");
+            System.out.println("pt100 Temperatur fertig");
 
             // Temperaturdifferenz radianceTemperature - BadTemperatur berechnen -> eigentliche Vergleichsgröße
-//            differenceCalculatorService.calculateDifference();
+            ContributionEntityData radTempData = entity.getEntityData().get("radTemp");
+            ContributionEntityData tempDiffData = new ContributionEntityData();
+            for (String key : radTempData.getContributionData().keySet()){
+                SiReal radTemp = radTempData.getContributionData().get(key);
+                SiReal bathTemp = bathTempData.getContributionData().get(key);
+                SiReal tempDiff = differenceCalculatorService.calculateDifference(radTemp, bathTemp);
+                tempDiffData.getContributionData().put(key, tempDiff);
+            }
 
+            // neuen Dataidentifier anlegen und zur EntityUnderComparison hinzufügen
+            DataIdentifier dataIdentifierTempDiff = DataIdentifier.builder()
+                    .id("tempDiff")
+                    .refType("temperature_differenceValue")
+                    .refId("blackbody01")
+                    .siLabel("Temperature differences between reference temperatures and radiance temperatures")
+                    .index(entity.getDataIdentifiers().get("radTemp").getIndex()).build();
+            entity.getDataIdentifiers().put(dataIdentifierTempDiff.getId(), dataIdentifierTempDiff);
+            entity.getEntityData().put(dataIdentifierTempDiff.getId(), tempDiffData);
+            System.out.println("Temperatur Difference fertig");
 
 
             //Enwerte berechnen und Outlier aussortieren
-//
-//            int lastOutlierLength = -1;
-//            int currentOutlierLength = 0;
-//            //----- Auswerteschleife beginnt hier
-//            while (lastOutlierLength != currentOutlierLength) {
-//                lastOutlierLength = currentOutlierLength;
-//
-//                // AnalysisOutput in EntityUnderComparison erzeugen
-//                AnalysisOutput analysisOutput = new AnalysisOutput();
-//                if (currentOutlierLength > 0) {
-//                    analysisOutput.setOutliers(entity.getAnalysisOutputs().get((entity.getAnalysisOutputs().size())-1).getOutliers());
-//                }
-//                // Outlier aus Contribution aussortieren -> neue Liste ohne Outlier
-//                List<String> outliers = analysisOutput.getOutliers();
-//                HashMap<String, SiReal> contributionData = entity.getEntityData().get("measuredValue").getContributionData();
-//                HashMap<String ,SiReal> contributingData = new HashMap<>();
-//                for (String id : contributionData.keySet()) {
-//                    if (!outliers.contains(id)) {
-//                        contributingData.put(id, contributionData.get(id));
-//                    }
-//                }
-//
-//                // weigehted mean berechnen
-//                WeightedMeanCalculationService weightedMeanCalculationService = new WeightedMeanCalculationService();
-//                ReferenceValue referenceValue = weightedMeanCalculationService.calculateReferenceValue(contributingData);
-//                analysisOutput.setRefValue(referenceValue);
-//
-//                // En werte berechnen
-////                HashMap<String, SiReal> contributionMeasuredValues = new HashMap<>();
-////                for (String contributionId : comparisonDataModel.getContributions().keySet()){
-////                    contributionMeasuredValues.put(contributionId, entity.getEntityData().get(contributionId).getContributionData().get(contributionId));
-////                }
-//                StandardEnValueCalculationService enValueCalculationService = new StandardEnValueCalculationService();
-//                HashMap<String, EnValue> enValues = enValueCalculationService.calculateEnValue(contributionData, referenceValue, analysisOutput.getOutliers());
-//                analysisOutput.setEnValues(enValues);
-//
-//                // ConsistencyCheck
-//                EnCriterionConsistencyCheckService consistencyCheckService = new EnCriterionConsistencyCheckService();
-//                consistencyCheckService.evaluateConsistency(analysisOutput);
-//
-//                // Entscheidung, ob geflaggte Contributions als Outlier aufgenommen werden sollen
-//                DecisionProcessingService decisionProcessingService = new DecisionProcessingService();
-//                decisionProcessingService.processDecision(analysisOutput, true);
-//
-//                // AnalysisOutput in EntityUnderComparison hinzufügen
-//                entity.getAnalysisOutputs().add(analysisOutput);
-//
-//                // hat sich Anzahl der Outlier geändert? Kriterium für nächsten Durchlauf
-//                currentOutlierLength = entity.getAnalysisOutputs().get(entity.getAnalysisOutputs().size()-1).getOutliers().size();
-//            }
+            int lastOutlierLength = -1;
+            int currentOutlierLength = 0;
+            //----- Auswerteschleife beginnt hier
+            while (lastOutlierLength != currentOutlierLength) {
+                lastOutlierLength = currentOutlierLength;
+
+                // AnalysisOutput in EntityUnderComparison erzeugen
+                AnalysisOutput analysisOutput = new AnalysisOutput();
+                if (currentOutlierLength > 0) {
+                    analysisOutput.setOutliers(entity.getAnalysisOutputs().get((entity.getAnalysisOutputs().size())-1).getOutliers());
+                }
+
+                // Outlier aus Contribution aussortieren -> neue Liste ohne Outlier
+                List<String> outliers = analysisOutput.getOutliers();
+                HashMap<String, SiReal> allContributionData = entity.getEntityData().get("tempDiff").getContributionData();
+                HashMap<String ,SiReal> contributingData = new HashMap<>();
+                for (String id : allContributionData.keySet()) {
+                    if (!outliers.contains(id)) {
+                        contributingData.put(id, allContributionData.get(id));
+                    }
+                }
+
+                // weigehted mean berechnen
+                WeightedMeanCalculationService weightedMeanCalculationService = new WeightedMeanCalculationService();
+                ReferenceValue referenceValue = weightedMeanCalculationService.calculateReferenceValue(contributingData);
+                analysisOutput.setRefValue(referenceValue);
+
+                // En werte berechnen
+                StandardEnValueCalculationService enValueCalculationService = new StandardEnValueCalculationService();
+                HashMap<String, EnValue> enValues = enValueCalculationService.calculateEnValue(allContributionData, referenceValue, analysisOutput.getOutliers());
+                analysisOutput.setEnValues(enValues);
+
+                // ConsistencyCheck
+                EnCriterionConsistencyCheckService consistencyCheckService = new EnCriterionConsistencyCheckService();
+                consistencyCheckService.evaluateConsistency(analysisOutput);
+
+                // Entscheidung, ob geflaggte Contributions als Outlier aufgenommen werden sollen
+                DecisionProcessingService decisionProcessingService = new DecisionProcessingService();
+                decisionProcessingService.processDecision(analysisOutput, true);
+
+                // AnalysisOutput in EntityUnderComparison hinzufügen
+                entity.getAnalysisOutputs().add(analysisOutput);
+
+                // hat sich Anzahl der Outlier geändert? Kriterium für nächsten Durchlauf
+                currentOutlierLength = entity.getAnalysisOutputs().get(entity.getAnalysisOutputs().size()-1).getOutliers().size();
+            }
         }
 
         // Output report erzeugen
