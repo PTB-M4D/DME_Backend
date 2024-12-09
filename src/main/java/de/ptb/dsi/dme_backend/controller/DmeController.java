@@ -4,12 +4,17 @@ import de.ptb.dsi.dme_backend.model.DataIdentifier;
 import de.ptb.dsi.dme_backend.model.SiReal;
 import de.ptb.dsi.dme_backend.service.domain.VirtualMassComparisonService;
 import de.ptb.dsi.dme_backend.service.input.InputReaderService;
+import de.ptb.dsi.dme_backend.service.output.DccServiceOutputWriter;
+import jakarta.xml.bind.JAXBException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
+
+import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
@@ -23,7 +28,7 @@ public class DmeController {
 
     private final InputReaderService inputReaderService;
     private final VirtualMassComparisonService virtualMassComparisonService;
-
+    private  final DccServiceOutputWriter dccService;
     @RequestMapping(value = "/dcc/{pid}", method = RequestMethod.GET )
     public ResponseEntity<Document> readDocument(@PathVariable String pid) throws ParserConfigurationException, IOException, SAXException {
         return new ResponseEntity<>(inputReaderService.readDocument(pid), HttpStatus.OK);
@@ -42,6 +47,10 @@ public class DmeController {
         return "evaluation complete";
     }
 
+    @GetMapping(value = "/outputReport", produces = {MediaType.APPLICATION_XML_VALUE} )
+    public  ResponseEntity< String> getDcc() throws JAXBException, DatatypeConfigurationException {
+
+        return new ResponseEntity<>(dccService.getOutputReport(), HttpStatus.OK);}
     @RequestMapping(value = "/sayHello", method = RequestMethod.GET)
     public String sayHelloWorld() {return " Test Hi";}
 }
