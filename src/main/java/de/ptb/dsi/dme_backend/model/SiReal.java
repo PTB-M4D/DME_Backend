@@ -25,4 +25,11 @@ public class SiReal {
         this.value = value;
         this.expandedMU = expUnc;
     }
+
+    public SiReal(String label, Double value, String unit, SiExpandedMU expUnc) {
+        this.label = label;
+        this.value = value;
+        this.unit = unit;
+        this.expandedMU = expUnc;
+    }
 }

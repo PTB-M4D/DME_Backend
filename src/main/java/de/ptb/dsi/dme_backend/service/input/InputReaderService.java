@@ -39,8 +39,8 @@ public class InputReaderService implements IInputReaderService {
             for (EntityUnderComparison entity : comparisonDataModel.getEntities().values()) {
                 for (String dataId : entity.getDataIdentifiers().keySet()) {
                     DataIdentifier dataIdentifier = entity.getDataIdentifiers().get(dataId);
-//                    SiReal siRealLoadedData = readData(dataIdentifier, contributionFile);
-//                    this.addDataToEntity(entity.getEntityData(), dataId, contributionId, siRealLoadedData);
+                    SiReal siRealLoadedData = readData(dataIdentifier, contributionFile);
+                    this.addDataToEntity(entity.getEntityData(), dataId, contributionId, siRealLoadedData);
                 }
             }
         }
@@ -57,28 +57,29 @@ public class InputReaderService implements IInputReaderService {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         InputSource is = new InputSource(new StringReader(dccXml));
-        Document document = builder.parse(new InputSource(new StringReader(dccXml)));
+        Document document = builder.parse(is);
         return document;
     }
 
 
-    public SiReal readData() throws ParserConfigurationException, IOException, SAXException, XPathExpressionException {
-//    public SiReal readData(@Nonnull DataIdentifier dataIdentifier, @Nonnull Document document) throws  XPathExpressionException {
-        Document document;
+//    public SiReal readData() throws ParserConfigurationException, IOException, SAXException, XPathExpressionException {
+    public SiReal readData(@Nonnull DataIdentifier dataIdentifier, @Nonnull Document document) throws  XPathExpressionException {
+//        Document document;
         SiReal siReal ;
 //        document = readDocument("Temp_Comparison_PTB_1");
-        document = readDocument("Mass_Comparison_PTB");
+//        document = readDocument("Mass_Comparison_PTB");
         document.getDocumentElement().normalize();
         XPath xpath = XPathFactory.newInstance().newXPath();
         if (document == null) {
             log.warn("Document is null");
             return null;
         }
-//        String refId = dataIdentifier.getRefId();
-//        int index= dataIdentifier.getIndex();
+        String refId = dataIdentifier.getRefId();
+        String refType = dataIdentifier.getRefType();
+        int index = dataIdentifier.getIndex();
         //        String refType = "basic_measuredValue";
-        String refId = "blackbody01";
-        String refType = "basic_measuredValue";
+//        String refId = "blackbody01";
+//        String refType = "basic_measuredValue";
 //        String  refType = "basic_measuredValue basic_arithmenticMean temperature_ITS-90";
         NodeList filteredNodes = null;
         String dccExpression = "//*[name()='dcc:digitalCalibrationCertificate']";
@@ -98,11 +99,11 @@ public class InputReaderService implements IInputReaderService {
             XPathExpression exprRefTye = xpath.compile("//*[@refType='" + refType + "']");
             filteredNodes = (NodeList) exprRefTye.evaluate(document, XPathConstants.NODESET);
         }
-        siReal=searchRefTypeInNode(refType ,filteredNodes);
+        siReal=searchRefTypeInNode(refType ,filteredNodes,index);
         return siReal;
     }
 
-    private SiReal searchRefTypeInNode( String refType, NodeList nodes) throws XPathExpressionException {
+    private SiReal searchRefTypeInNode( String refType, NodeList nodes, Integer index) throws XPathExpressionException {
         XPath xpath = XPathFactory.newInstance().newXPath();
         SiReal siReal = null;
         //        int index= dataIdentifier.getIndex();
@@ -139,11 +140,11 @@ public class InputReaderService implements IInputReaderService {
                 String siRealDistributionXMLList = evaluateXPath(xpath, siRealRefTypeListNode, "//*[@refType='" + refType + "']/realListXMLList/expandedUncXMLList/distributionXMLList")
                         .item(0).getTextContent();
                 SiExpandedMU siExpandedUnc = SiExpandedMU.builder()
-                        .valueExpandedMU(expandedUncXMLList.get(0))//index
+                        .valueExpandedMU(expandedUncXMLList.get(index))//index
                         .coverageFactor(coverageFactorXMLList)
                         .coverageProbability(siRealCoverageProbabilityXMLList)
                         .distribution(siRealDistributionXMLList).build();
-                siReal = SiReal.builder().value(siValuesXMLList.get(0))// index
+                siReal = SiReal.builder().value(siValuesXMLList.get(index))// index
                         .unit(siRealListUnitXMLList)
                         .expandedMU(siExpandedUnc).build();
                 System.out.println("siReal: "+siReal);
@@ -184,7 +185,11 @@ public class InputReaderService implements IInputReaderService {
 
     private void addDataToEntity(@Nonnull HashMap<String, ContributionEntityData> entityData, String identifierId, String contributionId, SiReal data) {
         ContributionEntityData contributionEntityData = entityData.get(identifierId);
-        if (contributionEntityData != null) {
+        if (contributionEntityData == null) {
+            entityData.put(identifierId, new ContributionEntityData());
+            contributionEntityData = entityData.get(identifierId);
+            contributionEntityData.getContributionData().put(contributionId, data);
+        } else {
             contributionEntityData.getContributionData().put(contributionId, data);
         }
     }
