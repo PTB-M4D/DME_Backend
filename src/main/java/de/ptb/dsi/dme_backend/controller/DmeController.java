@@ -3,13 +3,19 @@ package de.ptb.dsi.dme_backend.controller;
 import de.ptb.dsi.dme_backend.model.DataIdentifier;
 import de.ptb.dsi.dme_backend.model.SiReal;
 import de.ptb.dsi.dme_backend.service.domain.VirtualMassComparisonService;
+import de.ptb.dsi.dme_backend.service.domain.VirtualRadTemperatureComparisonService;
 import de.ptb.dsi.dme_backend.service.input.InputReaderService;
+import de.ptb.dsi.dme_backend.service.output.DccServiceOutputWriter;
+import jakarta.xml.bind.JAXBException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
+
+import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
@@ -39,7 +45,7 @@ public class DmeController {
 //        return new ResponseEntity<>(inputReaderService.readData(), HttpStatus.OK);
 //    }
     @RequestMapping(value = "/testMass", method = RequestMethod.GET)
-    public String compareMass()  {
+    public String compareMass() throws XPathExpressionException, ParserConfigurationException, IOException, TransformerException, SAXException {
         virtualMassComparisonService.evaluateComparison("");
         return "evaluation complete";
     }
