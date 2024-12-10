@@ -2,29 +2,28 @@ package de.ptb.dsi.dme_backend.service.output;
 
 
 import de.ptb.dsi.dme_backend.model.dcc.*;
+import de.ptb.dsi.dme_backend.model.dsi.Test;
 import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-
+import java.util.*;
 
 @Service
 @AllArgsConstructor
 public class DccServiceOutputWriter {
     public String getOutputReport() throws JAXBException, DatatypeConfigurationException {
-        DataType dataType = DataType.builder()
-                .id("123").build();
+//        DataType dataType = DataType.builder()
+//                .id("blackbody01").build();
         TextType softwareName = TextType.builder()
                 .content(Collections.singletonList("D-Comparison Temperature"))
                 .build();
@@ -51,7 +50,7 @@ public class DccServiceOutputWriter {
                 .identifications(identificationCoreList)
                 .beginPerformanceDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(new SimpleDateFormat(LocalDate.now().toString()).format(date)))
                 .endPerformanceDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(new SimpleDateFormat(LocalDate.now().toString()).format(date)))
-//                .performanceLocation(PerformanceLocationType.builder().value(StringPerformanceLocationType.LABORATORY)
+//                .performanceLocation(PerformanceLocationType.builder().value(StringPerformanceLocationType.LABORATORY))
                 .build();
         TextType identificationName = TextType.builder()
                 .content(Collections.singletonList("serialNo"))
@@ -69,6 +68,7 @@ public class DccServiceOutputWriter {
                 .build();
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++AdministrativeData-ITEMS+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         TextType itemName1 = TextType.builder()
+                .id("blackbody01")
                 .content(Collections.singletonList("blackbody transfer standard: cavity 1"))
                 .build();
         TextType itemName2 = TextType.builder()
@@ -76,10 +76,12 @@ public class DccServiceOutputWriter {
                 .build();
         ItemType item1= ItemType.builder()
                 .name(itemName1)
+                .id("blackbody01")
                 .identifications(identificationItemList)
                 .build();
         ItemType item2= ItemType.builder()
                 .name(itemName2)
+                .id("blackbody02")
                 .identifications(identificationItemList)
                 .build();
         ItemListType items = ItemListType.builder()
@@ -90,11 +92,14 @@ public class DccServiceOutputWriter {
         CalibrationLaboratory calibrationLaboratory = CalibrationLaboratory.builder()
                 .contact(contact)
                 .build();
+        LocationType location= new LocationType();
+
         TextType customerName = TextType.builder()
                 .content(Collections.singletonList("EURAMET Pilot CCT K11 Consultative Committee for Temperature PTB Berlin"))
                 .build();
         ContactType customer=ContactType.builder()
                 .name(customerName)
+                .location(location)
                 .build();
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++AdministrativeData_RespPersonList+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -115,6 +120,7 @@ public class DccServiceOutputWriter {
                 .items(items)
                 .calibrationLaboratory(calibrationLaboratory)
                 .customer(customer)
+                .respPersons(respPersons)
                 .build();
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++MeasurementResults-----------------------------------------------
@@ -122,19 +128,27 @@ public class DccServiceOutputWriter {
                 .id("Temp_Comparison_PTB_1")
                 .name(TextType.builder().content(Collections.singletonList("Comparison data of participant laboratory")).build())
                 .build();
-
         MeasurementResultListType measurementResults = MeasurementResultListType.builder()
                 .measurementResult(Arrays.asList(result1))
                 .build();
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++DigitalCalibrationCertificate+++++++++++++++++++++++++++++++++++++++++++++++++++
 
         DigitalCalibrationCertificateType certificate = DigitalCalibrationCertificateType.builder()
                 .schemaVersion("3.2.1")
                 .administrativeData(administrativeData)
                 .measurementResults(measurementResults)
                 .build();
-
-
         System.out.println("dcc" + certificate);
+//        Test test = new Test();
+//        test.setSchemaVersion("123");
+//        test.setModel("model");
+////        Test.builder().schemaVersion("1.2.3").build();
+//        JAXBContext context1 = JAXBContext.newInstance(Test.class);
+//        Marshaller marshaller1 = context1.createMarshaller();
+//        marshaller1.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+//        marshaller1.setProperty(Marshaller.JAXB_FRAGMENT, true);
+//      //  marshaller1.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, "https://ptb.de/si");
+//        marshaller1.marshal(test, System.out);
 
         JAXBContext context = JAXBContext.newInstance(DigitalCalibrationCertificateType.class);
         Marshaller marshaller = context.createMarshaller();

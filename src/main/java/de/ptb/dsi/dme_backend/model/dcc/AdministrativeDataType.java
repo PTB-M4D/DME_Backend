@@ -8,14 +8,13 @@
 
 package de.ptb.dsi.dme_backend.model.dcc;
 
-import jakarta.xml.bind.annotation.XmlRootElement;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.xml.bind.annotation.XmlElement;
-
+import jakarta.xml.bind.annotation.*;
 
 /**
  * 

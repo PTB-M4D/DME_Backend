@@ -8,9 +8,9 @@
 
 package de.ptb.dsi.dme_backend.model.dcc;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+
 
 /**
  * [deprecated type] use listMeasurementUncertaintyUnivariateType instead
@@ -35,10 +35,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "listUnivariateUncType", namespace = "https://ptb.de/si", propOrder = {
-    "expandedUnc",
-    "coverageInterval"
-})
+
 public class ListUnivariateUncType {
 
     protected ExpandedUncType expandedUnc;

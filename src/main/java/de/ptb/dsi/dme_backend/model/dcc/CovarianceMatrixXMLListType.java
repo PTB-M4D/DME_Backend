@@ -11,12 +11,12 @@ package de.ptb.dsi.dme_backend.model.dcc;
 
 import lombok.Data;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.XmlType;
+
 
 /**
  * <p>Java-Klasse für covarianceMatrixXMLListType complex type.
@@ -48,9 +48,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "covarianceMatrixXMLListType", namespace = "https://ptb.de/si", propOrder = {
-    "columnXMLList"
-})
+
 @Data
 public class CovarianceMatrixXMLListType {
 
@@ -107,9 +105,7 @@ public class CovarianceMatrixXMLListType {
      * 
      */
     @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {
-        "covarianceXMLList"
-    })
+
     public static class ColumnXMLList {
 
         @XmlElement(namespace = "https://ptb.de/si", required = true)

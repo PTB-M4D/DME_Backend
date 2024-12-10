@@ -8,11 +8,11 @@
 
 package de.ptb.dsi.dme_backend.model.dcc;
 
-import javax.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.*;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.XmlType;
+
 
 /**
  * <p>Java-Klasse für listType complex type.
@@ -42,11 +42,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "listType", namespace = "https://ptb.de/si", propOrder = {
-    "label",
-    "dateTime",
-    "realListOrRealListXMLListOrComplexList"
-})
+
 public class ListType {
 
     protected String label;

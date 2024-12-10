@@ -11,10 +11,11 @@ package de.ptb.dsi.dme_backend.model.dcc;
 
 import lombok.Data;
 
-import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import javax.xml.bind.annotation.XmlType;
+
+import jakarta.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.adapters.CollapsedStringAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
 
 /**
  * 
@@ -46,13 +47,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "byteDataType", propOrder = {
-    "name",
-    "description",
-    "fileName",
-    "mimeType",
-    "dataBase64"
-})
+
 @Data
 public class ByteDataType {
 

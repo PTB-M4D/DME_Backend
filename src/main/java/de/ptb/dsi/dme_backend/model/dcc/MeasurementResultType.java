@@ -10,12 +10,12 @@ package de.ptb.dsi.dme_backend.model.dcc;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import jakarta.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.adapters.CollapsedStringAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.XmlType;
+
 
 /**
  * 
@@ -52,16 +52,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "measurementResultType", propOrder = {
-    "name",
-    "description",
-    "usedMethods",
-    "usedSoftware",
-    "measuringEquipments",
-    "influenceConditions",
-    "results",
-    "measurementMetaData"
-})
+
 @Builder
 @AllArgsConstructor
 public class MeasurementResultType {

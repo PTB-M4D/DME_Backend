@@ -12,9 +12,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlEnumValue;
-import javax.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.XmlEnum;
+import jakarta.xml.bind.annotation.XmlEnumValue;
+
 
 /**
  * <p>Java-Klasse für stringPerformanceLocationType.
@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlType;
  * </pre>
  * 
  */
-@XmlType(name = "stringPerformanceLocationType")
+
 @XmlEnum
 public enum StringPerformanceLocationType {
 

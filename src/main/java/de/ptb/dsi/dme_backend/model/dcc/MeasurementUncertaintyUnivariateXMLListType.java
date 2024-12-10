@@ -9,9 +9,9 @@
 package de.ptb.dsi.dme_backend.model.dcc;
 
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+
 
 /**
  * <p>Java-Klasse für measurementUncertaintyUnivariateXMLListType complex type.
@@ -35,11 +35,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "measurementUncertaintyUnivariateXMLListType", namespace = "https://ptb.de/si", propOrder = {
-    "standardMUXMLList",
-    "expandedMUXMLList",
-    "coverageIntervalMUXMLList"
-})
+
 public class MeasurementUncertaintyUnivariateXMLListType {
 
     protected StandardMUXMLListType standardMUXMLList;

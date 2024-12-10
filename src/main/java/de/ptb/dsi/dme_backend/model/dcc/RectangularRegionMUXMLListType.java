@@ -9,13 +9,13 @@
 package de.ptb.dsi.dme_backend.model.dcc;
 
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlList;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlList;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.XmlType;
+
 
 /**
  * <p>Java-Klasse für rectangularRegionMUXMLListType complex type.
@@ -40,12 +40,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "rectangularRegionMUXMLListType", namespace = "https://ptb.de/si", propOrder = {
-    "covarianceMatrixXMLList",
-    "coverageFactorXMLList",
-    "coverageProbabilityXMLList",
-    "distributionXMLList"
-})
+
 public class RectangularRegionMUXMLListType {
 
     @XmlElement(required = true)

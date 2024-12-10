@@ -10,11 +10,11 @@ package de.ptb.dsi.dme_backend.model.dcc;
 
 import lombok.Data;
 
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.annotation.*;
+import jakarta.xml.bind.JAXBElement;
+import jakarta.xml.bind.annotation.*;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.math.BigInteger;
-import javax.xml.bind.annotation.XmlType;
+
 
 /**
  * <p>Java-Klasse für constantQuantityType complex type.
@@ -44,17 +44,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "constantQuantityType", namespace = "https://ptb.de/si", propOrder = {
-    "label",
-    "quantityType",
-    "value",
-    "unit",
-    "significantDigit",
-    "dateTime",
-    "valueStandardMU",
-    "uncertainty",
-    "distribution"
-})
+
 @Data
 public class ConstantQuantityType {
 

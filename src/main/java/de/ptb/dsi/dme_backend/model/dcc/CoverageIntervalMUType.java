@@ -10,9 +10,9 @@ package de.ptb.dsi.dme_backend.model.dcc;
 
 import lombok.Data;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+
 
 /**
  * Definition of coverage interval measurement uncertainty data.
@@ -40,13 +40,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "coverageIntervalMUType", namespace = "https://ptb.de/si", propOrder = {
-    "valueStandardMU",
-    "intervalMin",
-    "intervalMax",
-    "coverageProbability",
-    "distribution"
-})
+
 @Data
 public class CoverageIntervalMUType {
 
