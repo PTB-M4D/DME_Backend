@@ -64,6 +64,7 @@ public class DataType {
         @XmlElement(name = "xml", type = XmlType.class),
         @XmlElement(name = "quantity", type = QuantityType.class)
     })
+    protected QuantityType quantity;
     protected List<Object> textOrFormulaOrByteData;
     @XmlAttribute(name = "id")
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)

@@ -2,7 +2,9 @@ package de.ptb.dsi.dme_backend.service.domain;
 
 import de.ptb.dsi.dme_backend.model.*;
 import de.ptb.dsi.dme_backend.service.input.InputReaderService;
+import de.ptb.dsi.dme_backend.service.output.DccServiceOutputWriter;
 import de.ptb.dsi.dme_backend.service.submodel.*;
+import jakarta.xml.bind.JAXBException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.xml.sax.SAXException;
@@ -24,8 +26,10 @@ public class VirtualRadTemperatureComparisonService implements IComparisonEvalua
     private final Pt100TemperatureFromResistanceCalculatorService pt100TemperatureFromResistanceCalculatorService;
     private final StandardDifferenceCalculatorService differenceCalculatorService;
     private final StandardBilateralEnValueCalculationService bilateralEnValueCalculationService;
+    private final DccServiceOutputWriter OutputWriter;
+
     @Override
-    public String evaluateComparison(String inputJson) throws XPathExpressionException, ParserConfigurationException, IOException, TransformerException, SAXException {
+    public String evaluateComparison(String inputJson) throws XPathExpressionException, ParserConfigurationException, IOException, TransformerException, SAXException, JAXBException {
 
         ComparisonDataModel comparisonDataModel = new ComparisonDataModel();
 
@@ -219,6 +223,7 @@ public class VirtualRadTemperatureComparisonService implements IComparisonEvalua
 
         // Output report erzeugen
         // API antwort als JSON bzw base64
-        return null;
+        String outputReport = OutputWriter.createMeasurementResults(comparisonDataModel);
+        return outputReport;
     }
 }

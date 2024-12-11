@@ -8,6 +8,10 @@
 
 package de.ptb.dsi.dme_backend.model.dcc;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -78,6 +82,9 @@ import javax.xml.bind.annotation.XmlType;
     "influenceConditions",
     "measurementMetaData"
 })
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class QuantityType {
 
     protected TextType name;

@@ -1,6 +1,7 @@
 package de.ptb.dsi.dme_backend.service.output;
 
 
+import de.ptb.dsi.dme_backend.model.*;
 import de.ptb.dsi.dme_backend.model.dcc.*;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
@@ -13,15 +14,92 @@ import javax.xml.datatype.DatatypeFactory;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 
 @Service
 @AllArgsConstructor
 public class DccServiceOutputWriter {
+
+    public RealQuantityType realQuantityTypeFromSiReal(SiReal siReal){
+        return RealQuantityType.builder()
+                .label(siReal.getLabel())
+                .value(siReal.getValue())
+                .unit(siReal.getUnit())
+                .expandedUnc(ExpandedUncType.builder()
+                        .uncertainty(siReal.getExpandedMU().getValueExpandedMU())
+                        .coverageFactor(siReal.getExpandedMU().getCoverageFactor())
+//                        .coverageProbability(siReal.getExpandedMU().getCoverageProbability())
+                        .distribution(siReal.getExpandedMU().getDistribution())
+                        .build())
+                .build();
+    }
+
+    public String createMeasurementResults(ComparisonDataModel comparisonDataModel) throws JAXBException {
+        // loop over each EntityUnderComparison
+
+        QuantityType quantity = QuantityType.builder().build();
+        for (EntityUnderComparison entityUnderComparison : comparisonDataModel.getEntities().values()){
+
+            // XML Classes for refValue and EnValues
+            AnalysisOutput analysisOutput = entityUnderComparison.getAnalysisOutputs().get(entityUnderComparison.getAnalysisOutputs().size()-1);
+
+            // reference Value
+            RealQuantityType referenceValue = realQuantityTypeFromSiReal(analysisOutput.getRefValue().getSiReal());
+
+            // quantity for reference Value
+            QuantityType quantityReferenceValue = QuantityType.builder()
+                    .name(TextType.builder()
+                            .content(Collections.singletonList("Comparison Reference Value (En Criterion)"))
+                            .build())
+                    .real(referenceValue)
+                    .refType(Collections.singletonList("basic_referencevalue"))
+                    .build();
+
+            quantity = quantityReferenceValue;
+        }
+
+//        QuantityType quantity = QuantityType.builder().build();
+        ResultType result = ResultType.builder()
+                .name(TextType.builder()
+                        .content(Collections.singletonList("Temperature reference value at nominal temperature of 34.5 °C"))
+                        .build())
+                .data(DataType.builder()
+                        .quantity(quantity)
+                        .build())
+                .build();
+
+        ResultListType results = ResultListType.builder()
+                .result(Collections.singletonList(result))
+                .build();
+
+
+        MeasurementResultType measurementResult = MeasurementResultType.builder()
+                .name(TextType.builder()
+                        .content(Collections.singletonList("Comparison reference values for each nominal temperature"))
+                        .build()
+                )
+                .results(results)
+                .build();
+
+        MeasurementResultListType measurementResults = MeasurementResultListType.builder()
+                .measurementResult(Collections.singletonList(measurementResult))
+                .build();
+
+        DigitalCalibrationCertificateType certificate = DigitalCalibrationCertificateType.builder()
+                .schemaVersion("3.2.1")
+                .measurementResults(measurementResults)
+                .build();
+
+        JAXBContext context = JAXBContext.newInstance(DigitalCalibrationCertificateType.class);
+        Marshaller marshaller = context.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        marshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, "https://ptb.de/dcc https://ptb.de/dcc/v3.2.1/dcc.xsd");
+        StringWriter writer = new StringWriter();
+        marshaller.marshal(certificate, writer);
+        return writer.toString();
+    }
+
     public String getOutputReport() throws JAXBException, DatatypeConfigurationException {
         DataType dataType = DataType.builder()
                 .id("123").build();

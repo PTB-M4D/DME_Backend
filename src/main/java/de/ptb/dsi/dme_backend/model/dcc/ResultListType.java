@@ -9,6 +9,10 @@
 package de.ptb.dsi.dme_backend.model.dcc;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -43,6 +47,9 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "resultListType", propOrder = {
     "result"
 })
+@AllArgsConstructor
+@Builder
+@NoArgsConstructor
 public class ResultListType {
 
     @XmlElement(required = true)

@@ -51,15 +51,17 @@ public class DmeController {
     }
 
     @RequestMapping(value = "/testTemp", method = RequestMethod.GET)
-    public String compareTemp() throws XPathExpressionException, ParserConfigurationException, IOException, TransformerException, SAXException {
-        virtualRadTemperatureComparisonService.evaluateComparison("");
-        return "evaluation complete";
+    public String compareTemp() throws XPathExpressionException, ParserConfigurationException, IOException, TransformerException, SAXException, JAXBException {
+        String outputReport = virtualRadTemperatureComparisonService.evaluateComparison("");
+        return outputReport;
     }
 
     @GetMapping(value = "/outputReport", produces = {MediaType.APPLICATION_XML_VALUE} )
     public  ResponseEntity< String> getDcc() throws JAXBException, DatatypeConfigurationException {
 
         return new ResponseEntity<>(dccService.getOutputReport(), HttpStatus.OK);}
+
+
     @RequestMapping(value = "/sayHello", method = RequestMethod.GET)
     public String sayHelloWorld() {return " Test Hi";}
 }
