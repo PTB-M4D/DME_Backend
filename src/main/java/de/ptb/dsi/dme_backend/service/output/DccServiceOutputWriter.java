@@ -66,16 +66,18 @@ public class DccServiceOutputWriter {
                             .content(Collections.singletonList("Comparison Reference Value (En Criterion)"))
                             .build())
                     .real(referenceValue)
-                    .refType(Collections.singletonList("basic_referencevalue"))
+                    .refType(Collections.singletonList("comparison_referenceValueEnCriterion"))
                     .build();
 
             ResultType resultReferenceValue = ResultType.builder()
-                    .name(TextType.builder()
-                            .content(Collections.singletonList("Temperature reference value at nominal temperature of 34.5 °C"))
-                            .build())
+//                    .name(TextType.builder()
+//                            .content(Collections.singletonList("Temperature reference value at nominal temperature of 34.5 °C")) //Todo was soll hier rein?
+//                            .build())
                     .data(DataType.builder()
                             .quantity(quantityReferenceValue)
                             .build())
+//                    .refType(Collections.singletonList("temperature_radianceTemperature")) //Todo überarbeiten
+                    .id("comparison_referenceValues")
                     .build();
             results.add(resultReferenceValue);
 
@@ -94,7 +96,8 @@ public class DccServiceOutputWriter {
                                 .content(contentsEn)
                                 .build())
                         .real(siReal)
-                        .refType(Collections.singletonList("comparison_equivalenceValue"))
+                        .refType(Collections.singletonList("comparison_equivalenceValueEnCriterion"))
+                        .id(comparisonDataModel.getContributions().get(enKey).getPidInputData())
                         .build();
                 listEn.getQuantity().add(quantity);
             }
@@ -105,6 +108,7 @@ public class DccServiceOutputWriter {
                     .data(DataType.builder()
                             .list(listEn)
                             .build())
+                    .refType(Collections.singletonList("comparison_equivalenceValue"))
                     .build();
             results.add(resultEn);
 
@@ -121,13 +125,16 @@ public class DccServiceOutputWriter {
                     realListRow.getValueXMLList().add(bilateralEnValue.getEnValue().getEnValueRaw().getValue());
                     realListRow.getLabelXMLList().add(bilateralEnValue.getContributionB());
                 }
+
+                String contributionId = bilateralEnValueRow.get("0").getContributionA();
                 QuantityType quantity = QuantityType.builder()
                         .name(TextType.builder()
                                 .content(Collections.singletonList("Bilateral en Matrix row " + bilateralEnKey
-                                        + ": " + bilateralEnValueRow.get("0").getContributionA()))
+                                        + ": " + contributionId))
                                 .build())
                         .realListXMLList(realListRow)
                         .refType(Collections.singletonList("comparison_equivalenceValueEnCriterion"))
+                        .id(comparisonDataModel.getContributions().get(contributionId).getPidInputData())
                         .build();
                 bilateralEnList.getQuantity().add(quantity);
             }
@@ -140,9 +147,6 @@ public class DccServiceOutputWriter {
                             .build())
                     .build();
             results.add(resultBilateralEn);
-
-
-
 
 
             //-------------- loop over all entityData and add Quantities to list in dcc:result
@@ -163,6 +167,7 @@ public class DccServiceOutputWriter {
                                     .build())
                             .real(siReal)
                             .refType(Collections.singletonList(dataIdentifier.getRefType()))
+                            .id(comparisonDataModel.getContributions().get(contributionKey).getPidInputData())
                             .build();
                     listContrib.getQuantity().add(quantity);
                 }

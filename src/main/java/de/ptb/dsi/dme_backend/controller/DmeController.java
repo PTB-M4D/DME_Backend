@@ -45,9 +45,9 @@ public class DmeController {
 //        return new ResponseEntity<>(inputReaderService.readData(), HttpStatus.OK);
 //    }
     @RequestMapping(value = "/testMass", method = RequestMethod.GET)
-    public String compareMass() throws XPathExpressionException, ParserConfigurationException, IOException, TransformerException, SAXException {
-        virtualMassComparisonService.evaluateComparison("");
-        return "evaluation complete";
+    public String compareMass() throws XPathExpressionException, ParserConfigurationException, IOException, TransformerException, SAXException, JAXBException {
+        String outputReport = virtualMassComparisonService.evaluateComparison("");
+        return outputReport;
     }
 
     @RequestMapping(value = "/testTemp", method = RequestMethod.GET)

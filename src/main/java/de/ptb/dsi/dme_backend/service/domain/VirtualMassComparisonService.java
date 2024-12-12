@@ -2,10 +2,9 @@ package de.ptb.dsi.dme_backend.service.domain;
 
 import de.ptb.dsi.dme_backend.model.*;
 import de.ptb.dsi.dme_backend.service.input.InputReaderService;
-import de.ptb.dsi.dme_backend.service.submodel.DecisionProcessingService;
-import de.ptb.dsi.dme_backend.service.submodel.EnCriterionConsistencyCheckService;
-import de.ptb.dsi.dme_backend.service.submodel.StandardEnValueCalculationService;
-import de.ptb.dsi.dme_backend.service.submodel.WeightedMeanCalculationService;
+import de.ptb.dsi.dme_backend.service.output.DccServiceOutputWriter;
+import de.ptb.dsi.dme_backend.service.submodel.*;
+import jakarta.xml.bind.JAXBException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.xml.sax.SAXException;
@@ -24,9 +23,11 @@ import java.util.Set;
 public class VirtualMassComparisonService implements IComparisonEvaluationService {
 //    private ComparisonDataModel comparisonDataModel;
     private final InputReaderService inputReaderService;
+    private final StandardBilateralEnValueCalculationService bilateralEnValueCalculationService;
+    private final DccServiceOutputWriter OutputWriter;
 
     @Override
-    public String evaluateComparison(String inputJson) throws XPathExpressionException, ParserConfigurationException, IOException, TransformerException, SAXException {
+    public String evaluateComparison(String inputJson) throws XPathExpressionException, ParserConfigurationException, IOException, TransformerException, SAXException, JAXBException {
 
         // 1) Contribution Inhalte kommen aus UI
         Contribution contribution1 = new Contribution("CENAM", "CENAM","Mass_Comparison_CENAM");
@@ -45,6 +46,7 @@ public class VirtualMassComparisonService implements IComparisonEvaluationServic
         DataIdentifier dataIdentifier = DataIdentifier.builder()
             .refType("basic_measuredValue")
             .id("measuredValue") //für Temperature würde noch refId dazukommen
+            .siLabel("measured mass")
             .index(0).build();
 
         // 3) ComparisonDataModel erzeugen und auffüllen
@@ -124,6 +126,12 @@ public class VirtualMassComparisonService implements IComparisonEvaluationServic
                 HashMap<String, EnValue> enValues = enValueCalculationService.calculateEnValue(contributionData, referenceValue, analysisOutput.getOutliers());
                 analysisOutput.setEnValues(enValues);
 
+                // Berecnung der Bilateralen En Werte
+                HashMap<String, Contribution> contributions = comparisonDataModel.getContributions();
+                HashMap<String, HashMap<String, BilateralEnValue>> bilateralEnValues =
+                        bilateralEnValueCalculationService.calculateBilateralEnValues(entity.getEntityData().get(investigatedDataIdentifierId).getContributionData(), contributions);
+                analysisOutput.setBilateralEnValues(bilateralEnValues);
+
                 // ConsistencyCheck
                 EnCriterionConsistencyCheckService consistencyCheckService = new EnCriterionConsistencyCheckService();
                 consistencyCheckService.evaluateConsistency(analysisOutput);
@@ -142,6 +150,7 @@ public class VirtualMassComparisonService implements IComparisonEvaluationServic
 
         // Output report erzeugen
         // API antwort als JSON bzw base64
-        return null;
+        String outputReport = OutputWriter.createMeasurementResults(comparisonDataModel);
+        return outputReport;
     }
 }
