@@ -62,8 +62,10 @@ public class DataType {
         @XmlElement(name = "formula", type = FormulaType.class),
         @XmlElement(name = "byteData", type = ByteDataType.class),
         @XmlElement(name = "xml", type = XmlType.class),
-        @XmlElement(name = "quantity", type = QuantityType.class)
+        @XmlElement(name = "quantity", type = QuantityType.class),
+        @XmlElement(name = "list", type = DccListType.class)
     })
+    protected DccListType list;
     protected QuantityType quantity;
     protected List<Object> textOrFormulaOrByteData;
     @XmlAttribute(name = "id")

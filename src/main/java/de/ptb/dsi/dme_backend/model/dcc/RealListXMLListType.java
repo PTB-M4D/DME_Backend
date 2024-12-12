@@ -9,6 +9,10 @@
 package de.ptb.dsi.dme_backend.model.dcc;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.*;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -66,6 +70,9 @@ import javax.xml.bind.annotation.XmlType;
     "ellipsoidalRegionXMLList",
     "rectangularRegionXMLList"
 })
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class RealListXMLListType {
 
     @XmlList

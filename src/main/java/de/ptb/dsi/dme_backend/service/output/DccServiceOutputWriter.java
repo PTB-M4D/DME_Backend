@@ -35,16 +35,25 @@ public class DccServiceOutputWriter {
                 .build();
     }
 
-    public String createMeasurementResults(ComparisonDataModel comparisonDataModel) throws JAXBException {
-        // loop over each EntityUnderComparison
+    public RealQuantityType realQuantityTypeFromEnValue(SiReal siReal){
+        return RealQuantityType.builder()
+                .label(siReal.getLabel())
+                .value(siReal.getValue())
+                .build();
+    }
 
-        QuantityType quantity = QuantityType.builder().build();
+    public String createMeasurementResults(ComparisonDataModel comparisonDataModel) throws JAXBException {
+
+        // loop over each EntityUnderComparison. Every Entity as it's own dcc:measurementResult
+        List<MeasurementResultType> measurementResults = new ArrayList<>();
         for (EntityUnderComparison entityUnderComparison : comparisonDataModel.getEntities().values()){
 
-            // XML Classes for refValue and EnValues
+            // ReferenceValue and each entityData get it's own dcc:result
+            List<ResultType> results = new ArrayList<>();
+
             AnalysisOutput analysisOutput = entityUnderComparison.getAnalysisOutputs().get(entityUnderComparison.getAnalysisOutputs().size()-1);
 
-            // reference Value
+            //---------------- XML Classes for reference Value
             RealQuantityType referenceValue = realQuantityTypeFromSiReal(analysisOutput.getRefValue().getSiReal());
 
             // quantity for reference Value
@@ -56,39 +65,140 @@ public class DccServiceOutputWriter {
                     .refType(Collections.singletonList("basic_referencevalue"))
                     .build();
 
-            quantity = quantityReferenceValue;
+            ResultType resultReferenceValue = ResultType.builder()
+                    .name(TextType.builder()
+                            .content(Collections.singletonList("Temperature reference value at nominal temperature of 34.5 °C"))
+                            .build())
+                    .data(DataType.builder()
+                            .quantity(quantityReferenceValue)
+                            .build())
+                    .build();
+            results.add(resultReferenceValue);
+
+            //-------------- loop over all enValues in analysisoutput. EnValues get seperate dcc:result
+            DccListType listEn = DccListType.builder().build();
+            for (String enKey : analysisOutput.getEnValues().keySet()){
+                SiReal enValue = analysisOutput.getEnValues().get(enKey).getEnValueRaw();
+                RealQuantityType siReal = realQuantityTypeFromEnValue(enValue);
+
+                List<String> contentsEn = new ArrayList<>();
+                contentsEn.add("Contribution from " + enKey);
+                contentsEn.add("used method: " + analysisOutput.getEnValues().get(enKey).getMethod());
+                contentsEn.add("En criterion value for: " + entityUnderComparison.getDataIdentifiers().get(analysisOutput.getDataIdentifierId()).getSiLabel());
+                QuantityType quantity = QuantityType.builder()
+                        .name(TextType.builder()
+                                .content(contentsEn)
+                                .build())
+                        .real(siReal)
+                        .refType(Collections.singletonList("comparison_equivalenceValue"))
+                        .build();
+                listEn.getQuantity().add(quantity);
+            }
+            ResultType resultEn = ResultType.builder()
+                    .name(TextType.builder()
+                            .content(Collections.singletonList("Equivalence values"))
+                            .build())
+                    .data(DataType.builder()
+                            .list(listEn)
+                            .build())
+                    .build();
+            results.add(resultEn);
+
+
+            //-------------- Bilateral EnValues: list of quantities for each row in the matrix
+            DccListType bilateralEnList = DccListType.builder().build();
+
+            HashMap<String, HashMap<String, BilateralEnValue>> bilateralEnValues = analysisOutput.getBilateralEnValues();
+            for (String bilateralEnKey: bilateralEnValues.keySet()){
+                HashMap<String, BilateralEnValue> bilateralEnValueRow = bilateralEnValues.get(bilateralEnKey);
+                RealListXMLListType realListRow = RealListXMLListType.builder().build();
+                realListRow.getUnitXMLList().add("\\one");
+                for (BilateralEnValue bilateralEnValue : bilateralEnValueRow.values()){
+                    realListRow.getValueXMLList().add(bilateralEnValue.getEnValue().getEnValueRaw().getValue());
+                    realListRow.getLabelXMLList().add(bilateralEnValue.getContributionB());
+                }
+                QuantityType quantity = QuantityType.builder()
+                        .name(TextType.builder()
+                                .content(Collections.singletonList("Bilateral en Matrix row " + bilateralEnKey
+                                        + ": " + bilateralEnValueRow.get("0").getContributionA()))
+                                .build())
+                        .realListXMLList(realListRow)
+                        .refType(Collections.singletonList("comparison_equivalenceValueEnCriterion"))
+                        .build();
+                bilateralEnList.getQuantity().add(quantity);
+            }
+            ResultType resultBilateralEn = ResultType.builder()
+                    .name(TextType.builder()
+                            .content(Collections.singletonList("Bilateral equivalence values"))
+                            .build())
+                    .data(DataType.builder()
+                            .list(bilateralEnList)
+                            .build())
+                    .build();
+            results.add(resultBilateralEn);
+
+
+
+
+
+            //-------------- loop over all entityData and add Quantities to list in dcc:result
+            Set<String> entityKeys = entityUnderComparison.getDataIdentifiers().keySet();
+            for (String entityKey : entityKeys){
+                DataIdentifier dataIdentifier = entityUnderComparison.getDataIdentifiers().get(entityKey);
+                ContributionEntityData entityData = entityUnderComparison.getEntityData().get(entityKey);
+
+                // all contributions are gathered as SiReals in quantity in dcc:list
+                DccListType listContrib = DccListType.builder().build();
+                for (String contributionKey : entityData.getContributionData().keySet()){
+                    SiReal data = entityData.getContributionData().get(contributionKey);
+                    RealQuantityType siReal = realQuantityTypeFromSiReal(data);
+
+                    QuantityType quantity = QuantityType.builder()
+                            .name(TextType.builder()
+                                    .content(Collections.singletonList("Contribution from " + contributionKey))
+                                    .build())
+                            .real(siReal)
+                            .refType(Collections.singletonList(dataIdentifier.getRefType()))
+                            .build();
+                    listContrib.getQuantity().add(quantity);
+                }
+
+                ResultType result = ResultType.builder()
+                        .name(TextType.builder()
+                                .content(Collections.singletonList(dataIdentifier.getSiLabel()))
+                                .build())
+                        .data(DataType.builder()
+                                .list(listContrib)
+                                .build())
+                        .build();
+                results.add(result);
+            }
+
+
+            // build dcc:results
+            ResultListType resultList = ResultListType.builder()
+                    .result(results)
+                    .build();
+
+            // build dcc:measurementResult
+            MeasurementResultType measurementResult = MeasurementResultType.builder()
+                    .name(TextType.builder()
+                            .content(Collections.singletonList("Results for the evaluation of the Comparison"))
+                            .build()
+                    )
+                    .results(resultList)
+                    .build();
+            measurementResults.add(measurementResult);
         }
 
-//        QuantityType quantity = QuantityType.builder().build();
-        ResultType result = ResultType.builder()
-                .name(TextType.builder()
-                        .content(Collections.singletonList("Temperature reference value at nominal temperature of 34.5 °C"))
-                        .build())
-                .data(DataType.builder()
-                        .quantity(quantity)
-                        .build())
-                .build();
-
-        ResultListType results = ResultListType.builder()
-                .result(Collections.singletonList(result))
-                .build();
-
-
-        MeasurementResultType measurementResult = MeasurementResultType.builder()
-                .name(TextType.builder()
-                        .content(Collections.singletonList("Comparison reference values for each nominal temperature"))
-                        .build()
-                )
-                .results(results)
-                .build();
-
-        MeasurementResultListType measurementResults = MeasurementResultListType.builder()
-                .measurementResult(Collections.singletonList(measurementResult))
+        // build measurementResults and create dcc:calibrationCertificate
+        MeasurementResultListType measurementResultList = MeasurementResultListType.builder()
+                .measurementResult(measurementResults)
                 .build();
 
         DigitalCalibrationCertificateType certificate = DigitalCalibrationCertificateType.builder()
                 .schemaVersion("3.2.1")
-                .measurementResults(measurementResults)
+                .measurementResults(measurementResultList)
                 .build();
 
         JAXBContext context = JAXBContext.newInstance(DigitalCalibrationCertificateType.class);
