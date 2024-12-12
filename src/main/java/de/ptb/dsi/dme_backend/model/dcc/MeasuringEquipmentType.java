@@ -9,12 +9,12 @@
 package de.ptb.dsi.dme_backend.model.dcc;
 
 
-import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import jakarta.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.adapters.CollapsedStringAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.XmlType;
+
 
 /**
  * 
@@ -49,16 +49,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "measuringEquipmentType", propOrder = {
-    "name",
-    "equipmentClass",
-    "description",
-    "certificate",
-    "manufacturer",
-    "model",
-    "identifications",
-    "measuringEquipmentQuantities"
-})
+
 public class MeasuringEquipmentType {
 
     @XmlElement(required = true)

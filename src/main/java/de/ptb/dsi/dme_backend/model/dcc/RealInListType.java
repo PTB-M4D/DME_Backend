@@ -8,14 +8,14 @@
 
 package de.ptb.dsi.dme_backend.model.dcc;
 
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElementRef;
-import javax.xml.bind.annotation.XmlSchemaType;
+import jakarta.xml.bind.JAXBElement;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElementRef;
+import jakarta.xml.bind.annotation.XmlSchemaType;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.math.BigInteger;
-import javax.xml.bind.annotation.XmlType;
+
 
 /**
  * <p>Java-Klasse für realInListType complex type.
@@ -47,17 +47,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "realInListType", namespace = "https://ptb.de/si", propOrder = {
-    "label",
-    "quantityType",
-    "value",
-    "unit",
-    "significantDigit",
-    "dateTime",
-    "measurementUncertaintyUnivaraite",
-    "expandedUnc",
-    "coverageInterval"
-})
+
 public class RealInListType {
 
     protected String label;

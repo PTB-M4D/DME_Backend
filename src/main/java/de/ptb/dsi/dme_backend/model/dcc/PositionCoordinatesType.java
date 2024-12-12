@@ -9,12 +9,12 @@
 package de.ptb.dsi.dme_backend.model.dcc;
 
 
-import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import jakarta.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.adapters.CollapsedStringAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.XmlType;
+
 
 /**
  * <p>Java-Klasse für positionCoordinatesType complex type.
@@ -44,14 +44,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "positionCoordinatesType", propOrder = {
-    "positionCoordinateSystem",
-    "reference",
-    "declaration",
-    "positionCoordinate1",
-    "positionCoordinate2",
-    "positionCoordinate3"
-})
+
 public class PositionCoordinatesType {
 
     @XmlElement(required = true)

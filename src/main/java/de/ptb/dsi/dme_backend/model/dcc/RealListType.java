@@ -8,13 +8,13 @@
 
 package de.ptb.dsi.dme_backend.model.dcc;
 
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.annotation.*;
+import jakarta.xml.bind.JAXBElement;
+import jakarta.xml.bind.annotation.*;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.XmlType;
+
 
 /**
  * <p>Java-Klasse für realListType complex type.
@@ -47,18 +47,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "realListType", namespace = "https://ptb.de/si", propOrder = {
-    "label",
-    "dateTime",
-    "listQuantityType",
-    "listUnit",
-    "listsignificantDigit",
-    "listMeasurementUncertaintyUnivariate",
-    "listUnivariateUnc",
-    "real",
-    "ellipsoidalRegion",
-    "rectangularRegion"
-})
+
 public class RealListType {
 
     protected String label;

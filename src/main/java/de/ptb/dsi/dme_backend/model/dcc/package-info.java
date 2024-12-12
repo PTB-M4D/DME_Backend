@@ -7,7 +7,7 @@
 
 
 
-@XmlAccessorType(XmlAccessType.FIELD)
+
 @XmlSchema(
         namespace = "https://ptb.de/dcc",
         elementFormDefault = XmlNsForm.QUALIFIED,
@@ -17,7 +17,7 @@
                 @XmlNs(prefix = "xsi", namespaceURI = "http://www.w3.org/2001/XMLSchema-instance"),
                 })
 
-
+@XmlAccessorType(XmlAccessType.FIELD)
 package de.ptb.dsi.dme_backend.model.dcc;
 
 import jakarta.xml.bind.annotation.*;

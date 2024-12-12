@@ -11,9 +11,9 @@ package de.ptb.dsi.dme_backend.model.dcc;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
+
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,16 +47,7 @@ import java.util.List;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "hybridType", namespace = "https://ptb.de/si", propOrder = {
-    "real",
-    "complex",
-    "list",
-    "realList",
-    "realListXMLList",
-    "complexList",
-    "complexListXMLList",
-    "constant"
-})
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

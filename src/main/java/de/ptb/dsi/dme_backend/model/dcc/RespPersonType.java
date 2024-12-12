@@ -12,10 +12,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
-import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import javax.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.adapters.CollapsedStringAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
 
 /**
  * 
@@ -48,15 +48,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "respPersonType", propOrder = {
-    "person",
-    "description",
-    "role",
-    "mainSigner",
-    "cryptElectronicSeal",
-    "cryptElectronicSignature",
-    "cryptElectronicTimeStamp"
-})
+
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor

@@ -8,17 +8,18 @@
 
 package de.ptb.dsi.dme_backend.model.dcc;
 
-import jakarta.xml.bind.annotation.XmlRootElement;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import jakarta.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.adapters.CollapsedStringAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.XmlType;
+
 
 /**
  * 
@@ -64,12 +65,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "digitalCalibrationCertificateType", propOrder = {
-    "administrativeData",
-    "measurementResults",
-    "comment",
-    "document"
-})
+
 @XmlRootElement(name = "DigitalCalibrationCertificate", namespace = "https://ptb.de/dcc"
        )
 @Data
@@ -233,9 +229,7 @@ public class DigitalCalibrationCertificateType {
      * 
      */
     @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {
-        "any"
-    })
+
     public static class Comment {
 
         @XmlAnyElement(lax = true)

@@ -9,14 +9,14 @@
 package de.ptb.dsi.dme_backend.model.dcc;
 
 
-import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import jakarta.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.adapters.CollapsedStringAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import javax.xml.datatype.Duration;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.XmlType;
+
 
 /**
  * <p>Java-Klasse für statementMetaDataType complex type.
@@ -58,24 +58,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "statementMetaDataType", propOrder = {
-    "countryCodeISO31661",
-    "convention",
-    "traceable",
-    "norm",
-    "reference",
-    "declaration",
-    "valid",
-    "date",
-    "period",
-    "respAuthority",
-    "conformity",
-    "conformityXMLList",
-    "data",
-    "nonSIDefinition",
-    "nonSIUnit",
-    "location"
-})
+
 public class StatementMetaDataType {
 
     @XmlElement(name = "countryCodeISO3166_1")

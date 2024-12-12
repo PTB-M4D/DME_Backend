@@ -11,12 +11,12 @@ package de.ptb.dsi.dme_backend.model.dcc;
 
 import lombok.Data;
 
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.annotation.*;
+import jakarta.xml.bind.JAXBElement;
+import jakarta.xml.bind.annotation.*;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.XmlType;
+
 
 /**
  * <p>Java-Klasse für complexListType complex type.
@@ -48,17 +48,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "complexListType", namespace = "https://ptb.de/si", propOrder = {
-    "label",
-    "dateTime",
-    "listQuantityType",
-    "listUnit",
-    "listUnitPhase",
-    "listBivariateUnc",
-    "complex",
-    "ellipsoidalRegion",
-    "rectangularRegion"
-})
+
 @Data
 public class ComplexListType {
 

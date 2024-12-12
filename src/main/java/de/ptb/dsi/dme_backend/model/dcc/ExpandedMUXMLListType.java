@@ -11,13 +11,13 @@ package de.ptb.dsi.dme_backend.model.dcc;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlList;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlList;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.XmlType;
+
 
 /**
  * Definition of expanded measurement uncertainty data.
@@ -44,12 +44,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "expandedMUXMLListType", namespace = "https://ptb.de/si", propOrder = {
-    "valueExpandedMUXMLList",
-    "coverageFactorXMLList",
-    "coverageProbabilityXMLList",
-    "distributionXMLList"
-})
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

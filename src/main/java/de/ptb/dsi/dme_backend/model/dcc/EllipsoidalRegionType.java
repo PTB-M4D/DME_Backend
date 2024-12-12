@@ -8,10 +8,10 @@
 
 package de.ptb.dsi.dme_backend.model.dcc;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+
 
 /**
  * <p>Java-Klasse für ellipsoidalRegionType complex type.
@@ -36,12 +36,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "ellipsoidalRegionType", namespace = "https://ptb.de/si", propOrder = {
-    "covarianceMatrix",
-    "coverageFactor",
-    "coverageProbability",
-    "distribution"
-})
+
 public class EllipsoidalRegionType {
 
     @XmlElement(required = true)
