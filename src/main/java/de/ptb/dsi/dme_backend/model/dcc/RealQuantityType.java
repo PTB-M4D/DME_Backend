@@ -11,6 +11,10 @@ package de.ptb.dsi.dme_backend.model.dcc;
 
 import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.bind.annotation.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.math.BigInteger;
 
@@ -45,7 +49,9 @@ import java.math.BigInteger;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class RealQuantityType {
 
     protected String label;

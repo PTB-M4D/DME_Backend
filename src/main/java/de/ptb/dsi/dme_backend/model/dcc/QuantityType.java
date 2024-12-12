@@ -11,6 +11,10 @@ package de.ptb.dsi.dme_backend.model.dcc;
 import jakarta.xml.bind.annotation.*;
 import jakarta.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,7 +65,9 @@ import java.util.List;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class QuantityType {
 
     protected TextType name;

@@ -12,6 +12,10 @@ package de.ptb.dsi.dme_backend.model.dcc;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +44,9 @@ import java.util.List;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ResultListType {
 
     @XmlElement(required = true)
