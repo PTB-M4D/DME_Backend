@@ -8,6 +8,8 @@
 
 package de.ptb.dsi.dme_backend.model.dcc;
 
+import jakarta.xml.bind.JAXBElement;
+import jakarta.xml.bind.annotation.XmlElement;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -41,16 +43,18 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class ExpandedUncType {
-
+    @XmlElement(name = "uncertainty", namespace = "https://ptb.de/si", required = true)
     protected double uncertainty;
+    @XmlElement(name = "coverageFactor", namespace = "https://ptb.de/si", required = false)
     protected double coverageFactor;
+    @XmlElement(name = "coverageProbability", namespace = "https://ptb.de/si", required = false)
     protected double coverageProbability;
+    @XmlElement(name = "distribution", namespace = "https://ptb.de/si", required = false)
     protected String distribution;
 
     /**

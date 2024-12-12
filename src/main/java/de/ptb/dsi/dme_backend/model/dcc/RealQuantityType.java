@@ -53,17 +53,19 @@ import java.math.BigInteger;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RealQuantityType {
-
+    @XmlElement(name = "label", namespace = "https://ptb.de/si", required = false)
     protected String label;
     @XmlElementRef(name = "quantityType", namespace = "https://ptb.de/si", type = JAXBElement.class, required = false)
     protected JAXBElement<String> quantityType;
+    @XmlElement(name = "value", namespace = "https://ptb.de/si", required = false)
     protected double value;
-    @XmlElement(required = true)
+    @XmlElement(name = "unit", namespace = "https://ptb.de/si", required = true)
     protected String unit;
     protected BigInteger significantDigit;
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar dateTime;
     protected MeasurementUncertaintyUnivariateType measurementUncertaintyUnivariate;
+    @XmlElement(name = "expandedUnc", namespace = "https://ptb.de/si", required = false)
     protected ExpandedUncType expandedUnc;
     protected CoverageIntervalType coverageInterval;
 

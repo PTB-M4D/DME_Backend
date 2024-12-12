@@ -62,21 +62,24 @@ import java.util.List;
 public class RealListXMLListType {
 
     @XmlList
+    @XmlElement(name = "labelXMLList", namespace = "https://ptb.de/si", required = false)
     protected List<String> labelXMLList;
     @XmlElementRef(name = "quantityTypeXMLList", namespace = "https://ptb.de/si", type = JAXBElement.class, required = false)
     protected JAXBElement<String> quantityTypeXMLList;
     @XmlList
-    @XmlElement(type = Double.class)
+    @XmlElement(name = "valueXMLList", namespace = "https://ptb.de/si", required = false, type = Double.class)
     protected List<Double> valueXMLList;
     @XmlList
-    @XmlElement(required = true)
+    @XmlElement(name = "unitXMLList", namespace = "https://ptb.de/si", required = true)
     protected List<String> unitXMLList;
     @XmlList
     protected List<BigInteger> significantDigitXMLList;
     @XmlList
     protected List<XMLGregorianCalendar> dateTimeXMLList;
     protected MeasurementUncertaintyUnivariateXMLListType measurementUncertaintyUnivariateXMLList;
+    @XmlElement(name = "expandedUncXMLList", namespace = "https://ptb.de/si", required = false)
     protected ExpandedUncXMLListType expandedUncXMLList;
+    @XmlElement(name = "coverageIntervalXMLList", namespace = "https://ptb.de/si", required = false)
     protected CoverageIntervalXMLListType coverageIntervalXMLList;
     protected MeasurementUncertaintyMultivariateXMLListType measurementUncertaintyMultivariateXMLList;
     protected EllipsoidalRegionType ellipsoidalRegionXMLList;
