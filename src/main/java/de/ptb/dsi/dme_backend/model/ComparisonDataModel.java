@@ -11,7 +11,7 @@ public class ComparisonDataModel {
    private HashMap<String, Contribution> contributions;//contributorList
    private HashMap<String,EntityUnderComparison> entities;//key entityId   z.B. "mass"
    //   private List<ParticipantMeasuredValue> outliers;
-
+ private String pidReport;
    public ComparisonDataModel(){
       this.contributions = new HashMap<>();
       this.entities = new HashMap<>();

@@ -56,6 +56,7 @@ import java.util.List;
 public class ItemListType {
 
     protected TextType name;
+
     protected EquipmentClassType equipmentClass;
     protected RichContentType description;
     protected ContactType owner;

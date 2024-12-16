@@ -15,4 +15,8 @@ public class Contribution {
     public Contribution(String contributionId){
         this.contributionId = contributionId;
     }
+    public Contribution(String participant, String pidInputData){
+        this.participant = participant;
+        this.pidInputData = pidInputData;
+    }
 }

@@ -47,8 +47,7 @@ public class InputReaderService implements IInputReaderService {
     }
 
     public Document readDocument(@Nonnull String pidInputData) throws ParserConfigurationException, IOException, SAXException {
-        String urlPid = "http://localhost:8085/api/d-dcc/dcc/" + pidInputData + "";
-//        String urlPid = "https://d-si.ptb.de/api/d-dcc/dcc/" + pidInputData + "";
+        String urlPid =   pidInputData ;
         RestTemplate restTemplate = new RestTemplate();
         String response = restTemplate.getForObject(urlPid, String.class, 200);
         byte[] byteBase64 = Base64.getDecoder().decode(response);

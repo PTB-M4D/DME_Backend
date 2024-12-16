@@ -10,10 +10,12 @@ package de.ptb.dsi.dme_backend.model.dcc;
 
 
 import jakarta.xml.bind.JAXBElement;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlElementRef;
-import jakarta.xml.bind.annotation.XmlElementRefs;
+import jakarta.xml.bind.annotation.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +48,10 @@ import java.util.List;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class LocationType {
 
     @XmlElementRefs({
@@ -61,7 +66,8 @@ public class LocationType {
         @XmlElementRef(name = "positionCoordinates", namespace = "https://ptb.de/dcc", type = JAXBElement.class, required = false)
     })
     protected List<JAXBElement<?>> cityOrCountryCodeOrPostCode;
-
+    @XmlElement(required = true)
+    protected String city;
     /**
      * Gets the value of the cityOrCountryCodeOrPostCode property.
      * 

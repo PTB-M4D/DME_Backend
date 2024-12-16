@@ -1,52 +1,59 @@
 package de.ptb.dsi.dme_backend.service.domain;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import de.ptb.dsi.dme_backend.model.*;
+import de.ptb.dsi.dme_backend.model.dcc.*;
 import de.ptb.dsi.dme_backend.service.input.InputReaderService;
 import de.ptb.dsi.dme_backend.service.output.DccServiceOutputWriter;
 import de.ptb.dsi.dme_backend.service.submodel.*;
+import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.xml.sax.SAXException;
 
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.io.StringWriter;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
 public class VirtualRadTemperatureComparisonService implements IComparisonEvaluationService {
-    //    private ComparisonDataModel comparisonDataModel;
+    //
     private final InputReaderService inputReaderService;
     private final Pt100TemperatureFromResistanceCalculatorService pt100TemperatureFromResistanceCalculatorService;
     private final StandardDifferenceCalculatorService differenceCalculatorService;
     private final StandardBilateralEnValueCalculationService bilateralEnValueCalculationService;
-    private final DccServiceOutputWriter OutputWriter;
-
+    private final DccServiceOutputWriter dccServiceOutputWriter;
     @Override
-    public String evaluateComparison(String inputJson) throws XPathExpressionException, ParserConfigurationException, IOException, TransformerException, SAXException, JAXBException {
-
-        ComparisonDataModel comparisonDataModel = new ComparisonDataModel();
-
-        // 1) Contribution Inhalte kommen aus UI
-        Contribution contribution1 = new Contribution("PTB1", "PTB","Temp_Comparison_PTB_1");
-        Contribution contribution2 = new Contribution("PTB2", "PTB","Temp_Comparison_PTB_2");
-        Contribution contribution3 = new Contribution("PTB3", "PTB","Temp_Comparison_PTB_3");
-        Contribution contribution4 = new Contribution("PTB4", "PTB","Temp_Comparison_PTB_4_Ausreisser");
-
-        // 2) Contributions im Comparisondatamodel einfügen
-        comparisonDataModel.getContributions().put(contribution1.getContributionId(), contribution1);
-        comparisonDataModel.getContributions().put(contribution2.getContributionId(), contribution2);
-        comparisonDataModel.getContributions().put(contribution3.getContributionId(), contribution3);
-        comparisonDataModel.getContributions().put(contribution4.getContributionId(), contribution4);
+    public OutputReport evaluateComparison(JsonNode inputJson) throws XPathExpressionException, ParserConfigurationException, IOException, TransformerException, SAXException, JAXBException, DatatypeConfigurationException {
 
 
-        // 3) Dataidentifier festlegen (später über UI) -> Werte im DCC finden, refType basic measured value (später über UI)
+        JsonNode dataReport = inputJson.get("keyComparisonData");
+        String pidReport= dataReport.get("pidReport").toString();
+        System.out.println("pidReport:   "+ pidReport);
+        List<Contribution> contributionList = new ArrayList<>();
+        OutputReport outputReport = null;
+        for (JsonNode participant_node : dataReport.get("participantList")) {
+            participant_node = participant_node.get("participant");
+            String participantName =participant_node.get("name").toString();
+            String pidDcc= participant_node.get("pidDCC").asText();
+            Contribution participant = new Contribution(participantName, participantName, pidDcc);
+            contributionList.add(participant);
+            ComparisonDataModel comparisonDataModel = new ComparisonDataModel();
+            comparisonDataModel.getContributions().put(participant.getContributionId(), participant);
+            System.out.println("comparisonDataModel:   " + comparisonDataModel);
+            // 1) Contribution Inhalte kommen aus UI
+            // 2) Dataidentifier festlegen (später über UI) -> Werte im DCC finden, refType basic measured value (später über UI)
+            // 3) Dataidentifier festlegen (später über UI) -> Werte im DCC finden, refType basic measured value (später über UI)
         DataIdentifier dataIdentRadTemp1 = DataIdentifier.builder()
                 .id("radTemp")
                 .siLabel("Radiation temperature at setpoint 1")
@@ -198,7 +205,7 @@ public class VirtualRadTemperatureComparisonService implements IComparisonEvalua
                 StandardEnValueCalculationService enValueCalculationService = new StandardEnValueCalculationService();
                 HashMap<String, EnValue> enValues = enValueCalculationService.calculateEnValue(allContributionData, referenceValue, analysisOutput.getOutliers());
                 analysisOutput.setEnValues(enValues);
-
+                System.out.println("cont:   "+ comparisonDataModel);
                 // Berecnung der Bilateralen En Werte
                 HashMap<String, Contribution> contributions = comparisonDataModel.getContributions();
                 HashMap<String, HashMap<String, BilateralEnValue>> bilateralEnValues =
@@ -223,7 +230,31 @@ public class VirtualRadTemperatureComparisonService implements IComparisonEvalua
 
         // Output report erzeugen
         // API antwort als JSON bzw base64
-        String outputReport = OutputWriter.createMeasurementResults(comparisonDataModel);
+            String base64 = dccServiceOutputWriter.createOutputReportTemp(comparisonDataModel);
+            outputReport= new OutputReport(pidReport,base64);
+        }
         return outputReport;
     }
+
+    public RealQuantityType realQuantityTypeFromSiReal(SiReal siReal) {
+        return RealQuantityType.builder()
+                .label(siReal.getLabel())
+                .value(siReal.getValue())
+                .unit(siReal.getUnit())
+                .expandedUnc(ExpandedUncType.builder()
+                        .uncertainty(siReal.getExpandedMU().getValueExpandedMU())
+                        .coverageFactor(siReal.getExpandedMU().getCoverageFactor())
+//                        .coverageProbability(siReal.getExpandedMU().getCoverageProbability())
+                        .distribution(siReal.getExpandedMU().getDistribution())
+                        .build())
+                .build();
+    }
+
+    public RealQuantityType realQuantityTypeFromEnValue(SiReal siReal) {
+        return RealQuantityType.builder()
+                .label(siReal.getLabel())
+                .value(siReal.getValue())
+                .build();
+    }
+
 }

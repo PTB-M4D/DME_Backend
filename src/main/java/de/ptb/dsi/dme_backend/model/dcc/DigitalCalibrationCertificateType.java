@@ -74,7 +74,7 @@ import java.util.List;
 @Builder
 public class DigitalCalibrationCertificateType {
 
-    @XmlElement(required = true , namespace = "https://ptb.de/si")
+    @XmlElement(required = true )
 
     protected AdministrativeDataType administrativeData;
     @XmlElement(required = true)

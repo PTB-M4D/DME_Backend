@@ -64,6 +64,8 @@ public class ItemType {
     protected String model;
     @XmlElement(required = true)
     protected IdentificationListType identifications;
+    @XmlElement(required = true)
+    protected ItemQuantities itemQuantities;
     @XmlAttribute(name = "id")
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     @XmlID

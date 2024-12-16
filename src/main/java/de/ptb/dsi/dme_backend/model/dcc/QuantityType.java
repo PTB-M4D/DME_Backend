@@ -1,8 +1,8 @@
 //
-// Diese Datei wurde mit der JavaTM Architecture for XML Binding(JAXB) Reference Implementation, v2.3.2 generiert 
-// Siehe <a href="https://javaee.github.io/jaxb-v2/">https://javaee.github.io/jaxb-v2/</a> 
-// Änderungen an dieser Datei gehen bei einer Neukompilierung des Quellschemas verloren. 
-// Generiert: 2024.11.29 um 02:25:21 PM CET 
+// Diese Datei wurde mit der JavaTM Architecture for XML Binding(JAXB) Reference Implementation, v2.3.2 generiert
+// Siehe <a href="https://javaee.github.io/jaxb-v2/">https://javaee.github.io/jaxb-v2/</a>
+// Änderungen an dieser Datei gehen bei einer Neukompilierung des Quellschemas verloren.
+// Generiert: 2024.11.29 um 02:25:21 PM CET
 //
 
 
@@ -20,17 +20,17 @@ import java.util.List;
 
 
 /**
- * 
+ *
  *         A single measurement quantity that can contain a D-SI element or text.
  *         Additionally used methods, used software, influence conditions that only affect this quantity can be
  *         added.
  *         Measurement metadata can also be added.
- *       
- * 
+ *
+ *
  * <p>Java-Klasse für quantityType complex type.
- * 
+ *
  * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
- * 
+ *
  * <pre>
  * &lt;complexType name="quantityType"&gt;
  *   &lt;complexContent&gt;
@@ -61,13 +61,13 @@ import java.util.List;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
+ *
+ *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class QuantityType {
 
     protected TextType name;
@@ -105,11 +105,11 @@ public class QuantityType {
 
     /**
      * Ruft den Wert der name-Eigenschaft ab.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link TextType }
-     *     
+     *
      */
     public TextType getName() {
         return name;
@@ -117,11 +117,11 @@ public class QuantityType {
 
     /**
      * Legt den Wert der name-Eigenschaft fest.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link TextType }
-     *     
+     *
      */
     public void setName(TextType value) {
         this.name = value;
@@ -129,11 +129,11 @@ public class QuantityType {
 
     /**
      * Ruft den Wert der description-Eigenschaft ab.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link RichContentType }
-     *     
+     *
      */
     public RichContentType getDescription() {
         return description;
@@ -141,11 +141,11 @@ public class QuantityType {
 
     /**
      * Legt den Wert der description-Eigenschaft fest.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link RichContentType }
-     *     
+     *
      */
     public void setDescription(RichContentType value) {
         this.description = value;
@@ -153,11 +153,11 @@ public class QuantityType {
 
     /**
      * Ruft den Wert der noQuantity-Eigenschaft ab.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link RichContentType }
-     *     
+     *
      */
     public RichContentType getNoQuantity() {
         return noQuantity;
@@ -165,11 +165,11 @@ public class QuantityType {
 
     /**
      * Legt den Wert der noQuantity-Eigenschaft fest.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link RichContentType }
-     *     
+     *
      */
     public void setNoQuantity(RichContentType value) {
         this.noQuantity = value;
@@ -177,11 +177,11 @@ public class QuantityType {
 
     /**
      * Ruft den Wert der real-Eigenschaft ab.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link RealQuantityType }
-     *     
+     *
      */
     public RealQuantityType getReal() {
         return real;
@@ -189,11 +189,11 @@ public class QuantityType {
 
     /**
      * Legt den Wert der real-Eigenschaft fest.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link RealQuantityType }
-     *     
+     *
      */
     public void setReal(RealQuantityType value) {
         this.real = value;
@@ -201,11 +201,11 @@ public class QuantityType {
 
     /**
      * Ruft den Wert der list-Eigenschaft ab.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link ListType }
-     *     
+     *
      */
     public ListType getList() {
         return list;
@@ -213,11 +213,11 @@ public class QuantityType {
 
     /**
      * Legt den Wert der list-Eigenschaft fest.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link ListType }
-     *     
+     *
      */
     public void setList(ListType value) {
         this.list = value;
@@ -225,11 +225,11 @@ public class QuantityType {
 
     /**
      * Ruft den Wert der hybrid-Eigenschaft ab.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link HybridType }
-     *     
+     *
      */
     public HybridType getHybrid() {
         return hybrid;
@@ -237,11 +237,11 @@ public class QuantityType {
 
     /**
      * Legt den Wert der hybrid-Eigenschaft fest.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link HybridType }
-     *     
+     *
      */
     public void setHybrid(HybridType value) {
         this.hybrid = value;
@@ -249,11 +249,11 @@ public class QuantityType {
 
     /**
      * Ruft den Wert der complex-Eigenschaft ab.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link ComplexQuantityType }
-     *     
+     *
      */
     public ComplexQuantityType getComplex() {
         return complex;
@@ -261,11 +261,11 @@ public class QuantityType {
 
     /**
      * Legt den Wert der complex-Eigenschaft fest.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link ComplexQuantityType }
-     *     
+     *
      */
     public void setComplex(ComplexQuantityType value) {
         this.complex = value;
@@ -273,11 +273,11 @@ public class QuantityType {
 
     /**
      * Ruft den Wert der constant-Eigenschaft ab.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link ConstantQuantityType }
-     *     
+     *
      */
     public ConstantQuantityType getConstant() {
         return constant;
@@ -285,11 +285,11 @@ public class QuantityType {
 
     /**
      * Legt den Wert der constant-Eigenschaft fest.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link ConstantQuantityType }
-     *     
+     *
      */
     public void setConstant(ConstantQuantityType value) {
         this.constant = value;
@@ -297,11 +297,11 @@ public class QuantityType {
 
     /**
      * Ruft den Wert der realListXMLList-Eigenschaft ab.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link RealListXMLListType }
-     *     
+     *
      */
     public RealListXMLListType getRealListXMLList() {
         return realListXMLList;
@@ -309,11 +309,11 @@ public class QuantityType {
 
     /**
      * Legt den Wert der realListXMLList-Eigenschaft fest.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link RealListXMLListType }
-     *     
+     *
      */
     public void setRealListXMLList(RealListXMLListType value) {
         this.realListXMLList = value;
@@ -321,11 +321,11 @@ public class QuantityType {
 
     /**
      * Ruft den Wert der relativeUncertainty-Eigenschaft ab.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link RelativeUncertaintyType }
-     *     
+     *
      */
     public RelativeUncertaintyType getRelativeUncertainty() {
         return relativeUncertainty;
@@ -333,11 +333,11 @@ public class QuantityType {
 
     /**
      * Legt den Wert der relativeUncertainty-Eigenschaft fest.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link RelativeUncertaintyType }
-     *     
+     *
      */
     public void setRelativeUncertainty(RelativeUncertaintyType value) {
         this.relativeUncertainty = value;
@@ -345,11 +345,11 @@ public class QuantityType {
 
     /**
      * Ruft den Wert der usedMethods-Eigenschaft ab.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link UsedMethodListType }
-     *     
+     *
      */
     public UsedMethodListType getUsedMethods() {
         return usedMethods;
@@ -357,11 +357,11 @@ public class QuantityType {
 
     /**
      * Legt den Wert der usedMethods-Eigenschaft fest.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link UsedMethodListType }
-     *     
+     *
      */
     public void setUsedMethods(UsedMethodListType value) {
         this.usedMethods = value;
@@ -369,11 +369,11 @@ public class QuantityType {
 
     /**
      * Ruft den Wert der usedSoftware-Eigenschaft ab.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link SoftwareListType }
-     *     
+     *
      */
     public SoftwareListType getUsedSoftware() {
         return usedSoftware;
@@ -381,11 +381,11 @@ public class QuantityType {
 
     /**
      * Legt den Wert der usedSoftware-Eigenschaft fest.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link SoftwareListType }
-     *     
+     *
      */
     public void setUsedSoftware(SoftwareListType value) {
         this.usedSoftware = value;
@@ -393,11 +393,11 @@ public class QuantityType {
 
     /**
      * Ruft den Wert der measuringEquipments-Eigenschaft ab.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link MeasuringEquipmentListType }
-     *     
+     *
      */
     public MeasuringEquipmentListType getMeasuringEquipments() {
         return measuringEquipments;
@@ -405,11 +405,11 @@ public class QuantityType {
 
     /**
      * Legt den Wert der measuringEquipments-Eigenschaft fest.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link MeasuringEquipmentListType }
-     *     
+     *
      */
     public void setMeasuringEquipments(MeasuringEquipmentListType value) {
         this.measuringEquipments = value;
@@ -417,11 +417,11 @@ public class QuantityType {
 
     /**
      * Ruft den Wert der influenceConditions-Eigenschaft ab.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link InfluenceConditionListType }
-     *     
+     *
      */
     public InfluenceConditionListType getInfluenceConditions() {
         return influenceConditions;
@@ -429,11 +429,11 @@ public class QuantityType {
 
     /**
      * Legt den Wert der influenceConditions-Eigenschaft fest.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link InfluenceConditionListType }
-     *     
+     *
      */
     public void setInfluenceConditions(InfluenceConditionListType value) {
         this.influenceConditions = value;
@@ -441,11 +441,11 @@ public class QuantityType {
 
     /**
      * Ruft den Wert der measurementMetaData-Eigenschaft ab.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link MeasurementMetaDataListType }
-     *     
+     *
      */
     public MeasurementMetaDataListType getMeasurementMetaData() {
         return measurementMetaData;
@@ -453,11 +453,11 @@ public class QuantityType {
 
     /**
      * Legt den Wert der measurementMetaData-Eigenschaft fest.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link MeasurementMetaDataListType }
-     *     
+     *
      */
     public void setMeasurementMetaData(MeasurementMetaDataListType value) {
         this.measurementMetaData = value;
@@ -465,11 +465,11 @@ public class QuantityType {
 
     /**
      * Ruft den Wert der id-Eigenschaft ab.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getId() {
         return id;
@@ -477,11 +477,11 @@ public class QuantityType {
 
     /**
      * Legt den Wert der id-Eigenschaft fest.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setId(String value) {
         this.id = value;
@@ -489,25 +489,25 @@ public class QuantityType {
 
     /**
      * Gets the value of the refId property.
-     * 
+     *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the refId property.
-     * 
+     *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getRefId().add(newItem);
      * </pre>
-     * 
-     * 
+     *
+     *
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link Object }
-     * 
-     * 
+     *
+     *
      */
     public List<Object> getRefId() {
         if (refId == null) {
@@ -518,25 +518,25 @@ public class QuantityType {
 
     /**
      * Gets the value of the refType property.
-     * 
+     *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the refType property.
-     * 
+     *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getRefType().add(newItem);
      * </pre>
-     * 
-     * 
+     *
+     *
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link String }
-     * 
-     * 
+     *
+     *
      */
     public List<String> getRefType() {
         if (refType == null) {
@@ -544,5 +544,4 @@ public class QuantityType {
         }
         return this.refType;
     }
-
 }
