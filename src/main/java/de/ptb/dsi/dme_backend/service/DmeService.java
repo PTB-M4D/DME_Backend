@@ -9,7 +9,6 @@ import jakarta.xml.bind.JAXBException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.xml.sax.SAXException;
-
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -28,17 +27,13 @@ public class DmeService {
 
         JsonNode data = inputJson.get("keyComparisonData");
         String smartStandard = (data.get("smartStandardEvaluationMethod")).asText();
-        System.out.println("smart:   " + smartStandard);
-        System.out.println("status:   " + smartStandard.equals("massIntercomparison"));
+
         if (smartStandard.equals("radiationTempComparison")) {
             return virtualRadTemperatureComparisonService.evaluateComparison(inputJson);
-
         }
         if (smartStandard.equals("massIntercomparison")) {
-           return virtualMassComparisonService.evaluateComparison(inputJson);
-         
-        }
-else return new OutputReport("pidReport not found","base64 not found");
+            return virtualMassComparisonService.evaluateComparison(inputJson);
+        } else return new OutputReport("pidReport not found", "base64 not found");
 //TODO exceptions ergänzen
     }
 

@@ -35,19 +35,17 @@ public class VirtualMassComparisonService implements IComparisonEvaluationServic
     @Override
     public OutputReport evaluateComparison(JsonNode inputJson) throws XPathExpressionException, ParserConfigurationException, IOException, TransformerException, SAXException, JAXBException, DatatypeConfigurationException {
         JsonNode dataReport = inputJson.get("keyComparisonData");
-        String pidReport= dataReport.get("pidReport").toString();
-        System.out.println("pidReport:   "+ pidReport);
+        String pidReport= dataReport.get("pidReport").asText();
         List<Contribution> contributionList = new ArrayList<>();
         OutputReport outputReport = null;
         for (JsonNode participant_node : dataReport.get("participantList")) {
             participant_node = participant_node.get("participant");
-            String participantName =participant_node.get("name").toString();
+            String participantName =participant_node.get("name").asText();
             String pidDcc= participant_node.get("pidDCC").asText();
             Contribution participant = new Contribution(participantName, participantName, pidDcc);
             contributionList.add(participant);
             ComparisonDataModel comparisonDataModel = new ComparisonDataModel();
             comparisonDataModel.getContributions().put(participant.getContributionId(), participant);
-            System.out.println("comparisonDataModel:   " + comparisonDataModel);
             // 1) Contribution Inhalte kommen aus UI
 
             // 2) Dataidentifier festlegen (später über UI) -> Werte im DCC finden, refType basic measured value (später über UI)

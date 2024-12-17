@@ -38,13 +38,13 @@ public class VirtualRadTemperatureComparisonService implements IComparisonEvalua
 
 
         JsonNode dataReport = inputJson.get("keyComparisonData");
-        String pidReport= dataReport.get("pidReport").toString();
+        String pidReport= dataReport.get("pidReport").asText();
         System.out.println("pidReport:   "+ pidReport);
         List<Contribution> contributionList = new ArrayList<>();
         OutputReport outputReport = null;
         for (JsonNode participant_node : dataReport.get("participantList")) {
             participant_node = participant_node.get("participant");
-            String participantName =participant_node.get("name").toString();
+            String participantName =participant_node.get("name").asText();
             String pidDcc= participant_node.get("pidDCC").asText();
             Contribution participant = new Contribution(participantName, participantName, pidDcc);
             contributionList.add(participant);
@@ -205,7 +205,6 @@ public class VirtualRadTemperatureComparisonService implements IComparisonEvalua
                 StandardEnValueCalculationService enValueCalculationService = new StandardEnValueCalculationService();
                 HashMap<String, EnValue> enValues = enValueCalculationService.calculateEnValue(allContributionData, referenceValue, analysisOutput.getOutliers());
                 analysisOutput.setEnValues(enValues);
-                System.out.println("cont:   "+ comparisonDataModel);
                 // Berecnung der Bilateralen En Werte
                 HashMap<String, Contribution> contributions = comparisonDataModel.getContributions();
                 HashMap<String, HashMap<String, BilateralEnValue>> bilateralEnValues =
@@ -236,25 +235,5 @@ public class VirtualRadTemperatureComparisonService implements IComparisonEvalua
         return outputReport;
     }
 
-    public RealQuantityType realQuantityTypeFromSiReal(SiReal siReal) {
-        return RealQuantityType.builder()
-                .label(siReal.getLabel())
-                .value(siReal.getValue())
-                .unit(siReal.getUnit())
-                .expandedUnc(ExpandedUncType.builder()
-                        .uncertainty(siReal.getExpandedMU().getValueExpandedMU())
-                        .coverageFactor(siReal.getExpandedMU().getCoverageFactor())
-//                        .coverageProbability(siReal.getExpandedMU().getCoverageProbability())
-                        .distribution(siReal.getExpandedMU().getDistribution())
-                        .build())
-                .build();
-    }
-
-    public RealQuantityType realQuantityTypeFromEnValue(SiReal siReal) {
-        return RealQuantityType.builder()
-                .label(siReal.getLabel())
-                .value(siReal.getValue())
-                .build();
-    }
 
 }

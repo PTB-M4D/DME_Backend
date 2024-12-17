@@ -2,9 +2,6 @@ package de.ptb.dsi.dme_backend.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import de.ptb.dsi.dme_backend.model.OutputReport;
-import de.ptb.dsi.dme_backend.service.domain.VirtualMassComparisonService;
-import de.ptb.dsi.dme_backend.service.domain.VirtualRadTemperatureComparisonService;
-import de.ptb.dsi.dme_backend.service.input.InputReaderService;
 import de.ptb.dsi.dme_backend.service.DmeService;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Contact;
@@ -18,7 +15,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -46,11 +42,7 @@ import java.io.IOException;
 @AllArgsConstructor
 public class DmeController {
 
-    private final InputReaderService inputReaderService;
-    private final VirtualMassComparisonService virtualMassComparisonService;
-    private final DmeService dccService;
-    private final VirtualRadTemperatureComparisonService virtualRadTemperatureComparisonService;
-
+    private final DmeService dmeService;
 
     @RequestMapping(value = "/evaluateComparison", method = RequestMethod.POST)
     public ResponseEntity<OutputReport> evaluateDKCR(@RequestBody
@@ -80,7 +72,7 @@ public class DmeController {
                                                              "}\n" +
                                                              "}")))
                                                      JsonNode inputJson) throws DatatypeConfigurationException, JAXBException, XPathExpressionException, ParserConfigurationException, IOException, TransformerException, SAXException {
-        return new ResponseEntity<>(dccService.evaluate(inputJson), HttpStatus.CREATED);
+        return new ResponseEntity<>(dmeService.evaluate(inputJson), HttpStatus.CREATED);
     }
     @RequestMapping(value = "/evaluateComparisonTemp", method = RequestMethod.POST)
     public ResponseEntity<OutputReport> evaluateDKCRTemp(@RequestBody
@@ -110,7 +102,7 @@ public class DmeController {
                                                              "}\n" +
                                                              "}")))
                                                      JsonNode inputJson) throws DatatypeConfigurationException, JAXBException, XPathExpressionException, ParserConfigurationException, IOException, TransformerException, SAXException {
-        return new ResponseEntity<>(dccService.evaluate(inputJson), HttpStatus.CREATED);
+        return new ResponseEntity<>(dmeService.evaluate(inputJson), HttpStatus.CREATED);
     }
     @RequestMapping(value = "/sayHello", method = RequestMethod.GET)
     public String sayHelloWorld() {

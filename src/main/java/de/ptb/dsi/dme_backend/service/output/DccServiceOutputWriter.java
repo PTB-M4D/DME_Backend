@@ -167,7 +167,7 @@ public class DccServiceOutputWriter {
                                 .build())
                         .real(siReal)
                         .refType(Collections.singletonList("comparison_equivalenceValueEnCriterion"))
-                        .id(comparisonDataModel.getContributions().get(enKey).getPidInputData())
+                        .id(comparisonDataModel.getContributions().get(enKey).getParticipant())
                         .build();
                 listEn.getQuantity().add(quantity1);
             }
@@ -204,7 +204,7 @@ public class DccServiceOutputWriter {
                                 .build())
                         .realListXMLList(realListRow)
                         .refType(Collections.singletonList("comparison_equivalenceValueEnCriterion"))
-                        .id(comparisonDataModel.getContributions().get(contributionId).getPidInputData())
+                        .id(comparisonDataModel.getContributions().get(contributionId).getParticipant())
                         .build();
                 bilateralEnList.getQuantity().add(quantity3);
             }
@@ -237,7 +237,7 @@ public class DccServiceOutputWriter {
                                     .build())
                             .real(siReal)
                             .refType(Collections.singletonList(dataIdentifier.getRefType()))
-                            .id(comparisonDataModel.getContributions().get(contributionKey).getPidInputData())
+                            .id(comparisonDataModel.getContributions().get(contributionKey).getParticipant())
                             .build();
                     listContrib.getQuantity().add(quantity4);
                 }
@@ -289,10 +289,7 @@ public class DccServiceOutputWriter {
         marshaller.marshal(certificate, writer);
 
         String base64 = Base64.getEncoder().encodeToString(writer.toString().getBytes());
-
         return base64;
-
-
     }
 
     public String createOutputReportTemp(ComparisonDataModel comparisonDataModel) throws JAXBException, DatatypeConfigurationException {
@@ -505,7 +502,7 @@ public class DccServiceOutputWriter {
                                 .build())
                         .real(siReal)
                         .refType(Collections.singletonList("comparison_equivalenceValueEnCriterion"))
-                        .id(comparisonDataModel.getContributions().get(enKey).getPidInputData())
+                        .id(comparisonDataModel.getContributions().get(enKey).getParticipant())
                         .build();
                 listEn.getQuantity().add(quantity1);
             }
@@ -542,9 +539,10 @@ public class DccServiceOutputWriter {
                                 .build())
                         .realListXMLList(realListRow)
                         .refType(Collections.singletonList("comparison_equivalenceValueEnCriterion"))
-                        .id(comparisonDataModel.getContributions().get(contributionId).getPidInputData())
+                        .id(comparisonDataModel.getContributions().get(contributionId).getParticipant())
                         .build();
                 bilateralEnList.getQuantity().add(quantity3);
+
             }
             ResultType resultBilateralEn = ResultType.builder()
                     .name(TextType.builder()
@@ -568,14 +566,13 @@ public class DccServiceOutputWriter {
                 for (String contributionKey : entityData.getContributionData().keySet()) {
                     SiReal data = entityData.getContributionData().get(contributionKey);
                     RealQuantityType siReal = realQuantityTypeFromSiReal(data);
-
                     QuantityType quantity4 = QuantityType.builder()
                             .name(TextType.builder()
                                     .content(Collections.singletonList("Contribution from " + contributionKey))
                                     .build())
                             .real(siReal)
                             .refType(Collections.singletonList(dataIdentifier.getRefType()))
-                            .id(comparisonDataModel.getContributions().get(contributionKey).getPidInputData())
+                            .id(comparisonDataModel.getContributions().get(contributionKey).getParticipant())
                             .build();
                     listContrib.getQuantity().add(quantity4);
                 }
