@@ -3,6 +3,7 @@ package de.ptb.dsi.dme_backend.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import de.ptb.dsi.dme_backend.model.*;
+import de.ptb.dsi.dme_backend.service.domain.IComparisonEvaluationService;
 import de.ptb.dsi.dme_backend.service.domain.VirtualMassComparisonService;
 import de.ptb.dsi.dme_backend.service.domain.VirtualRadTemperatureComparisonService;
 import jakarta.xml.bind.JAXBException;
@@ -19,8 +20,7 @@ import java.io.IOException;
 @Service
 @AllArgsConstructor
 public class DmeService {
-    VirtualRadTemperatureComparisonService virtualRadTemperatureComparisonService;
-    VirtualMassComparisonService virtualMassComparisonService;
+    private final IComparisonEvaluationService virtualRadTemperatureComparisonService, virtualMassComparisonService;
 
 
     public OutputReport evaluate(JsonNode inputJson) throws DatatypeConfigurationException, XPathExpressionException, JAXBException, ParserConfigurationException, IOException, TransformerException, SAXException {

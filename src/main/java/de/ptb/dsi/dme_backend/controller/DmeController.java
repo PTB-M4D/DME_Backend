@@ -3,6 +3,7 @@ package de.ptb.dsi.dme_backend.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import de.ptb.dsi.dme_backend.model.OutputReport;
 import de.ptb.dsi.dme_backend.service.DmeService;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
@@ -25,9 +26,9 @@ import java.io.IOException;
 
 @OpenAPIDefinition(
         info = @Info(
-                title = "D-Comparison Service Backend API",
+                title = "DME Service Backend API",
                 termsOfService = "https://d-si.ptb.de/#/d-comparison",
-                description = "This API exposes endpoints to manage D-Comparison.",
+                description = "This API exposes endpoints to manage DME .",
                 version = "v0.3",
                 contact = @Contact(
                         name = "D-SI Services",
@@ -104,9 +105,10 @@ public class DmeController {
                                                      JsonNode inputJson) throws DatatypeConfigurationException, JAXBException, XPathExpressionException, ParserConfigurationException, IOException, TransformerException, SAXException {
         return new ResponseEntity<>(dmeService.evaluate(inputJson), HttpStatus.CREATED);
     }
-    @RequestMapping(value = "/sayHello", method = RequestMethod.GET)
+    @RequestMapping(value = "/testDme", method = RequestMethod.GET)
+    @Hidden
     public String sayHelloWorld() {
-        return " Test Hi";
+        return " DME Service";
     }
 }
 

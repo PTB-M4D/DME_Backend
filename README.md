@@ -92,7 +92,7 @@ docker build -t dmebackend
 docker run -p 8000:8080 dmebackend
 ```
 
-The application should now be accessible at `http://localhost:8000/api/dme-comparison/sayHello`.
+The application should now be accessible at `http://localhost:8000/api/dme-comparison/testDme`.
 
 
 ## License
