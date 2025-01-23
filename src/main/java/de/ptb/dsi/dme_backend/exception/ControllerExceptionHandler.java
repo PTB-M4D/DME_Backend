@@ -12,7 +12,7 @@ import org.springframework.web.context.request.WebRequest;
 import java.util.Date;
 
 
-@ControllerAdvice
+//@ControllerAdvice
 public class ControllerExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)

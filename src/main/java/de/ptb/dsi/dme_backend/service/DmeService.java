@@ -1,11 +1,8 @@
 package de.ptb.dsi.dme_backend.service;
 
-
 import com.fasterxml.jackson.databind.JsonNode;
 import de.ptb.dsi.dme_backend.model.*;
 import de.ptb.dsi.dme_backend.service.domain.IComparisonEvaluationService;
-import de.ptb.dsi.dme_backend.service.domain.VirtualMassComparisonService;
-import de.ptb.dsi.dme_backend.service.domain.VirtualRadTemperatureComparisonService;
 import jakarta.xml.bind.JAXBException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
