@@ -18,36 +18,47 @@ import java.util.*;
 @Service
 @AllArgsConstructor
 public class DccServiceOutputWriter {
-    public String createOutputReportMass(ComparisonDataModel comparisonDataModel) throws JAXBException, DatatypeConfigurationException {
-            TextType softwareName = TextType.builder()
-                .content(Collections.singletonList("GEMIMEG Tool"))
+
+    private SoftwareListType createSoftwareList(String softwarename, String softwareVersion){
+        TextType softwareName = TextType.builder()
+                .content(Collections.singletonList(softwarename))
                 .build();
         SoftwareType software = SoftwareType.builder()
                 .name(softwareName)
-                .release("v1.2.0")
+                .release(softwareVersion)
                 .build();
         SoftwareListType softwareList = SoftwareListType.builder()
                 .software(Arrays.asList(software))
                 .build();
-        IdentificationType identificationCore = IdentificationType.builder()
-                .issuer("calibrationLaboratory")
-                .value("NMIJ")
+
+        return softwareList;
+    }
+
+    private CoreDataType createCoreData(String identificationIssuer, String identificaionValue,
+                                        String coreDataCountryCode, String coreDataUniqueIdentifier) throws DatatypeConfigurationException {
+        IdentificationType identification = IdentificationType.builder()
+                .issuer(identificationIssuer)
+                .value(identificaionValue)
                 .build();
-        IdentificationListType identificationCoreList = IdentificationListType.builder()
-                .identification(Arrays.asList(identificationCore)).build();
+        IdentificationListType identificationList = IdentificationListType.builder()
+                .identification(Arrays.asList(identification)).build();
+
         Date date = new Date();
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++CoreData+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
         CoreDataType coreData = CoreDataType.builder()
-                .countryCodeISO31661("JP")
+                .countryCodeISO31661(coreDataCountryCode)
                 .usedLangCodeISO6391(Collections.singletonList("en"))
                 .mandatoryLangCodeISO6391(Collections.singletonList("en"))
-                .uniqueIdentifier("mass")
-                .identifications(identificationCoreList)
+                .uniqueIdentifier(coreDataUniqueIdentifier)
+                .identifications(identificationList)
                 .beginPerformanceDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(new SimpleDateFormat(LocalDate.now().toString()).format(date)))
                 .endPerformanceDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(new SimpleDateFormat(LocalDate.now().toString()).format(date)))
                 .performanceLocation(PerformanceLocationType.builder().value(StringPerformanceLocationType.LABORATORY).build())
                 .build();
+        return coreData;
+    }
 
+    private ItemListType createItemListMass(){
         TextType itemName1 = TextType.builder()
                 .content(Collections.singletonList("1kg Silicon Sphere"))
 //                .lang("en")
@@ -75,7 +86,10 @@ public class DccServiceOutputWriter {
                 .item(Arrays.asList(item1))
                 .build();
 
+        return items;
+    }
 
+    private CalibrationLaboratory createCalibrationLaboratoryMass(){
         ContactType contact = ContactType.builder()
                 .name(TextType.builder().content(Collections.singletonList("Pilot Laboratory")).build())
                 .eMail("info@nmij.jp")
@@ -84,18 +98,22 @@ public class DccServiceOutputWriter {
         CalibrationLaboratory calibrationLaboratory = CalibrationLaboratory.builder()
                 .contact(contact)
                 .build();
+        return calibrationLaboratory;
+    }
 
-//TODOLocation
+    private ContactType createCustomerMass(){
         TextType customerName = TextType.builder()
                 .content(Collections.singletonList("Kenichi Fuji"))
                 .build();
-        ContactType customer=ContactType.builder()
+        ContactType customer = ContactType.builder()
                 .name(customerName)
                 .eMail("k.f@NMILJ.jp")
                 .location(LocationType.builder().city("Tokyo").build())
                 .build();
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++AdministrativeData_RespPersonList+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        return customer;
+    }
 
+    private RespPersonListType createRespPersonListMass(){
         TextType respPersonName = TextType.builder()
                 .content(Collections.singletonList("A Person"))
                 .build();
@@ -106,7 +124,45 @@ public class DccServiceOutputWriter {
         RespPersonListType respPersons= RespPersonListType.builder()
                 .respPerson(Arrays.asList(respPerson))
                 .build();
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++AdministrativeDataType++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        return respPersons;
+    }
+
+    private ResultType createResultReferenceValueEnCiterion(AnalysisOutput analysisOutput){
+        RealQuantityType referenceValue = realQuantityTypeFromSiReal(analysisOutput.getRefValue().getSiReal());
+
+        // quantity for reference Value
+        QuantityType quantityReferenceValue = QuantityType.builder()
+                .name(TextType.builder()
+                        .content(Collections.singletonList("Comparison Reference Value (En Criterion)"))
+                        .build())
+                .real(referenceValue)
+                .refType(Collections.singletonList("comparison_referenceValueEnCriterion"))
+                .build();
+
+        ResultType resultReferenceValue = ResultType.builder()
+//                    .name(TextType.builder()
+//                            .content(Collections.singletonList("Temperature reference value at nominal temperature of 34.5 °C")) //Todo was soll hier rein?
+//                            .build())
+                .data(DataType.builder()
+                        .quantity(quantityReferenceValue)
+                        .build())
+//                    .refType(Collections.singletonList("temperature_radianceTemperature")) //Todo überarbeiten
+                .id("comparison_referenceValues")
+                .build();
+        return resultReferenceValue;
+    }
+    public String createOutputReportMass(ComparisonDataModel comparisonDataModel) throws JAXBException, DatatypeConfigurationException {
+
+        // ADMINISTRATIVE DATA
+        //TODOLocation
+        SoftwareListType softwareList = createSoftwareList("GEMIMEG Tool", "v1.2.0");
+        CoreDataType coreData = createCoreData("calibrationLaboratory", "NMIJ",
+                "JP", "mass");
+        ItemListType items = createItemListMass();
+        CalibrationLaboratory calibrationLaboratory = createCalibrationLaboratoryMass();
+        ContactType customer = createCustomerMass();
+        RespPersonListType respPersons = createRespPersonListMass();
+
         AdministrativeDataType administrativeData = AdministrativeDataType.builder()
                 .dccSoftware(softwareList)
                 .coreData(coreData)
@@ -128,27 +184,8 @@ public class DccServiceOutputWriter {
             AnalysisOutput analysisOutput = entityUnderComparison1.getAnalysisOutputs().get(entityUnderComparison1.getAnalysisOutputs().size() - 1);
 
             //---------------- XML Classes for reference Value
-            RealQuantityType referenceValue = realQuantityTypeFromSiReal(analysisOutput.getRefValue().getSiReal());
 
-            // quantity for reference Value
-            QuantityType quantityReferenceValue = QuantityType.builder()
-                    .name(TextType.builder()
-                            .content(Collections.singletonList("Comparison Reference Value (En Criterion)"))
-                            .build())
-                    .real(referenceValue)
-                    .refType(Collections.singletonList("comparison_referenceValueEnCriterion"))
-                    .build();
-
-            ResultType resultReferenceValue = ResultType.builder()
-//                    .name(TextType.builder()
-//                            .content(Collections.singletonList("Temperature reference value at nominal temperature of 34.5 °C")) //Todo was soll hier rein?
-//                            .build())
-                    .data(DataType.builder()
-                            .quantity(quantityReferenceValue)
-                            .build())
-//                    .refType(Collections.singletonList("temperature_radianceTemperature")) //Todo überarbeiten
-                    .id("comparison_referenceValues")
-                    .build();
+            ResultType resultReferenceValue = createResultReferenceValueEnCiterion(analysisOutput);
             results.add(resultReferenceValue);
 
             //-------------- loop over all enValues in analysisoutput. EnValues get seperate dcc:result
