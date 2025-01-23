@@ -36,24 +36,23 @@ public class VirtualRadTemperatureComparisonService implements IComparisonEvalua
     @Override
     public OutputReport evaluateComparison(JsonNode inputJson) throws XPathExpressionException, ParserConfigurationException, IOException, TransformerException, SAXException, JAXBException, DatatypeConfigurationException {
 
-
         JsonNode dataReport = inputJson.get("keyComparisonData");
         String pidReport= dataReport.get("pidReport").asText();
         System.out.println("pidReport:   "+ pidReport);
         List<Contribution> contributionList = new ArrayList<>();
         OutputReport outputReport = null;
+        ComparisonDataModel comparisonDataModel = new ComparisonDataModel();
+        // 1) Contribution Inhalte kommen aus UI
         for (JsonNode participant_node : dataReport.get("participantList")) {
             participant_node = participant_node.get("participant");
-            String participantName =participant_node.get("name").asText();
-            String pidDcc= participant_node.get("pidDCC").asText();
+            String participantName = participant_node.get("name").asText();
+            String pidDcc = participant_node.get("pidDCC").asText();
             Contribution participant = new Contribution(participantName, participantName, pidDcc);
             contributionList.add(participant);
-            ComparisonDataModel comparisonDataModel = new ComparisonDataModel();
             comparisonDataModel.getContributions().put(participant.getContributionId(), participant);
-            System.out.println("comparisonDataModel:   " + comparisonDataModel);
-            // 1) Contribution Inhalte kommen aus UI
-            // 2) Dataidentifier festlegen (später über UI) -> Werte im DCC finden, refType basic measured value (später über UI)
-            // 3) Dataidentifier festlegen (später über UI) -> Werte im DCC finden, refType basic measured value (später über UI)
+        }
+
+        // 2) Dataidentifier festlegen (später über UI) -> Werte im DCC finden, refType basic measured value (später über UI)
         DataIdentifier dataIdentRadTemp1 = DataIdentifier.builder()
                 .id("radTemp")
                 .siLabel("Radiation temperature at setpoint 1")
@@ -114,12 +113,10 @@ public class VirtualRadTemperatureComparisonService implements IComparisonEvalua
         comparisonDataModel.getEntities().put(entityUnderComparison3.getEntityId(), entityUnderComparison3);
 
 
-
         // 5) Input Reader starten
         // mit dataIdentifier aus den EntityUnderComparison imComparisonDataModel, die entsprechenden Werte aus dem DCC einlesen
-        // EntityUnderComparison -> ContributionEntityData -> Hashmap<SiReal> {"1": SiReal, "2": SiReal, "3": SiReal}
+        // EntityUnderComparison -> ContributionEntityData -> Hashmap<SiReal> {"1": SiReal, "2": SiReal, "3": SiReal}z
         inputReaderService.loadData(comparisonDataModel);
-
 
         // Schleife über alle EntityUnderComparison
         // Auswertung hier nur für EntityUnderComparison mit id = "mass"
@@ -231,7 +228,7 @@ public class VirtualRadTemperatureComparisonService implements IComparisonEvalua
         // API antwort als JSON bzw base64
             String base64 = dccServiceOutputWriter.createOutputReportTemp(comparisonDataModel);
             outputReport= new OutputReport(pidReport,base64);
-        }
+
         return outputReport;
     }
 
