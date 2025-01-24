@@ -52,7 +52,11 @@ public class VirtualRadTemperatureComparisonService implements IComparisonEvalua
             comparisonDataModel.getContributions().put(participant.getContributionId(), participant);
         }
 
-        // 2) Dataidentifier festlegen (später über UI) -> Werte im DCC finden, refType basic measured value (später über UI)
+        // 2) smartStandard festlegen -> wählt korrekte Administrativdaten in Outputwriter
+        String smartStandard = dataReport.get("smartStandardEvaluationMethod").asText();
+        comparisonDataModel.setSmartStandard(smartStandard);
+
+        // 3) Dataidentifier festlegen (später über UI) -> Werte im DCC finden, refType basic measured value (später über UI)
         DataIdentifier dataIdentRadTemp1 = DataIdentifier.builder()
                 .id("radTemp")
                 .siLabel("Radiation temperature at setpoint 1")
@@ -226,7 +230,7 @@ public class VirtualRadTemperatureComparisonService implements IComparisonEvalua
 
         // Output report erzeugen
         // API antwort als JSON bzw base64
-            String base64 = dccServiceOutputWriter.createOutputReportTemp(comparisonDataModel);
+            String base64 = dccServiceOutputWriter.createOutputReport(comparisonDataModel);
             outputReport= new OutputReport(pidReport,base64);
 
         return outputReport;

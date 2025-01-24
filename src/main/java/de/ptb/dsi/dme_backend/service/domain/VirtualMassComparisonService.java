@@ -39,6 +39,7 @@ public class VirtualMassComparisonService implements IComparisonEvaluationServic
         List<Contribution> contributionList = new ArrayList<>();
         OutputReport outputReport = null;
         ComparisonDataModel comparisonDataModel = new ComparisonDataModel();
+
         // 1) Contribution Inhalte kommen aus UI
         for (JsonNode participant_node : dataReport.get("participantList")) {
             participant_node = participant_node.get("participant");
@@ -50,7 +51,11 @@ public class VirtualMassComparisonService implements IComparisonEvaluationServic
             comparisonDataModel.getContributions().put(participant.getContributionId(), participant);
         }
 
-        // 2) Dataidentifier festlegen (später über UI) -> Werte im DCC finden, refType basic measured value (später über UI)
+        // 2) smartStandard festlegen -> wählt korrekte Administrativdaten in Outputwriter
+        String smartStandard = dataReport.get("smartStandardEvaluationMethod").asText();
+        comparisonDataModel.setSmartStandard(smartStandard);
+
+        // 3) Dataidentifier festlegen (später über UI) -> Werte im DCC finden, refType basic measured value (später über UI)
         DataIdentifier dataIdentifier = DataIdentifier.builder()
                 .refType("basic_measuredValue")
                 .id("measuredValue") //für Temperature würde noch refId dazukommen
@@ -67,6 +72,7 @@ public class VirtualMassComparisonService implements IComparisonEvaluationServic
         // 5) Input Reader starten
         // mit dataIdentifier aus den EntityUnderComparison imComparisonDataModel, die entsprechenden Werte aus dem DCC einlesen
         // EntityUnderComparison -> ContributionEntityData -> Hashmap<SiReal> {"1": SiReal, "2": SiReal, "3": SiReal}
+
         inputReaderService.loadData(comparisonDataModel);
 
         // Schleife über alle EntityUnderComparison
@@ -134,7 +140,7 @@ public class VirtualMassComparisonService implements IComparisonEvaluationServic
                 currentOutlierLength = entity.getAnalysisOutputs().get(entity.getAnalysisOutputs().size() - 1).getOutliers().size();
             }
         }
-        String base64 = dccServiceOutputWriter.createOutputReportMass(comparisonDataModel);
+        String base64 = dccServiceOutputWriter.createOutputReport(comparisonDataModel);
         outputReport= new OutputReport(pidReport,base64);
 
         return outputReport;
