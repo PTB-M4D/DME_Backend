@@ -385,7 +385,7 @@ public class DccServiceOutputWriter {
                             .build())
                     .real(siReal)
                     .refType(Collections.singletonList("comparison_equivalenceValueEnCriterion"))
-                    .id(comparisonDataModel.getContributions().get(enKey).getParticipant())
+                    .id(comparisonDataModel.getContributions().get(enKey).getContributionId())
                     .build();
             listEn.getQuantity().add(quantity);
         }
@@ -423,7 +423,7 @@ public class DccServiceOutputWriter {
                             .build())
                     .realListXMLList(realListRow)
                     .refType(Collections.singletonList("comparison_equivalenceValueEnCriterion"))
-                    .id(comparisonDataModel.getContributions().get(contributionId).getParticipant())
+                    .id(comparisonDataModel.getContributions().get(contributionId).getContributionId())
                     .build();
             bilateralEnList.getQuantity().add(quantity3);
         }
@@ -454,7 +454,7 @@ public class DccServiceOutputWriter {
                             .build())
                     .real(siReal)
                     .refType(Collections.singletonList(dataIdentifier.getRefType()))
-                    .id(comparisonDataModel.getContributions().get(contributionKey).getParticipant())
+                    .id(comparisonDataModel.getContributions().get(contributionKey).getContributionId())
                     .build();
             listContrib.getQuantity().add(quantity);
         }

@@ -47,8 +47,10 @@ public class VirtualRadTemperatureComparisonService implements IComparisonEvalua
 
             String participantName = participant_node.get("name").asText();
             String pidDcc = participant_node.get("pidDCC").asText();
+            String[] parts = pidDcc.split("/");
+            String contributionId = parts[parts.length-1];
 
-            Contribution participant = new Contribution(participantName, participantName, pidDcc);
+            Contribution participant = new Contribution(contributionId, participantName, pidDcc);
             comparisonDataModel.getContributions().put(participant.getContributionId(), participant);
         }
 
