@@ -33,28 +33,31 @@ public class VirtualRadTemperatureComparisonService implements IComparisonEvalua
     private final StandardDifferenceCalculatorService differenceCalculatorService;
     private final StandardBilateralEnValueCalculationService bilateralEnValueCalculationService;
     private final DccServiceOutputWriter dccServiceOutputWriter;
+
     @Override
     public OutputReport evaluateComparison(JsonNode inputJson) throws XPathExpressionException, ParserConfigurationException, IOException, TransformerException, SAXException, JAXBException, DatatypeConfigurationException {
 
-        JsonNode dataReport = inputJson.get("keyComparisonData");
-        String pidReport= dataReport.get("pidReport").asText();
-        System.out.println("pidReport:   "+ pidReport);
-        List<Contribution> contributionList = new ArrayList<>();
         OutputReport outputReport = null;
         ComparisonDataModel comparisonDataModel = new ComparisonDataModel();
+        JsonNode dataReport = inputJson.get("keyComparisonData");
+
         // 1) Contribution Inhalte kommen aus UI
         for (JsonNode participant_node : dataReport.get("participantList")) {
             participant_node = participant_node.get("participant");
+
             String participantName = participant_node.get("name").asText();
             String pidDcc = participant_node.get("pidDCC").asText();
+
             Contribution participant = new Contribution(participantName, participantName, pidDcc);
-            contributionList.add(participant);
             comparisonDataModel.getContributions().put(participant.getContributionId(), participant);
         }
 
-        // 2) smartStandard festlegen -> wählt korrekte Administrativdaten in Outputwriter
+        // 2) smartStandard und PidReport festlegen -> wählt korrekte Administrativdaten in Outputwriter
         String smartStandard = dataReport.get("smartStandardEvaluationMethod").asText();
         comparisonDataModel.setSmartStandard(smartStandard);
+
+        String pidReport= dataReport.get("pidReport").asText();
+        comparisonDataModel.setPidReport(pidReport);
 
         // 3) Dataidentifier festlegen (später über UI) -> Werte im DCC finden, refType basic measured value (später über UI)
         DataIdentifier dataIdentRadTemp1 = DataIdentifier.builder()
