@@ -24,6 +24,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class DmeService {
     private final Map<String, IComparisonEvaluationService> serviceMap = new HashMap<>();
+
     @Autowired
     public DmeService(List<IComparisonEvaluationService> services) {
         for (IComparisonEvaluationService service : services) {
@@ -34,29 +35,26 @@ public class DmeService {
             }
         }
     }
-         public OutputReport evaluate(JsonNode inputJson) throws DatatypeConfigurationException, XPathExpressionException, JAXBException, ParserConfigurationException, IOException, TransformerException, SAXException {
-             OutputReport outputReport = null;
-             JsonNode data = inputJson.get("keyComparisonData");
-             String evaluationMethod = data.get("smartStandardEvaluationMethod").asText();
-             switch (evaluationMethod) {
-                 case "radiationTempComparison":
-                     IComparisonEvaluationService TempService = serviceMap.get("radiationTempComparison");
-                     if (TempService != null) {
-                         outputReport = TempService.evaluateComparison(inputJson);
-                     }
-                     break;
-                 case "massIntercomparison":
-                     IComparisonEvaluationService massService = serviceMap.get("massIntercomparison");
-                     if (massService != null) {
-                         outputReport = massService.evaluateComparison(inputJson);
-                     }
-                     break;
-                 default:
-                     System.out.println("Method not recognized.");
-                     break;
-             }
-             return outputReport;
-         }
+
+    public OutputReport evaluate(JsonNode inputJson) throws DatatypeConfigurationException, XPathExpressionException, JAXBException, ParserConfigurationException, IOException, TransformerException, SAXException {
+        OutputReport outputReport = null;
+        IComparisonEvaluationService evaluationService = null;
+        JsonNode data = inputJson.get("keyComparisonData");
+        String evaluationMethod = data.get("smartStandardEvaluationMethod").asText();
+        switch (evaluationMethod) {
+            case "radiationTempComparison":
+                evaluationService = serviceMap.get("radiationTempComparison");
+                break;
+            case "massIntercomparison":
+                evaluationService = serviceMap.get("massIntercomparison");
+                break;
+            default:
+                System.out.println("Method not recognized.");
+                break;
+        }
+        outputReport = evaluationService.evaluateComparison(inputJson);
+        return outputReport;
+    }
 //    public OutputReport evaluate(JsonNode inputJson) throws DatatypeConfigurationException, XPathExpressionException, JAXBException, ParserConfigurationException, IOException, TransformerException, SAXException {
 //        OutputReport outputReport = null;
 //        JsonNode data = inputJson.get("keyComparisonData");
