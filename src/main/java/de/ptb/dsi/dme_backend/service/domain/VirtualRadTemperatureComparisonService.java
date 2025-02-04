@@ -67,18 +67,21 @@ public class VirtualRadTemperatureComparisonService implements IComparisonEvalua
                 .siLabel("Radiation temperature at setpoint 1")
                 .refId("blackbody01")
                 .refType("basic_measuredValue basic_arithmenticMean temperature_ITS-90")
+                .refTypes(Arrays.asList("basic_measuredValue", "basic_arithmenticMean", "temperature_ITS-90"))
                 .index(0).build();
         DataIdentifier dataIdentRadTemp2 = DataIdentifier.builder()
                 .id("radTemp")
                 .siLabel("Radiation temperature at setpoint 2")
                 .refId("blackbody01")
                 .refType("basic_measuredValue basic_arithmenticMean temperature_ITS-90")
+                .refTypes(Arrays.asList("basic_measuredValue", "basic_arithmenticMean", "temperature_ITS-90"))
                 .index(1).build();
         DataIdentifier dataIdentRadTemp3 = DataIdentifier.builder()
                 .id("radTemp")
                 .siLabel("Radiation temperature at setpoint 3")
                 .refId("blackbody01")
                 .refType("basic_measuredValue basic_arithmenticMean temperature_ITS-90")
+                .refTypes(Arrays.asList("basic_measuredValue", "basic_arithmenticMean", "temperature_ITS-90"))
                 .index(2).build();
 
         DataIdentifier dataIdentSensor11 = DataIdentifier.builder()
@@ -86,18 +89,21 @@ public class VirtualRadTemperatureComparisonService implements IComparisonEvalua
                 .siLabel("Resistance of pt-100 at setpoint 1")
                 .refId("blackbody01")
                 .refType("temperature_measuredValueSensor1")
+                .refTypes(Collections.singletonList("temperature_measuredValueSensor1"))
                 .index(0).build();
         DataIdentifier dataIdentSensor12 = DataIdentifier.builder()
                 .id("sensor1")
                 .siLabel("Resistance of pt-100 at  setpoint 2")
                 .refId("blackbody01")
                 .refType("temperature_measuredValueSensor1")
+                .refTypes(Collections.singletonList("temperature_measuredValueSensor1"))
                 .index(1).build();
         DataIdentifier dataIdentSensor13 = DataIdentifier.builder()
                 .id("sensor1")
                 .siLabel("Resistance of pt-100 at  setpoint 3")
                 .refId("blackbody01")
                 .refType("temperature_measuredValueSensor1")
+                .refTypes(Collections.singletonList("temperature_measuredValueSensor1"))
                 .index(2).build();
 
         // 4) EntityUnderComparison erzeugen z.B. "mass" oder "temp_setpoint1"

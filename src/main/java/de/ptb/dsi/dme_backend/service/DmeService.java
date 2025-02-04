@@ -22,7 +22,6 @@ public class DmeService {
     VirtualRadTemperatureComparisonService virtualRadTemperatureComparisonService;
     VirtualMassComparisonService virtualMassComparisonService;
 
-
     public OutputReport evaluate(JsonNode inputJson) throws DatatypeConfigurationException, XPathExpressionException, JAXBException, ParserConfigurationException, IOException, TransformerException, SAXException {
 
         JsonNode data = inputJson.get("keyComparisonData");

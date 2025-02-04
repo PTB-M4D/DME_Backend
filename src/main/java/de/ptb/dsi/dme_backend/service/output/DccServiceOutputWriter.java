@@ -384,7 +384,7 @@ public class DccServiceOutputWriter {
                             .content(contentsEn)
                             .build())
                     .real(siReal)
-                    .refType(Collections.singletonList("comparison_equivalenceValueEnCriterion"))
+//                    .refType(Collections.singletonList("comparison_equivalenceValueEnCriterion"))
                     .id(comparisonDataModel.getContributions().get(enKey).getContributionId())
                     .build();
             listEn.getQuantity().add(quantity);

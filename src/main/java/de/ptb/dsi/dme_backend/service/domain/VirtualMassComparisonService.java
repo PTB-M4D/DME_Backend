@@ -63,6 +63,7 @@ public class VirtualMassComparisonService implements IComparisonEvaluationServic
         // 3) Dataidentifier festlegen (später über UI) -> Werte im DCC finden, refType basic measured value (später über UI)
         DataIdentifier dataIdentifier = DataIdentifier.builder()
                 .refType("basic_measuredValue")
+                .refTypes(Collections.singletonList("basic_measuredValue"))
                 .id("measuredValue") //für Temperature würde noch refId dazukommen
                 .siLabel("measured mass")
                 .index(0).build();
