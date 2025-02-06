@@ -1,5 +1,6 @@
 package de.ptb.dsi.dme_backend.service;
 
+
 import com.fasterxml.jackson.databind.JsonNode;
 import de.ptb.dsi.dme_backend.model.*;
 import de.ptb.dsi.dme_backend.service.domain.IComparisonEvaluationService;

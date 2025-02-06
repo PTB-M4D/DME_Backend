@@ -9,6 +9,7 @@ import java.util.List;
 public class DataIdentifier {
     String id; // key for inputReader dataIdentifierId
     String refId;
+    List<String> refTypes;
     String refType;
     String siLabel;
     Integer index;

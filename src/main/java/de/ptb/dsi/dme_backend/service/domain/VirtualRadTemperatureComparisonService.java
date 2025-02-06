@@ -26,44 +26,55 @@ public class VirtualRadTemperatureComparisonService implements IComparisonEvalua
     private final StandardDifferenceCalculatorService differenceCalculatorService;
     private final StandardBilateralEnValueCalculationService bilateralEnValueCalculationService;
     private final DccServiceOutputWriter dccServiceOutputWriter;
+
     @Override
     public OutputReport evaluateComparison(JsonNode inputJson) throws XPathExpressionException, ParserConfigurationException, IOException, TransformerException, SAXException, JAXBException, DatatypeConfigurationException {
 
-
-        JsonNode dataReport = inputJson.get("keyComparisonData");
-        String pidReport= dataReport.get("pidReport").asText();
-        System.out.println("pidReport:   "+ pidReport);
-        List<Contribution> contributionList = new ArrayList<>();
         OutputReport outputReport = null;
+        ComparisonDataModel comparisonDataModel = new ComparisonDataModel();
+        JsonNode dataReport = inputJson.get("keyComparisonData");
+
+        // 1) Contribution Inhalte kommen aus UI
         for (JsonNode participant_node : dataReport.get("participantList")) {
             participant_node = participant_node.get("participant");
-            String participantName =participant_node.get("name").asText();
-            String pidDcc= participant_node.get("pidDCC").asText();
-            Contribution participant = new Contribution(participantName, participantName, pidDcc);
-            contributionList.add(participant);
-            ComparisonDataModel comparisonDataModel = new ComparisonDataModel();
+
+            String participantName = participant_node.get("name").asText();
+            String pidDcc = participant_node.get("pidDCC").asText();
+            String[] parts = pidDcc.split("/");
+            String contributionId = parts[parts.length-1];
+
+            Contribution participant = new Contribution(contributionId, participantName, pidDcc);
             comparisonDataModel.getContributions().put(participant.getContributionId(), participant);
-            System.out.println("comparisonDataModel:   " + comparisonDataModel);
-            // 1) Contribution Inhalte kommen aus UI
-            // 2) Dataidentifier festlegen (später über UI) -> Werte im DCC finden, refType basic measured value (später über UI)
-            // 3) Dataidentifier festlegen (später über UI) -> Werte im DCC finden, refType basic measured value (später über UI)
+        }
+
+        // 2) smartStandard und PidReport festlegen -> wählt korrekte Administrativdaten in Outputwriter
+        String smartStandard = dataReport.get("smartStandardEvaluationMethod").asText();
+        comparisonDataModel.setSmartStandard(smartStandard);
+
+        String pidReport= dataReport.get("pidReport").asText();
+        comparisonDataModel.setPidReport(pidReport);
+
+        // 3) Dataidentifier festlegen (später über UI) -> Werte im DCC finden, refType basic measured value (später über UI)
         DataIdentifier dataIdentRadTemp1 = DataIdentifier.builder()
                 .id("radTemp")
                 .siLabel("Radiation temperature at setpoint 1")
                 .refId("blackbody01")
                 .refType("basic_measuredValue basic_arithmenticMean temperature_ITS-90")
+                .refTypes(Arrays.asList("basic_measuredValue", "basic_arithmenticMean", "temperature_ITS-90"))
                 .index(0).build();
         DataIdentifier dataIdentRadTemp2 = DataIdentifier.builder()
                 .id("radTemp")
                 .siLabel("Radiation temperature at setpoint 2")
                 .refId("blackbody01")
                 .refType("basic_measuredValue basic_arithmenticMean temperature_ITS-90")
+                .refTypes(Arrays.asList("basic_measuredValue", "basic_arithmenticMean", "temperature_ITS-90"))
                 .index(1).build();
         DataIdentifier dataIdentRadTemp3 = DataIdentifier.builder()
                 .id("radTemp")
                 .siLabel("Radiation temperature at setpoint 3")
                 .refId("blackbody01")
                 .refType("basic_measuredValue basic_arithmenticMean temperature_ITS-90")
+                .refTypes(Arrays.asList("basic_measuredValue", "basic_arithmenticMean", "temperature_ITS-90"))
                 .index(2).build();
 
         DataIdentifier dataIdentSensor11 = DataIdentifier.builder()
@@ -71,18 +82,21 @@ public class VirtualRadTemperatureComparisonService implements IComparisonEvalua
                 .siLabel("Resistance of pt-100 at setpoint 1")
                 .refId("blackbody01")
                 .refType("temperature_measuredValueSensor1")
+                .refTypes(Collections.singletonList("temperature_measuredValueSensor1"))
                 .index(0).build();
         DataIdentifier dataIdentSensor12 = DataIdentifier.builder()
                 .id("sensor1")
                 .siLabel("Resistance of pt-100 at  setpoint 2")
                 .refId("blackbody01")
                 .refType("temperature_measuredValueSensor1")
+                .refTypes(Collections.singletonList("temperature_measuredValueSensor1"))
                 .index(1).build();
         DataIdentifier dataIdentSensor13 = DataIdentifier.builder()
                 .id("sensor1")
                 .siLabel("Resistance of pt-100 at  setpoint 3")
                 .refId("blackbody01")
                 .refType("temperature_measuredValueSensor1")
+                .refTypes(Collections.singletonList("temperature_measuredValueSensor1"))
                 .index(2).build();
 
         // 4) EntityUnderComparison erzeugen z.B. "mass" oder "temp_setpoint1"
@@ -107,12 +121,10 @@ public class VirtualRadTemperatureComparisonService implements IComparisonEvalua
         comparisonDataModel.getEntities().put(entityUnderComparison3.getEntityId(), entityUnderComparison3);
 
 
-
         // 5) Input Reader starten
         // mit dataIdentifier aus den EntityUnderComparison imComparisonDataModel, die entsprechenden Werte aus dem DCC einlesen
-        // EntityUnderComparison -> ContributionEntityData -> Hashmap<SiReal> {"1": SiReal, "2": SiReal, "3": SiReal}
+        // EntityUnderComparison -> ContributionEntityData -> Hashmap<SiReal> {"1": SiReal, "2": SiReal, "3": SiReal}z
         inputReaderService.loadData(comparisonDataModel);
-
 
         // Schleife über alle EntityUnderComparison
         // Auswertung hier nur für EntityUnderComparison mit id = "mass"
@@ -222,9 +234,9 @@ public class VirtualRadTemperatureComparisonService implements IComparisonEvalua
 
         // Output report erzeugen
         // API antwort als JSON bzw base64
-            String base64 = dccServiceOutputWriter.createOutputReportTemp(comparisonDataModel);
+            String base64 = dccServiceOutputWriter.createOutputReport(comparisonDataModel);
             outputReport= new OutputReport(pidReport,base64);
-        }
+
         return outputReport;
     }
 

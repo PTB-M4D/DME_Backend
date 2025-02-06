@@ -2,6 +2,7 @@ package de.ptb.dsi.dme_backend.service.input;
 
 import de.ptb.dsi.dme_backend.model.*;
 import jakarta.annotation.Nonnull;
+import jakarta.validation.constraints.Null;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -18,10 +19,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.xpath.*;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.HashMap;/**/
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -60,127 +58,170 @@ public class InputReaderService implements IInputReaderService {
         return document;
     }
 
-
-//    public SiReal readData() throws ParserConfigurationException, IOException, SAXException, XPathExpressionException {
     public SiReal readData(@Nonnull DataIdentifier dataIdentifier, @Nonnull Document document) throws  XPathExpressionException {
-//        Document document;
         SiReal siReal ;
-//        document = readDocument("Temp_Comparison_PTB_1");
-//        document = readDocument("Mass_Comparison_PTB");
         document.getDocumentElement().normalize();
-        XPath xpath = XPathFactory.newInstance().newXPath();
-        if (document == null) {
-            log.warn("Document is null");
-            return null;
-        }
+
+        // get searchterms from dataIdentifier
         String refId = dataIdentifier.getRefId();
-        String refType = dataIdentifier.getRefType();
-        int index = dataIdentifier.getIndex();
-        //        String refType = "basic_measuredValue";
-//        String refId = "blackbody01";
-//        String refType = "basic_measuredValue";
-//        String  refType = "basic_measuredValue basic_arithmenticMean temperature_ITS-90";
-        NodeList filteredNodes = null;
-        String dccExpression = "//*[name()='dcc:digitalCalibrationCertificate']";
-        NodeList dccNode= (NodeList)  xpath.evaluate(dccExpression, document, XPathConstants.NODESET);
-        String refIdExpressionBoolean = "boolean(//*[@refId='" + refId + "'])";
-        Boolean refIdExist = (Boolean) xpath.evaluate(refIdExpressionBoolean  , document, XPathConstants.BOOLEAN);
-        // Prüfen, ob refId definiert ist und nach Elementen mit dem angegebenen refId suchen
-        if(refIdExist) {
-            XPathExpression exprRefId = xpath.compile("//*[@refId='" + refId + "']");
-            NodeList refIdNodes = (NodeList) exprRefId.evaluate( document, XPathConstants.NODESET);
-            log.info(refIdNodes != null && refIdNodes.getLength() > 0 ? "Found nodes for refId: {}" : "No nodes found for refId: {}", refId);
-            if (refIdNodes.getLength() != 0 && refIdNodes != null) {
-                filteredNodes=refIdNodes;
-            }
-        }else {
-//             Suche nach dcc-Elementen mit dem angegebenen refType
-            XPathExpression exprRefTye = xpath.compile("//*[@refType='" + refType + "']");
-            filteredNodes = (NodeList) exprRefTye.evaluate(document, XPathConstants.NODESET);
+        List<String> refTypes = dataIdentifier.getRefTypes();
+
+        List<String> searchTerms = new ArrayList<>();
+        if (refId != null) {
+            searchTerms.add("ancestor-or-self::*[@refId='" + refId + "']"); // get every Element that has refId or is a child of element with refId
         }
-        siReal=searchRefTypeInNode(refType ,filteredNodes,index);
+        if (refTypes != null) {
+            for (String refType : refTypes) {
+                searchTerms.add("contains(@refType, '" + refType +"')"); // get every element whose refType contains a specific string
+            }
+        }
+        XPath xpath = XPathFactory.newInstance().newXPath();
+
+        // construct xPath query
+        String xPathExpression = "//*[";
+        for (int i = 0; i < searchTerms.size(); i++) {
+            if (i != 0) {
+                xPathExpression += "and ";
+            }
+            xPathExpression += searchTerms.get(i);
+            if (i < searchTerms.size() -1) {
+                xPathExpression += " ";
+            }
+        }
+        xPathExpression += "]";
+
+        NodeList filteredNodes = (NodeList) xpath.compile(xPathExpression).evaluate( document, XPathConstants.NODESET);
+
+        int index = dataIdentifier.getIndex();
+        siReal = getSiRealFromNodes(filteredNodes, index);
         return siReal;
     }
 
-    private SiReal searchRefTypeInNode( String refType, NodeList nodes, Integer index) throws XPathExpressionException {
+
+    private SiReal getSiRealFromNodes(NodeList nodes, Integer index) throws XPathExpressionException {
         XPath xpath = XPathFactory.newInstance().newXPath();
-        SiReal siReal = null;
-        //        int index= dataIdentifier.getIndex();
+
         for (int i = 0; i < nodes.getLength(); i++) {
             Node node = nodes.item(i);
-            XPathExpression exprRefTyp = xpath.compile("//*[@refType='" + refType + "']");
-            NodeList refTypeNode = (NodeList) exprRefTyp.evaluate(node, XPathConstants.NODESET);
-            NodeList siRealRefTypeListNode = refTypeNode.item(0).getChildNodes();
+
+            // check if node is a quantity and wether it hast XMLList or SiReal -> chose according strategy
             String quantityExpression = "boolean(//*[name()='dcc:quantity'])";
             Boolean nodeQuantityExist = (Boolean) xpath.evaluate(quantityExpression, node, XPathConstants.BOOLEAN);
-            System.out.println("nodeQuantityExist:  " + nodeQuantityExist);
+
             String siRealXmlListExpression = "boolean(//*[name()='si:realListXMLList'])";
             Boolean siRealXmlListNodeExist = (Boolean) xpath.evaluate(siRealXmlListExpression, node, XPathConstants.BOOLEAN);
-            System.out.println("siRealXmlListNodeExist:  " + siRealXmlListNodeExist);
+
             String siRealExpression = "boolean(//*[name()='si:real'])";
-            Boolean siRealNodeExist = (Boolean) xpath.evaluate(siRealExpression , node, XPathConstants.BOOLEAN);
-            System.out.println("siRealNodeExist:  " +  siRealNodeExist);
-            if (refTypeNode.getLength() != 0 && nodeQuantityExist && siRealXmlListNodeExist) {
+            Boolean siRealNodeExist = (Boolean) xpath.evaluate(siRealExpression, node, XPathConstants.BOOLEAN);
 
-                List<Double> siValuesXMLList = Arrays.stream(evaluateXPath(xpath, siRealRefTypeListNode, "//*[@refType='" + refType + "']/realListXMLList/valueXMLList")
-                                .item(0).getTextContent()
-                                .split("\\s+"))
-                        .map(Double::parseDouble).collect(Collectors.toList());
-                String siRealListUnitXMLList = evaluateXPath(xpath, siRealRefTypeListNode, "//*[@refType='" + refType + "']/realListXMLList/unitXMLList")
-                        .item(0).getTextContent();
-                List<Double> expandedUncXMLList = Arrays.stream(evaluateXPath(xpath, siRealRefTypeListNode, "//*[@refType='" + refType + "']/realListXMLList/expandedUncXMLList/uncertaintyXMLList")
-                                .item(0).getTextContent()
-                                .split("\\s+"))
-                        .map(Double::parseDouble).collect(Collectors.toList());
-                System.out.println(" siRealXMLList"+ siValuesXMLList);
-                int coverageFactorXMLList = Integer.parseInt(evaluateXPath(xpath, siRealRefTypeListNode, "//*[@refType='" + refType + "']/realListXMLList/expandedUncXMLList/coverageFactorXMLList").item(0).getTextContent());
-                Double siRealCoverageProbabilityXMLList = Double.valueOf(evaluateXPath(xpath, siRealRefTypeListNode, "//*[@refType='" + refType + "']/realListXMLList/expandedUncXMLList/coverageProbabilityXMLList")
-                        .item(0).getTextContent());
-                String siRealDistributionXMLList = evaluateXPath(xpath, siRealRefTypeListNode, "//*[@refType='" + refType + "']/realListXMLList/expandedUncXMLList/distributionXMLList")
-                        .item(0).getTextContent();
+            // get siReal
+            SiReal siReal = null;
+            if (nodeQuantityExist && siRealXmlListNodeExist) {
+                // get values of XML List
+                String xPathExpression = "./realListXMLList/valueXMLList";
+                String result = (String) xpath.compile(xPathExpression).evaluate(node, XPathConstants.STRING);
+                List<Double> siValuesXMLList = Arrays.stream(result.split("\\s+"))
+                        .map(Double::parseDouble).toList();
+
+                // get unit of XML List
+                xPathExpression = "./realListXMLList/unitXMLList";
+                result = (String) xpath.compile(xPathExpression).evaluate(node, XPathConstants.STRING);
+                List<String> siRealListUnitXMLList = Arrays.stream(result.split("\\s+")).toList();
+
+                // get uncertainty of XML List
+                xPathExpression = "./realListXMLList/expandedUncXMLList/uncertaintyXMLList";
+                result = (String) xpath.compile(xPathExpression).evaluate(node, XPathConstants.STRING);
+                List<Double> expandedUncXMLList = Arrays.stream(result.split("\\s+"))
+                        .map(Double::parseDouble).toList();
+
+                // get coverage factor of XML List
+                xPathExpression = "./realListXMLList/expandedUncXMLList/coverageFactorXMLList";
+                result = (String) xpath.compile(xPathExpression).evaluate(node, XPathConstants.STRING);
+                List<Integer> coverageFactorXMLList = Arrays.stream(result.split("\\s+"))
+                        .map(Integer::parseInt).toList();
+
+                // get coverage probability of XML List
+                xPathExpression = "./realListXMLList/expandedUncXMLList/coverageProbabilityXMLList";
+                result = (String) xpath.compile(xPathExpression).evaluate(node, XPathConstants.STRING);
+                List<Double> coverageProbabilityXMLList = Arrays.stream(result.split("\\s+"))
+                        .map(Double::parseDouble).toList();
+
+                // get distribution of XML List
+                xPathExpression = "./realListXMLList/expandedUncXMLList/distributionXMLList";
+                result = (String) xpath.compile(xPathExpression).evaluate(node, XPathConstants.STRING);
+                List<String> siRealDistributionXMLList = Arrays.stream(result.split("\\s+")).toList();
+
+
+                // build siReal
                 SiExpandedMU siExpandedUnc = SiExpandedMU.builder()
-                        .valueExpandedMU(expandedUncXMLList.get(index))//index
-                        .coverageFactor(coverageFactorXMLList)
-                        .coverageProbability(siRealCoverageProbabilityXMLList)
-                        .distribution(siRealDistributionXMLList).build();
-                siReal = SiReal.builder().value(siValuesXMLList.get(index))// index
-                        .unit(siRealListUnitXMLList)
+                        .valueExpandedMU(getXMLListValueByIndex(expandedUncXMLList, index))//index
+                        .coverageFactor(getXMLListValueByIndex(coverageFactorXMLList, index))
+                        .coverageProbability(getXMLListValueByIndex(coverageProbabilityXMLList, index))
+                        .distribution(getXMLListValueByIndex(siRealDistributionXMLList, index)).build();
+
+                siReal = SiReal.builder().value(getXMLListValueByIndex(siValuesXMLList, index))// index
+                        .unit(getXMLListValueByIndex(siRealListUnitXMLList, index))
                         .expandedMU(siExpandedUnc).build();
-                System.out.println("siReal: "+siReal);
-            } else if(siRealNodeExist && refTypeNode.getLength() != 0 && nodeQuantityExist &&  siRealNodeExist) {
 
-                    Double siReaLValue = Double.valueOf(evaluateXPath(xpath, siRealRefTypeListNode, "//*[@refType='" + refType + "']/real/value").item(0).getTextContent());
-                    String siReaLUnit = evaluateXPath(xpath, siRealRefTypeListNode, "//*[@refType='" + refType + "']/real/unit").item(0).getTextContent();
-                    String siReaLDateTime = evaluateXPath(xpath, siRealRefTypeListNode, "//*[@refType='" + refType + "']/real/dateTime").item(0).getTextContent();
-                    Double siReaLUncertainty = Double.valueOf(evaluateXPath(xpath, siRealRefTypeListNode, "//*[@refType='" + refType + "']/real/expandedUnc/uncertainty").item(0).getTextContent());
-                    int siReaLCoverageFactor = Integer.parseInt(evaluateXPath(xpath, siRealRefTypeListNode, "//*[@refType='" + refType + "']/real/expandedUnc/coverageFactor").item(0).getTextContent());
-                    Double siRealCoverageProbability = Double.valueOf(evaluateXPath(xpath, siRealRefTypeListNode, "//*[@refType='" + refType + "']/real/expandedUnc/coverageProbability").item(0).getTextContent());
+                return siReal;
+            } else if (siRealNodeExist && nodeQuantityExist) {
+                // get value of siReal
+                String xPathExpression = "./real/value";
+                String result = (String) xpath.compile(xPathExpression).evaluate(node, XPathConstants.STRING);
+                Double siReaLValue = Double.valueOf(result);
+
+                // get unit of siReal
+                xPathExpression = "./real/unit";
+                String siRealUnit = (String) xpath.compile(xPathExpression).evaluate(node, XPathConstants.STRING);
+
+                // get uncertainty of siReal
+                xPathExpression = "./real/expandedUnc/uncertainty";
+                result = (String) xpath.compile(xPathExpression).evaluate(node, XPathConstants.STRING);
+                Double siReaLUncertainty = Double.valueOf(result);
+
+                // get coverage factor of siReal
+                xPathExpression = "./real/expandedUnc/coverageFactor";
+                result = (String) xpath.compile(xPathExpression).evaluate(node, XPathConstants.STRING);
+                int siRealCoverageFactor = Integer.parseInt(result);
+
+                // get coverage probability of siReal
+                xPathExpression = "./real/expandedUnc/coverageProbability";
+                result = (String) xpath.compile(xPathExpression).evaluate(node, XPathConstants.STRING);
+                Double siRealCoverageProbability = Double.valueOf(result);
+
+                // get distribution of siReal
+                xPathExpression = "./real/expandedUnc/distribution";
+                String siRealDistribution = (String) xpath.compile(xPathExpression).evaluate(node, XPathConstants.STRING);
+
+                // build siReal
                 SiExpandedMU siExpandedUnc = SiExpandedMU.builder()
-                            .valueExpandedMU(siReaLUncertainty)
-                            .coverageFactor(siReaLCoverageFactor)
-                            .coverageProbability(siRealCoverageProbability)
-                            .build();
-                    siReal = SiReal.builder()
-                            .value(siReaLValue)
-                            .unit(siReaLUnit)
-                            .dateTime(siReaLDateTime)
-                            .expandedMU(siExpandedUnc).build();
-                    System.out.println("siReaL: " + siReal);
-                }
-            else {return null;}
+                        .valueExpandedMU(siReaLUncertainty)//index
+                        .coverageFactor(siRealCoverageFactor)
+                        .coverageProbability(siRealCoverageProbability)
+                        .distribution(siRealDistribution).build();
+
+                siReal = SiReal.builder().value(siReaLValue)// index
+                        .unit(siRealUnit)
+                        .expandedMU(siExpandedUnc).build();
+
+                return siReal;
+            }
         }
-        return siReal;
+        return null;
     }
 
+    private <T> T getXMLListValueByIndex(List<T> list, int index){
+        // gets value at index 0 if only one value is supplied in XMLList (e.g. uncertainty, distribution)
+        // get value at index if a comple XML List is supplid
+        int lenghtOfList = list.size();
 
-    private NodeList evaluateXPath(@Nonnull XPath xpath, @Nonnull NodeList nodeList, @Nonnull String expression) {
-        try {
-            return (NodeList) xpath.compile(expression).evaluate(nodeList, XPathConstants.NODESET);
-        } catch (XPathExpressionException e) {
-            log.error("Error evaluating XPath: {}", expression, e);
-            return null;
+        if (index < lenghtOfList) {
+            return list.get(index);
+        } else {
+            return list.get(0);
         }
     }
+
 
     private void addDataToEntity(@Nonnull HashMap<String, ContributionEntityData> entityData, String identifierId, String contributionId, SiReal data) {
         ContributionEntityData contributionEntityData = entityData.get(identifierId);
