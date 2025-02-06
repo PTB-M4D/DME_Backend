@@ -55,6 +55,7 @@ public class DmeService {
         outputReport = evaluationService.evaluateComparison(inputJson);
         return outputReport;
     }
+//    List<IComparisonEvaluationService> virtualServices;
 //    public OutputReport evaluate(JsonNode inputJson) throws DatatypeConfigurationException, XPathExpressionException, JAXBException, ParserConfigurationException, IOException, TransformerException, SAXException {
 //        OutputReport outputReport = null;
 //        JsonNode data = inputJson.get("keyComparisonData");
