@@ -38,10 +38,13 @@ public class DmeService {
     }
 
     public OutputReport evaluate(JsonNode inputJson) throws DatatypeConfigurationException, XPathExpressionException, JAXBException, ParserConfigurationException, IOException, TransformerException, SAXException {
-        OutputReport outputReport = null;
+        OutputReport outputReport;
         IComparisonEvaluationService evaluationService = null;
         JsonNode data = inputJson.get("keyComparisonData");
         String evaluationMethod = data.get("smartStandardEvaluationMethod").asText();
+        if (evaluationMethod == null || evaluationMethod.isEmpty()) {
+            throw new IllegalArgumentException("Evaluation method cannot be null or empty.");
+        }
         switch (evaluationMethod) {
             case "radiationTempComparison":
                 evaluationService = serviceMap.get("radiationTempComparison");
@@ -52,6 +55,9 @@ public class DmeService {
             default:
                 System.out.println("Method not recognized.");
                 break;
+        }
+        if (evaluationService == null) {
+            throw new IllegalArgumentException("Evaluation service not found for method: " + evaluationMethod);
         }
         outputReport = evaluationService.evaluateComparison(inputJson);
         return outputReport;

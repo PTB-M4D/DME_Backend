@@ -5,6 +5,7 @@ import de.ptb.dsi.dme_backend.model.OutputReport;
 import de.ptb.dsi.dme_backend.service.DmeService;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -46,8 +47,13 @@ public class DmeController {
     private final DmeService dmeService;
 
     @RequestMapping(value = "/evaluateComparison", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.CREATED)
+    @Operation(
+            summary = "Retrieve a JSON with the fileName and the Base64 string encoded DCC",
+            description = "POST request where the RequestBody a JSON_KeyComparisonData  with pidReport name, a list of participants, the evaluationMethod (mass, temperature...), and DCC PIDs as the message and receives a JSON with Base64 encoded DCC back.",
+            tags = {"evaluateComparison"})
     public ResponseEntity<OutputReport> evaluateDKCR(@RequestBody
-                                                     @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "A Json Node contain all participants and the PIDDCC", content = @Content(schema = @Schema(example = "{\n" +
+                                                     @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "A Json Node contain keyComparisonData", content = @Content(schema = @Schema(example = "{\n" +
                                                              "\"keyComparisonData\" : {\n" +
                                                              "\"pidReport\" : \"mass_Report\",\n" +
                                                              "\"smartStandardEvaluationMethod\" : \"massIntercomparison\",\n" +
@@ -75,9 +81,14 @@ public class DmeController {
                                                      JsonNode inputJson) throws DatatypeConfigurationException, JAXBException, XPathExpressionException, ParserConfigurationException, IOException, TransformerException, SAXException {
         return new ResponseEntity<>(dmeService.evaluate(inputJson), HttpStatus.CREATED);
     }
+    @ResponseStatus(HttpStatus.CREATED)
+    @Operation(
+            summary = "Retrieve a JSON with the fileName and the Base64 string encoded DCC",
+            description = "POST request where the RequestBody a JSON_KeyComparisonData  with pidReport name, a list of participants, the evaluationMethod (mass, temperature...), and DCC PIDs as the message and receives a JSON with Base64 encoded DCC back.",
+            tags = {"evaluateComparison"})
     @RequestMapping(value = "/evaluateComparisonTemp", method = RequestMethod.POST)
     public ResponseEntity<OutputReport> evaluateDKCRTemp(@RequestBody
-                                                     @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "A Json Node contain all participants and the PIDDCC", content = @Content(schema = @Schema(example = "{\n" +
+                                                     @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "A Json Node contain keyComparisonData", content = @Content(schema = @Schema(example = "{\n" +
                                                              "\"keyComparisonData\" : {\n" +
                                                              "\"pidReport\" : \"Temp_Report\",\n" +
                                                              "\"smartStandardEvaluationMethod\" : \"radiationTempComparison\",\n" +
