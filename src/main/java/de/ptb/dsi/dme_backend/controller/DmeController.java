@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.servers.Server;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.xml.bind.JAXBException;
@@ -36,7 +37,8 @@ import java.io.IOException;
                         url = "https://d-si.ptb.de",
                         email = "Daniel.Hutzschenreuter@ptb.de")),
         servers = {
-                @Server(url = "http://localhost:8080", description = "Server URL in development environment")
+                @Server(url = "http://localhost:8080", description = "URL in development environment"),
+                @Server(url = "https://d-si.ptb.de", description = "URL in production  environment")
         })
 @Tag(name = "D-Comparison Controller")
 @RestController
@@ -47,11 +49,11 @@ public class DmeController {
     private final DmeService dmeService;
 
     @RequestMapping(value = "/evaluateComparison", method = RequestMethod.POST)
-    @ResponseStatus(HttpStatus.CREATED)
     @Operation(
             summary = "Retrieve a JSON with the fileName and the Base64 string encoded DCC",
-            description = "POST request where the RequestBody a JSON_KeyComparisonData  with pidReport name, a list of participants, the evaluationMethod (mass, temperature...), and DCC PIDs as the message and receives a JSON with Base64 encoded DCC back.",
-            tags = {"evaluateComparison"})
+            description = "POST request where the RequestBody a JSON_KeyComparisonData  with pidReport name, a list of participants, the evaluationMethod (mass, temperature...), and DCC PIDs as the message and receives a JSON with Base64 encoded DCC back."
+            )
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<OutputReport> evaluateDKCR(@RequestBody
                                                      @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "A Json Node contain keyComparisonData", content = @Content(schema = @Schema(example = "{\n" +
                                                              "\"keyComparisonData\" : {\n" +
@@ -84,8 +86,7 @@ public class DmeController {
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(
             summary = "Retrieve a JSON with the fileName and the Base64 string encoded DCC",
-            description = "POST request where the RequestBody a JSON_KeyComparisonData  with pidReport name, a list of participants, the evaluationMethod (mass, temperature...), and DCC PIDs as the message and receives a JSON with Base64 encoded DCC back.",
-            tags = {"evaluateComparison"})
+            description = "POST request where the RequestBody a JSON_KeyComparisonData  with pidReport name, a list of participants, the evaluationMethod (mass, temperature...), and DCC PIDs as the message and receives a JSON with Base64 encoded DCC back.")
     @RequestMapping(value = "/evaluateComparisonTemp", method = RequestMethod.POST)
     public ResponseEntity<OutputReport> evaluateDKCRTemp(@RequestBody
                                                      @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "A Json Node contain keyComparisonData", content = @Content(schema = @Schema(example = "{\n" +
