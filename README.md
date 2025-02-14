@@ -1,6 +1,7 @@
-# DME Comparison Application
 
+# DME_Backend
 - [Overview](#overview)
+- [DME Architecture](#DME_Architecture)
 - [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)
 - [Running the Application](#running-the-application)
@@ -15,13 +16,21 @@ The application consists of multiple services:
 - **StandardBilateralEnCalculationService**: Implements logic for calculating `|Xi - Xj| / sqrt(Ui² - Uj²)`.
 - **EnValueCalculationService**: Calculates En-values for various participants.
 - **ReferenceValueCalculationService**: Calculates reference values from participant measurements.
-- **ConsistencyCheckService**: Performs checks to identify if data comparisons are consistent or inconsistent.
+- **EnCriterionConsistencyCheckService**: Performs checks to identify if data comparisons are consistent or inconsistent.
 - **DecisionProcessingService**: Defines the logic for processing decisions, either manually or automatically.
 
 
+  ![DME_Concept](src/main/resources/static/img/DME_Concept.png)
+
+## DME_Architecture
+
+ ![DME_Architecture.PNG](src/main/resources/static/img/DME_Architecture.PNG)
+
+This [presentation](src/main/resources/static/docs/CIM2025.pptx) explains the details of the Digital Metrological Expert software tool.
+
 ## Prerequisites
 
-- Java 22
+- Java 17
 - Maven 3.6+
 - Docker 
 
@@ -43,12 +52,12 @@ git clone https://github.com/PTB-M4D/DME_Backend.git
                           https://maven.apache.org/xsd/settings-1.0.0.xsd">
   <proxies>
     <proxy>
-      <id>ptb-webproxy</id>
+      <id>.....webproxy</id>
       <active>true</active>
       <protocol>http</protocol>
-      <host>webproxy.berlin.ptb.de</host>
+      <host>webproxy.example.com</host>
       <port>8080</port>
-      <nonProxyHosts>localhost|*.bs.ptb.de|*.berlin.ptb.de|*.ptb.de</nonProxyHosts>
+      <nonProxyHosts>localhost|*.example.com</nonProxyHosts>
     </proxy>
   </proxies>
 </settings>
@@ -93,7 +102,6 @@ docker run -p 8000:8080 dmebackend
 ```
 
 The application should now be accessible at `http://localhost:8000/api/dme-comparison/testDme`.
-
 
 ## License
 

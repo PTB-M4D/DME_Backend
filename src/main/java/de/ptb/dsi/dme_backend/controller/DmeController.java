@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.servers.Server;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.xml.bind.JAXBException;
@@ -37,12 +36,13 @@ import java.io.IOException;
                         url = "https://d-si.ptb.de",
                         email = "Daniel.Hutzschenreuter@ptb.de")),
         servers = {
-                @Server(url = "http://localhost:8080", description = "URL in development environment"),
-                @Server(url = "https://d-si.ptb.de", description = "URL in production  environment")
+                @Server(url = "https://d-si.ptb.de", description = "URL in production  environment"),
+                @Server(url = "http://localhost:8083", description = "URL in development environment")
+
         })
-@Tag(name = "D-Comparison Controller")
+@Tag(name = "DME Controller")
 @RestController
-@RequestMapping(path = "/api/dme-comparison")
+@RequestMapping(path = "/api/d-comparison")
 @AllArgsConstructor
 public class DmeController {
 
@@ -65,7 +65,54 @@ public class DmeController {
                                                              "\"name\" : \"CENAM\",\n" +
                                                              "\"pidDCC\" : \"https://d-si.ptb.de/api/d-dcc/dcc/Mass_Comparison_CENAM\"\n" +
                                                              "}\n" +
-                                                             "}, {\n" +
+                                                             "},{\n" +
+                                                             "\"participant\" : {\n" +
+                                                             "\n" +
+                                                             "\"name\" : \"IMIJ\",\n" +
+                                                             "\"pidDCC\" : \"https://d-si.ptb.de/api/d-dcc/dcc/Mass_Comparison_NMIJ\"\n" +
+                                                             "}\n" +
+                                                             "},{\n" +
+                                                             "\"participant\" : {\n" +
+                                                             "\n" +
+                                                             "\"name\" : \"PTB_Ausreisser\",\n" +
+                                                             "\"pidDCC\" : \"https://d-si.ptb.de/api/d-dcc/dcc/Mass_Comparison_PTB_Ausreisser\"\n" +
+                                                             "}\n" +
+                                                             "},{\n" +
+                                                             "\"participant\" : {\n" +
+                                                             "\n" +
+                                                             "\"name\" : \"PTB\",\n" +
+                                                             "\"pidDCC\" : \"https://d-si.ptb.de/api/d-dcc/dcc/Mass_Comparison_PTB\"\n" +
+                                                             "}\n" +
+                                                             "},{\n" +
+                                                             "\"participant\" : {\n" +
+                                                             "\"name\" : \"NRC\",\n" +
+                                                             "\"pidDCC\" : \"https://d-si.ptb.de/api/d-dcc/dcc/Mass_Comparison_NRC\"\n" +
+                                                             "}\n" +
+                                                             "},{\n" +
+                                                             "\"participant\" : {\n" +
+                                                             "\n" +
+                                                             "\"name\" : \"NPL\",\n" +
+                                                             "\"pidDCC\" : \"https://d-si.ptb.de/api/d-dcc/dcc/Mass_Comparison_NPL\"\n" +
+                                                             "}\n" +
+                                                             "},{\n" +
+                                                             "\"participant\" : {\n" +
+                                                             "\n" +
+                                                             "\"name\" : \"NIM\",\n" +
+                                                             "\"pidDCC\" : \"https://d-si.ptb.de/api/d-dcc/dcc/Mass_Comparison_NIM\"\n" +
+                                                             "}\n" +
+                                                             "},{\n" +
+                                                             "\"participant\" : {\n" +
+                                                             "\n" +
+                                                             "\"name\" : \"UME\",\n" +
+                                                             "\"pidDCC\" : \"https://d-si.ptb.de/api/d-dcc/dcc/Mass_Comparison_UME\"\n" +
+                                                             "}\n" +
+                                                             "},{\n" +
+                                                             "\"participant\" : {\n" +
+                                                             "\n" +
+                                                             "\"name\" : \"MSL\",\n" +
+                                                             "\"pidDCC\" : \"https://d-si.ptb.de/api/d-dcc/dcc/Mass_Comparison_MSL\"\n" +
+                                                             "}\n" +
+                                                             "},{\n" +
                                                              "\"participant\" : {\n" +
                                                              "\n" +
                                                              "\"name\" : \"INRIM\",\n" +
@@ -97,19 +144,19 @@ public class DmeController {
                                                              "\"participant\" : {\n" +
                                                              "\n" +
                                                              "\"name\" : \"PTB_1\",\n" +
-                                                             "\"pidDCC\" : \"http://localhost:8085/api/d-dcc/dcc/Temp_Comparison_PTB_1\"\n" +
+                                                             "\"pidDCC\" : \"https://d-si.ptb.de/api/d-dcc/dcc/Temp_Comparison_PTB_1\"\n" +
                                                              "}\n" +
                                                              "}, {\n" +
                                                              "\"participant\" : {\n" +
                                                              "\n" +
                                                              "\"name\" : \"PTB_2\",\n" +
-                                                             "\"pidDCC\" : \"http://localhost:8085/api/d-dcc/dcc/Temp_Comparison_PTB_2\"\n" +
+                                                             "\"pidDCC\" : \"https://d-si.ptb.de/api/d-dcc/dcc/Temp_Comparison_PTB_2\"\n" +
                                                              "}\n" +
                                                              "}, {\n" +
                                                              "\"participant\" : {\n" +
                                                              "\n" +
                                                              "\"name\" : \"PTB_3\",\n" +
-                                                             "\"pidDCC\" : \"http://localhost:8085/api/d-dcc/dcc/Temp_Comparison_PTB_3\"\n" +
+                                                             "\"pidDCC\" : \"https://d-si.ptb.de/api/d-dcc/dcc/Temp_Comparison_PTB_3\"\n" +
                                                              "}\n" +
                                                              "} ]\n" +
                                                              "}\n" +
