@@ -24,7 +24,7 @@ The application consists of multiple services:
 
 ## DME_Architecture
 
- ![DME_Architecture.PNG](src/main/resources/static/img/DME_Architecture.PNG)
+ ![DME_Architecture.PNG](src/main/resources/static/img/DME_Architecture.png)
 
 This [presentation](src/main/resources/static/docs/CIM2025.pptx) explains the details of the Digital Metrological Expert software tool.
 
@@ -42,7 +42,7 @@ This [presentation](src/main/resources/static/docs/CIM2025.pptx) explains the de
 git clone https://github.com/PTB-M4D/DME_Backend.git
 ```
 2. **local:**
-   Add a local ./m2/settings.xml to allow maven to use the ptb-proxy server:
+   Add a local ./m2/settings.xml to allow maven to use the proxy server:
 
 ```xml
 
