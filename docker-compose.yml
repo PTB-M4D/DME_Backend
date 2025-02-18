@@ -1,0 +1,7 @@
+services:
+  spring-boot-app:
+    container_name: dme-backend
+    image: dmebackend
+    ports:
+      - "8000:8080"
+
