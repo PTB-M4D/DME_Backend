@@ -26,7 +26,7 @@ The application consists of multiple services:
 
  ![DME_Architecture.PNG](src/main/resources/static/img/DME_Architecture.png)
 
-This [presentation](src/main/resources/static/docs/CIM2025.pptx) explains the details of the Digital Metrological Expert software tool.
+This [presentation](src/main/resources/static/docs/CIM2025.pdf) explains the details of the Digital Metrological Expert software tool.
 
 ## Prerequisites
 
