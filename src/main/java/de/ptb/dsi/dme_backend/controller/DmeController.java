@@ -175,7 +175,7 @@ public class DmeController {
                                                      @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "A Json Node contain keyComparisonData", content = @Content(schema = @Schema(example = "{\n" +
                                                              "\"keyComparisonData\" : {\n" +
                                                              "\"pidReport\" : \"mass_Report\",\n" +
-                                                             "\"smartStandardEvaluationMethod\" : \"massIntercomparison\",\n" +
+                                                             "\"smartStandardEvaluationMethod\" : \"laboratoryMedicineComparison\",\n" +
                                                              "\"participantList\" : [ {\n" +
                                                              "\"participant\" : {\n" +
                                                              "\n" +

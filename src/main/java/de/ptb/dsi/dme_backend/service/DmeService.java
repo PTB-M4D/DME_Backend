@@ -4,6 +4,7 @@ package de.ptb.dsi.dme_backend.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import de.ptb.dsi.dme_backend.model.*;
 import de.ptb.dsi.dme_backend.service.domain.IComparisonEvaluationService;
+import de.ptb.dsi.dme_backend.service.domain.LaboratoryMedicineComparisonService;
 import de.ptb.dsi.dme_backend.service.domain.MassComparisonService;
 import de.ptb.dsi.dme_backend.service.domain.RadTemperatureComparisonService;
 import jakarta.xml.bind.JAXBException;
@@ -33,6 +34,8 @@ public class DmeService {
                 serviceMap.put("radiationTempComparison", service);
             } else if (service instanceof MassComparisonService) {
                 serviceMap.put("massIntercomparison", service);
+            } else if (service instanceof LaboratoryMedicineComparisonService) {
+                serviceMap.put("laboratoryMedicineComparison", service);
             }
         }
     }
@@ -51,6 +54,9 @@ public class DmeService {
                 break;
             case "massIntercomparison":
                 evaluationService = serviceMap.get("massIntercomparison");
+                break;
+            case "laboratoryMedicineComparison":
+                evaluationService = serviceMap.get("laboratoryMedicineComparison");
                 break;
             default:
                 System.out.println("Method not recognized.");

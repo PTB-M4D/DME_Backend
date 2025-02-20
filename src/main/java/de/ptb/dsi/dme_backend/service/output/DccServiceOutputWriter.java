@@ -29,7 +29,7 @@ public class DccServiceOutputWriter {
         } else if (Objects.equals(comparisonDataModel.getSmartStandard(), "radiationTempComparison")) {
             administrativeData = createAdministrativeDataTemp();
         }else if (Objects.equals(comparisonDataModel.getSmartStandard(), "laboratoryMedicineComparison")) {
-            administrativeData = createAdministrativeDataTemp();
+            administrativeData = createAdministrativeDataLaboratoryMedicine();
         } else {
             administrativeData = new AdministrativeDataType();
         }
