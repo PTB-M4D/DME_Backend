@@ -19,7 +19,7 @@ import java.util.*;
 @Service
 @AllArgsConstructor
 
-public class VirtualRadTemperatureComparisonService implements IComparisonEvaluationService {
+public class RadTemperatureComparisonService implements IComparisonEvaluationService {
 
     private final InputReaderService inputReaderService;
     private final Pt100TemperatureFromResistanceCalculatorService pt100TemperatureFromResistanceCalculatorService;

@@ -36,8 +36,9 @@ import java.io.IOException;
                         url = "https://d-si.ptb.de",
                         email = "Daniel.Hutzschenreuter@ptb.de")),
         servers = {
-                @Server(url = "https://d-si.ptb.de", description = "URL in production  environment"),
-                @Server(url = "http://localhost:8083", description = "URL in development environment")
+                @Server(url = "http://localhost:8083", description = "URL in development environment"),
+                @Server(url = "https://d-si.ptb.de", description = "URL in production  environment")
+//                @Server(url = "http://localhost:8083", description = "URL in development environment")
 
         })
 @Tag(name = "DME Controller")
@@ -157,6 +158,88 @@ public class DmeController {
                                                              "\n" +
                                                              "\"name\" : \"PTB_3\",\n" +
                                                              "\"pidDCC\" : \"https://d-si.ptb.de/api/d-dcc/dcc/Temp_Comparison_PTB_3\"\n" +
+                                                             "}\n" +
+                                                             "} ]\n" +
+                                                             "}\n" +
+                                                             "}")))
+                                                     JsonNode inputJson) throws DatatypeConfigurationException, JAXBException, XPathExpressionException, ParserConfigurationException, IOException, TransformerException, SAXException {
+        return new ResponseEntity<>(dmeService.evaluate(inputJson), HttpStatus.CREATED);
+    }
+    @RequestMapping(value = "/evaluateComparisonLabMed", method = RequestMethod.POST)
+    @Operation(
+            summary = "Retrieve a JSON with the fileName and the Base64 string encoded DCC",
+            description = "POST request where the RequestBody a JSON_KeyComparisonData  with pidReport name, a list of participants, the evaluationMethod (mass, temperature...), and DCC PIDs as the message and receives a JSON with Base64 encoded DCC back."
+    )
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<OutputReport> evaluateDKCRLabMed(@RequestBody
+                                                     @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "A Json Node contain keyComparisonData", content = @Content(schema = @Schema(example = "{\n" +
+                                                             "\"keyComparisonData\" : {\n" +
+                                                             "\"pidReport\" : \"mass_Report\",\n" +
+                                                             "\"smartStandardEvaluationMethod\" : \"massIntercomparison\",\n" +
+                                                             "\"participantList\" : [ {\n" +
+                                                             "\"participant\" : {\n" +
+                                                             "\n" +
+                                                             "\"name\" : \"CENAM\",\n" +
+                                                             "\"pidDCC\" : \"https://d-si.ptb.de/api/d-dcc/dcc/Mass_Comparison_CENAM\"\n" +
+                                                             "}\n" +
+                                                             "},{\n" +
+                                                             "\"participant\" : {\n" +
+                                                             "\n" +
+                                                             "\"name\" : \"IMIJ\",\n" +
+                                                             "\"pidDCC\" : \"https://d-si.ptb.de/api/d-dcc/dcc/Mass_Comparison_NMIJ\"\n" +
+                                                             "}\n" +
+                                                             "},{\n" +
+                                                             "\"participant\" : {\n" +
+                                                             "\n" +
+                                                             "\"name\" : \"PTB_Ausreisser\",\n" +
+                                                             "\"pidDCC\" : \"https://d-si.ptb.de/api/d-dcc/dcc/Mass_Comparison_PTB_Ausreisser\"\n" +
+                                                             "}\n" +
+                                                             "},{\n" +
+                                                             "\"participant\" : {\n" +
+                                                             "\n" +
+                                                             "\"name\" : \"PTB\",\n" +
+                                                             "\"pidDCC\" : \"https://d-si.ptb.de/api/d-dcc/dcc/Mass_Comparison_PTB\"\n" +
+                                                             "}\n" +
+                                                             "},{\n" +
+                                                             "\"participant\" : {\n" +
+                                                             "\"name\" : \"NRC\",\n" +
+                                                             "\"pidDCC\" : \"https://d-si.ptb.de/api/d-dcc/dcc/Mass_Comparison_NRC\"\n" +
+                                                             "}\n" +
+                                                             "},{\n" +
+                                                             "\"participant\" : {\n" +
+                                                             "\n" +
+                                                             "\"name\" : \"NPL\",\n" +
+                                                             "\"pidDCC\" : \"https://d-si.ptb.de/api/d-dcc/dcc/Mass_Comparison_NPL\"\n" +
+                                                             "}\n" +
+                                                             "},{\n" +
+                                                             "\"participant\" : {\n" +
+                                                             "\n" +
+                                                             "\"name\" : \"NIM\",\n" +
+                                                             "\"pidDCC\" : \"https://d-si.ptb.de/api/d-dcc/dcc/Mass_Comparison_NIM\"\n" +
+                                                             "}\n" +
+                                                             "},{\n" +
+                                                             "\"participant\" : {\n" +
+                                                             "\n" +
+                                                             "\"name\" : \"UME\",\n" +
+                                                             "\"pidDCC\" : \"https://d-si.ptb.de/api/d-dcc/dcc/Mass_Comparison_UME\"\n" +
+                                                             "}\n" +
+                                                             "},{\n" +
+                                                             "\"participant\" : {\n" +
+                                                             "\n" +
+                                                             "\"name\" : \"MSL\",\n" +
+                                                             "\"pidDCC\" : \"https://d-si.ptb.de/api/d-dcc/dcc/Mass_Comparison_MSL\"\n" +
+                                                             "}\n" +
+                                                             "},{\n" +
+                                                             "\"participant\" : {\n" +
+                                                             "\n" +
+                                                             "\"name\" : \"INRIM\",\n" +
+                                                             "\"pidDCC\" : \"https://d-si.ptb.de/api/d-dcc/dcc/Mass_Comparison_INRIM\"\n" +
+                                                             "}\n" +
+                                                             "}, {\n" +
+                                                             "\"participant\" : {\n" +
+                                                             "\n" +
+                                                             "\"name\" : \"KRISS\",\n" +
+                                                             "\"pidDCC\" : \"https://d-si.ptb.de/api/d-dcc/dcc/Mass_Comparison_KRISS\"\n" +
                                                              "}\n" +
                                                              "} ]\n" +
                                                              "}\n" +

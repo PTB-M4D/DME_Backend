@@ -2,32 +2,24 @@ package de.ptb.dsi.dme_backend.service.domain;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import de.ptb.dsi.dme_backend.model.*;
-import de.ptb.dsi.dme_backend.model.dcc.*;
 import de.ptb.dsi.dme_backend.service.input.InputReaderService;
 import de.ptb.dsi.dme_backend.service.output.DccServiceOutputWriter;
 import de.ptb.dsi.dme_backend.service.submodel.*;
-import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
-import jakarta.xml.bind.Marshaller;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.xml.sax.SAXException;
 
 import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 import java.io.IOException;
-import java.io.StringWriter;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.*;
 
 @Service
 @AllArgsConstructor
-
-public class VirtualMassComparisonService implements IComparisonEvaluationService {
+public class LaboratoryMedicineComparisonService implements IComparisonEvaluationService {
 
     private final InputReaderService inputReaderService;
     private final StandardBilateralEnValueCalculationService bilateralEnValueCalculationService;

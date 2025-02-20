@@ -28,6 +28,8 @@ public class DccServiceOutputWriter {
             administrativeData = createAdministrativeDataMass();
         } else if (Objects.equals(comparisonDataModel.getSmartStandard(), "radiationTempComparison")) {
             administrativeData = createAdministrativeDataTemp();
+        }else if (Objects.equals(comparisonDataModel.getSmartStandard(), "laboratoryMedicineComparison")) {
+            administrativeData = createAdministrativeDataTemp();
         } else {
             administrativeData = new AdministrativeDataType();
         }
@@ -234,6 +236,114 @@ public class DccServiceOutputWriter {
     }
 
     private AdministrativeDataType createAdministrativeDataMass() throws DatatypeConfigurationException {
+
+        // Software
+        TextType softwareName = TextType.builder()
+                .content(Collections.singletonList("GEMIMEG Tool"))
+                .build();
+        SoftwareType software = SoftwareType.builder()
+                .name(softwareName)
+                .release("v1.2.0")
+                .build();
+        SoftwareListType softwareList = SoftwareListType.builder()
+                .software(Arrays.asList(software))
+                .build();
+
+        //Core data
+        IdentificationType identification = IdentificationType.builder()
+                .issuer("calibrationLaboratory")
+                .value("NMIJ")
+                .build();
+        IdentificationListType identificationList = IdentificationListType.builder()
+                .identification(Arrays.asList(identification)).build();
+
+        Date date = new Date();
+
+        CoreDataType coreData = CoreDataType.builder()
+                .countryCodeISO31661("JP")
+                .usedLangCodeISO6391(Collections.singletonList("en"))
+                .mandatoryLangCodeISO6391(Collections.singletonList("en"))
+                .uniqueIdentifier("mass")
+                .identifications(identificationList)
+                .beginPerformanceDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(new SimpleDateFormat(LocalDate.now().toString()).format(date)))
+                .endPerformanceDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(new SimpleDateFormat(LocalDate.now().toString()).format(date)))
+                .performanceLocation(PerformanceLocationType.builder().value(StringPerformanceLocationType.LABORATORY).build())
+                .build();
+
+
+        // Items
+        TextType itemName1 = TextType.builder()
+                .content(Collections.singletonList("1kg Silicon Sphere"))
+//                .lang("en")
+                .build();
+        IdentificationType identificationItem1 = IdentificationType.builder()
+                .issuer("calibrationLaboratory")
+                .value("An Identification")
+                .build();
+        IdentificationListType identificationItemList1 = IdentificationListType.builder()
+                .identification(Arrays.asList(identificationItem1)).build();
+        TextType manufacturerName = TextType.builder()
+                .content(Collections.singletonList("NMIJ"))
+                .build();
+//TODO "lang=en"
+        ContactNotStrictType manufacturer= ContactNotStrictType.builder()
+                .name(manufacturerName)
+                .build();
+        ItemType item1= ItemType.builder()
+                .name(itemName1)
+                .manufacturer(manufacturer)
+                .identifications(identificationItemList1)
+                .build();
+        ItemListType items = ItemListType.builder()
+                .name(itemName1)
+                .item(Arrays.asList(item1))
+                .build();
+
+        // Calibration Laboratory
+        ContactType contact = ContactType.builder()
+                .name(TextType.builder().content(Collections.singletonList("Pilot Laboratory")).build())
+                .eMail("info@nmij.jp")
+                .location(LocationType.builder().city("Tokyo").build())
+                .build();
+        CalibrationLaboratory calibrationLaboratory = CalibrationLaboratory.builder()
+                .contact(contact)
+                .build();
+
+        // Customer
+        TextType customerName = TextType.builder()
+                .content(Collections.singletonList("Kenichi Fuji"))
+                .build();
+        ContactType customer = ContactType.builder()
+                .name(customerName)
+                .eMail("k.f@NMILJ.jp")
+                .location(LocationType.builder().city("Tokyo").build())
+                .build();
+
+        // Presonsible Person
+        TextType respPersonName = TextType.builder()
+                .content(Collections.singletonList("A Person"))
+                .build();
+        RespPersonType respPerson = RespPersonType.builder()
+                .person(ContactNotStrictType.builder()
+                        .name(respPersonName).build())
+                .build();
+        RespPersonListType respPersons= RespPersonListType.builder()
+                .respPerson(Arrays.asList(respPerson))
+                .build();
+
+        // build Administrative Data
+        AdministrativeDataType administrativeData = AdministrativeDataType.builder()
+                .dccSoftware(softwareList)
+                .coreData(coreData)
+                .items(items)
+                .calibrationLaboratory(calibrationLaboratory)
+                .customer(customer)
+                .respPersons(respPersons)
+                .build();
+
+        return administrativeData;
+    }
+    private AdministrativeDataType createAdministrativeDataLaboratoryMedicine() throws DatatypeConfigurationException {
 
         // Software
         TextType softwareName = TextType.builder()

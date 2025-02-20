@@ -4,8 +4,8 @@ package de.ptb.dsi.dme_backend.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import de.ptb.dsi.dme_backend.model.*;
 import de.ptb.dsi.dme_backend.service.domain.IComparisonEvaluationService;
-import de.ptb.dsi.dme_backend.service.domain.VirtualMassComparisonService;
-import de.ptb.dsi.dme_backend.service.domain.VirtualRadTemperatureComparisonService;
+import de.ptb.dsi.dme_backend.service.domain.MassComparisonService;
+import de.ptb.dsi.dme_backend.service.domain.RadTemperatureComparisonService;
 import jakarta.xml.bind.JAXBException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +29,9 @@ public class DmeService {
     @Autowired
     public DmeService(List<IComparisonEvaluationService> services) {
         for (IComparisonEvaluationService service : services) {
-            if (service instanceof VirtualRadTemperatureComparisonService) {
+            if (service instanceof RadTemperatureComparisonService) {
                 serviceMap.put("radiationTempComparison", service);
-            } else if (service instanceof VirtualMassComparisonService) {
+            } else if (service instanceof MassComparisonService) {
                 serviceMap.put("massIntercomparison", service);
             }
         }
@@ -72,12 +72,12 @@ public class DmeService {
 //            for (IComparisonEvaluationService virtualService : virtualServices) {
 //                switch (method) {
 //                    case "radiationTempComparison":
-//                        if (virtualService instanceof VirtualRadTemperatureComparisonService) {
+//                        if (virtualService instanceof RadTemperatureComparisonService) {
 //                            outputReport = virtualService.evaluateComparison(inputJson);
 //                        }
 //                        break;
 //                    case "massIntercomparison":
-//                        if (virtualService instanceof VirtualMassComparisonService) {
+//                        if (virtualService instanceof MassComparisonService) {
 //                            outputReport = virtualService.evaluateComparison(inputJson);
 //                        }
 //                        break;
