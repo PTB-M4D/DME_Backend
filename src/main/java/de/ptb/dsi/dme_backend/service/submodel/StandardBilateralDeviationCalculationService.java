@@ -1,14 +1,18 @@
 package de.ptb.dsi.dme_backend.service.submodel;
 
 import de.ptb.dsi.dme_backend.model.*;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
+@AllArgsConstructor
 @Service
 public class StandardBilateralDeviationCalculationService implements IBilateralDeviationCalculationService {
+
+    private final StandardDifferenceCalculatorService differenceCalculatorService;
 
     @Override
     public HashMap<String, HashMap<String, SiReal>> calculateBilateralDeviations(HashMap<String, SiReal> contributionMeasuredValues,
@@ -27,24 +31,31 @@ public class StandardBilateralDeviationCalculationService implements IBilateralD
                     continue;
                 }
 
-                //Expanded uncertainty (95 %) are used for calculating the uncertainty of the deviation
-                double xi = contributionMeasuredValues.get(keyList.get(i)).getValue();
-                double xj = contributionMeasuredValues.get(keyList.get(j)).getValue();
-                double ui = contributionMeasuredValues.get(keyList.get(i)).getExpandedMU().getValueExpandedMU();
-                double uj = contributionMeasuredValues.get(keyList.get(j)).getExpandedMU().getValueExpandedMU();
-
-                double deviationDouble = xi - xj;
-                double deviationUncertaintyDouble = Math.sqrt(ui*ui + uj*uj);
-
-                // format Data into SiReal  -> HashMap<String, SiReal>
                 String label = "Difference:" + keyList.get(i) + " - " + keyList.get(j);
-                String unit = contributionMeasuredValues.get(keyList.get(i)).getUnit();
-                SiExpandedMU deviationUncertainty = SiExpandedMU.builder()
-                        .valueExpandedMU(deviationUncertaintyDouble)
-                        .coverageFactor(2)
-                        .build();
+                SiReal deviationSiReal = differenceCalculatorService.calculateDifference(
+                        contributionMeasuredValues.get(keyList.get(i)),
+                        contributionMeasuredValues.get(keyList.get(j)),
+                        label
+                );
 
-                SiReal deviationSiReal = new SiReal(label,deviationDouble, unit, deviationUncertainty);
+//                //Expanded uncertainty (95 %) are used for calculating the uncertainty of the deviation
+//                double xi = contributionMeasuredValues.get(keyList.get(i)).getValue();
+//                double xj = contributionMeasuredValues.get(keyList.get(j)).getValue();
+//                double ui = contributionMeasuredValues.get(keyList.get(i)).getExpandedMU().getValueExpandedMU();
+//                double uj = contributionMeasuredValues.get(keyList.get(j)).getExpandedMU().getValueExpandedMU();
+//
+//                double deviationDouble = xi - xj;
+//                double deviationUncertaintyDouble = Math.sqrt(ui*ui + uj*uj);
+//
+//                // format Data into SiReal  -> HashMap<String, SiReal>
+//                String label = "Difference:" + keyList.get(i) + " - " + keyList.get(j);
+//                String unit = contributionMeasuredValues.get(keyList.get(i)).getUnit();
+//                SiExpandedMU deviationUncertainty = SiExpandedMU.builder()
+//                        .valueExpandedMU(deviationUncertaintyDouble)
+//                        .coverageFactor(2)
+//                        .build();
+//
+//                SiReal deviationSiReal = new SiReal(label,deviationDouble, unit, deviationUncertainty);
 
                 // add to inner Hashmap
                 bilateralDeviations.put(keyList.get(j), deviationSiReal);

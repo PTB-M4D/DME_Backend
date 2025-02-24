@@ -31,6 +31,7 @@ public class VirtualRadTemperatureComparisonService implements IComparisonEvalua
     private final StandardEnValueCalculationService enValueCalculationService;
     private final EnCriterionConsistencyCheckService consistencyCheckService;
     private final DecisionProcessingService decisionProcessingService;
+    private final StandardDeviationToReferenceCalculationService deviationToReferenceCalculationService;
 
     @Override
     public OutputReport evaluateComparison(JsonNode inputJson) throws XPathExpressionException, ParserConfigurationException, IOException, TransformerException, SAXException, JAXBException, DatatypeConfigurationException {
@@ -227,6 +228,12 @@ public class VirtualRadTemperatureComparisonService implements IComparisonEvalua
                         bilateralDeviationCalculationService.calculateBilateralDeviations(entity.getEntityData().get(investigatedDataIdentifierId).getContributionData(), contributions);
                 analysisOutput.setBilateralDeviations(bilateralDeviations);
 
+                // Berechnung der Abweichung Referenzwert zu Messwerte
+                HashMap<String, SiReal> deviationsToReference = deviationToReferenceCalculationService.calculateDeviationsToReference(
+                        allContributionData,
+                        referenceValue
+                );
+                analysisOutput.setDeviationsToReference(deviationsToReference);
 
                 // ConsistencyCheck
                 consistencyCheckService.evaluateConsistency(analysisOutput);

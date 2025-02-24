@@ -14,6 +14,7 @@ public class AnalysisOutput {
     private ConsistencyCheckResult checkResult;
     private List<String> outliers;//contributionIds
     private HashMap<String,HashMap<String,SiReal>> bilateralDeviations;
+    private HashMap<String,SiReal> deviationsToReference;
 
     public AnalysisOutput(){
         this.enValues = new HashMap<>();
