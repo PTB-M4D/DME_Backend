@@ -27,6 +27,10 @@ public class VirtualRadTemperatureComparisonService implements IComparisonEvalua
     private final StandardBilateralEnValueCalculationService bilateralEnValueCalculationService;
     private final DccServiceOutputWriter dccServiceOutputWriter;
     private final StandardBilateralDeviationCalculationService bilateralDeviationCalculationService;
+    private final WeightedMeanCalculationService weightedMeanCalculationService;
+    private final StandardEnValueCalculationService enValueCalculationService;
+    private final EnCriterionConsistencyCheckService consistencyCheckService;
+    private final DecisionProcessingService decisionProcessingService;
 
     @Override
     public OutputReport evaluateComparison(JsonNode inputJson) throws XPathExpressionException, ParserConfigurationException, IOException, TransformerException, SAXException, JAXBException, DatatypeConfigurationException {
@@ -203,12 +207,10 @@ public class VirtualRadTemperatureComparisonService implements IComparisonEvalua
                 }
 
                 // weigehted mean berechnen
-                WeightedMeanCalculationService weightedMeanCalculationService = new WeightedMeanCalculationService();
                 ReferenceValue referenceValue = weightedMeanCalculationService.calculateReferenceValue(contributingData);
                 analysisOutput.setRefValue(referenceValue);
 
                 // En werte berechnen
-                StandardEnValueCalculationService enValueCalculationService = new StandardEnValueCalculationService();
                 HashMap<String, EnValue> enValues = enValueCalculationService.calculateEnValue(allContributionData, referenceValue, analysisOutput.getOutliers());
                 analysisOutput.setEnValues(enValues);
 
@@ -227,11 +229,9 @@ public class VirtualRadTemperatureComparisonService implements IComparisonEvalua
 
 
                 // ConsistencyCheck
-                EnCriterionConsistencyCheckService consistencyCheckService = new EnCriterionConsistencyCheckService();
                 consistencyCheckService.evaluateConsistency(analysisOutput);
 
                 // Entscheidung, ob geflaggte Contributions als Outlier aufgenommen werden sollen
-                DecisionProcessingService decisionProcessingService = new DecisionProcessingService();
                 decisionProcessingService.processDecision(analysisOutput, true);
 
                 // AnalysisOutput in EntityUnderComparison hinzufügen

@@ -33,6 +33,10 @@ public class VirtualMassComparisonService implements IComparisonEvaluationServic
     private final StandardBilateralEnValueCalculationService bilateralEnValueCalculationService;
     private final DccServiceOutputWriter dccServiceOutputWriter;
     private final StandardBilateralDeviationCalculationService bilateralDeviationCalculationService;
+    private final WeightedMeanCalculationService weightedMeanCalculationService;
+    private final StandardEnValueCalculationService enValueCalculationService;
+    private final EnCriterionConsistencyCheckService consistencyCheckService;
+    private final DecisionProcessingService decisionProcessingService;
 
     @Override
     public OutputReport evaluateComparison(JsonNode inputJson) throws XPathExpressionException, ParserConfigurationException, IOException, TransformerException, SAXException, JAXBException, DatatypeConfigurationException {
@@ -113,16 +117,10 @@ public class VirtualMassComparisonService implements IComparisonEvaluationServic
                 }
 
                 // weigehted mean berechnen
-                WeightedMeanCalculationService weightedMeanCalculationService = new WeightedMeanCalculationService();
                 ReferenceValue referenceValue = weightedMeanCalculationService.calculateReferenceValue(contributingData);
                 analysisOutput.setRefValue(referenceValue);
 
-                // En werte berechnen
-//                HashMap<String, SiReal> contributionMeasuredValues = new HashMap<>();
-//                for (String contributionId : comparisonDataModel.getContributions().keySet()){
-//                    contributionMeasuredValues.put(contributionId, entity.getEntityData().get(contributionId).getContributionData().get(contributionId));
-//                }
-                StandardEnValueCalculationService enValueCalculationService = new StandardEnValueCalculationService();
+                // en Werte berechnen
                 HashMap<String, EnValue> enValues = enValueCalculationService.calculateEnValue(contributionData, referenceValue, analysisOutput.getOutliers());
                 analysisOutput.setEnValues(enValues);
 
@@ -139,11 +137,9 @@ public class VirtualMassComparisonService implements IComparisonEvaluationServic
 
 
                 // ConsistencyCheck
-                EnCriterionConsistencyCheckService consistencyCheckService = new EnCriterionConsistencyCheckService();
                 consistencyCheckService.evaluateConsistency(analysisOutput);
 
                 // Entscheidung, ob geflaggte Contributions als Outlier aufgenommen werden sollen
-                DecisionProcessingService decisionProcessingService = new DecisionProcessingService();
                 decisionProcessingService.processDecision(analysisOutput, true);
 
                 // AnalysisOutput in EntityUnderComparison hinzufügen

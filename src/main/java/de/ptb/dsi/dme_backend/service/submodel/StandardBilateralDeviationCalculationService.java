@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 @Service
 public class StandardBilateralDeviationCalculationService implements IBilateralDeviationCalculationService {
@@ -20,6 +21,11 @@ public class StandardBilateralDeviationCalculationService implements IBilateralD
         for (int i = 0; i < keyList.size(); i++) {
             HashMap<String, SiReal> bilateralDeviations = new HashMap<>();
             for (int j = 0 ; j < keyList.size(); j++) {
+
+                //skip if contributionA = contributionB
+                if (Objects.equals(keyList.get(i), keyList.get(j))) {
+                    continue;
+                }
 
                 //Expanded uncertainty (95 %) are used for calculating the uncertainty of the deviation
                 double xi = contributionMeasuredValues.get(keyList.get(i)).getValue();
