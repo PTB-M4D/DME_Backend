@@ -26,6 +26,7 @@ public class VirtualRadTemperatureComparisonService implements IComparisonEvalua
     private final StandardDifferenceCalculatorService differenceCalculatorService;
     private final StandardBilateralEnValueCalculationService bilateralEnValueCalculationService;
     private final DccServiceOutputWriter dccServiceOutputWriter;
+    private final StandardBilateralDeviationCalculationService bilateralDeviationCalculationService;
 
     @Override
     public OutputReport evaluateComparison(JsonNode inputJson) throws XPathExpressionException, ParserConfigurationException, IOException, TransformerException, SAXException, JAXBException, DatatypeConfigurationException {
@@ -159,7 +160,7 @@ public class VirtualRadTemperatureComparisonService implements IComparisonEvalua
             for (String key : radTempData.getContributionData().keySet()){
                 SiReal radTemp = radTempData.getContributionData().get(key);
                 SiReal bathTemp = bathTempData.getContributionData().get(key);
-                SiReal tempDiff = differenceCalculatorService.calculateDifference(radTemp, bathTemp);
+                SiReal tempDiff = differenceCalculatorService.calculateDifference(radTemp, bathTemp, "Temperature Difference");
                 tempDiffData.getContributionData().put(key, tempDiff);
             }
 
@@ -210,11 +211,20 @@ public class VirtualRadTemperatureComparisonService implements IComparisonEvalua
                 StandardEnValueCalculationService enValueCalculationService = new StandardEnValueCalculationService();
                 HashMap<String, EnValue> enValues = enValueCalculationService.calculateEnValue(allContributionData, referenceValue, analysisOutput.getOutliers());
                 analysisOutput.setEnValues(enValues);
+
+
                 // Berecnung der Bilateralen En Werte
                 HashMap<String, Contribution> contributions = comparisonDataModel.getContributions();
                 HashMap<String, HashMap<String, BilateralEnValue>> bilateralEnValues =
                         bilateralEnValueCalculationService.calculateBilateralEnValues(entity.getEntityData().get(investigatedDataIdentifierId).getContributionData(), contributions);
                 analysisOutput.setBilateralEnValues(bilateralEnValues);
+
+
+                // Berechnung der bilateralen Abweichungen der Messwerte
+                HashMap<String, HashMap<String, SiReal>> bilateralDeviations =
+                        bilateralDeviationCalculationService.calculateBilateralDeviations(entity.getEntityData().get(investigatedDataIdentifierId).getContributionData(), contributions);
+                analysisOutput.setBilateralDeviations(bilateralDeviations);
+
 
                 // ConsistencyCheck
                 EnCriterionConsistencyCheckService consistencyCheckService = new EnCriterionConsistencyCheckService();

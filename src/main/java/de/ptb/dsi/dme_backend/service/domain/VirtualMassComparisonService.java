@@ -32,6 +32,7 @@ public class VirtualMassComparisonService implements IComparisonEvaluationServic
     private final InputReaderService inputReaderService;
     private final StandardBilateralEnValueCalculationService bilateralEnValueCalculationService;
     private final DccServiceOutputWriter dccServiceOutputWriter;
+    private final StandardBilateralDeviationCalculationService bilateralDeviationCalculationService;
 
     @Override
     public OutputReport evaluateComparison(JsonNode inputJson) throws XPathExpressionException, ParserConfigurationException, IOException, TransformerException, SAXException, JAXBException, DatatypeConfigurationException {
@@ -130,6 +131,12 @@ public class VirtualMassComparisonService implements IComparisonEvaluationServic
                 HashMap<String, HashMap<String, BilateralEnValue>> bilateralEnValues =
                         bilateralEnValueCalculationService.calculateBilateralEnValues(entity.getEntityData().get(investigatedDataIdentifierId).getContributionData(), contributions);
                 analysisOutput.setBilateralEnValues(bilateralEnValues);
+
+                // Berechnung der bilateralen Abweichungen der Messwerte
+                HashMap<String, HashMap<String, SiReal>> bilateralDeviations =
+                        bilateralDeviationCalculationService.calculateBilateralDeviations(entity.getEntityData().get(investigatedDataIdentifierId).getContributionData(), contributions);
+                analysisOutput.setBilateralDeviations(bilateralDeviations);
+
 
                 // ConsistencyCheck
                 EnCriterionConsistencyCheckService consistencyCheckService = new EnCriterionConsistencyCheckService();

@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class StandardDifferenceCalculatorService implements IDifferenceCalculatorService {
     @Override
-    public SiReal calculateDifference(SiReal siReal1, SiReal siReal2) {
+    public SiReal calculateDifference(SiReal siReal1, SiReal siReal2, String label) {
 
 
         double val1 = siReal1.getValue();
@@ -25,7 +25,7 @@ public class StandardDifferenceCalculatorService implements IDifferenceCalculato
 
         // build new ExpandedUncertaintyXMLList and SiRealXMLList
         SiReal result = SiReal.builder()
-                .label("TeperatureDifference")
+                .label(label)
                 .value(diff)
                 .unit(siReal1.getUnit())
                 .expandedMU(SiExpandedMU.builder()

@@ -13,6 +13,7 @@ public class AnalysisOutput {
     private HashMap<String,HashMap<String,BilateralEnValue>> bilateralEnValues;//keys ContributionIds
     private ConsistencyCheckResult checkResult;
     private List<String> outliers;//contributionIds
+    private HashMap<String,HashMap<String,SiReal>> bilateralDeviations;
 
     public AnalysisOutput(){
         this.enValues = new HashMap<>();

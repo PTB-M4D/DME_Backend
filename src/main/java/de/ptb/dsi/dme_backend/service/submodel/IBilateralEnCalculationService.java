@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 public interface IBilateralEnCalculationService {
    //public HashMap<String, HashMap<String, BilateralEnValue>> calculateBilateralEnValues(HashMap<String, SiReal> contributionMeasuredValues);
-   public HashMap<String, HashMap<String, BilateralEnValue>> calculateBilateralEnValues(HashMap<String, SiReal> contributionMeasuredValues,
+   HashMap<String, HashMap<String, BilateralEnValue>> calculateBilateralEnValues(HashMap<String, SiReal> contributionMeasuredValues,
                                                                                         HashMap<String, Contribution> contributions);
 }
 
